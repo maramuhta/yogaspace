@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Рейтинг администраторов — Yoga Space</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Unbounded:wght@400;500&family=Noto+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Montserrat',sans-serif;background:#FDF6F0;color:#5C6937}
+
+/* HERO */
+.hero{background:#5C6937;padding:3rem 2rem 2.5rem;text-align:center;position:relative;overflow:hidden}
+.hero svg.deco{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:1.5rem}
+.logo-text{font-family:'Unbounded',sans-serif;font-size:12px;color:#FDF6F0;letter-spacing:.14em}
+.hero h1{font-family:'Unbounded',sans-serif;font-size:clamp(18px,4vw,30px);color:#FDF6F0;font-weight:400;line-height:1.15;margin-bottom:.4rem}
+.hero h1 i{font-family:'Noto Serif Display',serif;font-style:italic;font-weight:300}
+.hero .period{font-size:11px;color:rgba(253,246,240,.55);letter-spacing:.1em;margin-bottom:.75rem}
+.hero .weights{font-family:'Noto Serif Display',serif;font-style:italic;font-size:12px;color:rgba(253,246,240,.75);max-width:500px;margin:0 auto}
+.star-deco{display:inline-block;color:#F0803B;margin:0 6px}
+
+/* WINNERS */
+.winners-section{padding:2.5rem 1.5rem;background:#FDF6F0}
+.section-label{font-family:'Unbounded',sans-serif;font-size:11px;letter-spacing:.1em;color:#5C6937;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
+.section-label::after{content:'';flex:1;height:1px;background:rgba(92,105,55,.2)}
+
+.winners-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:0}
+.winner-card{background:#FDF6F0;border:1px solid rgba(92,105,55,.15);border-radius:16px;overflow:hidden}
+.winner-top{background:#5C6937;padding:1rem 1.25rem;display:flex;align-items:center;gap:10px}
+.winner-studio{font-family:'Unbounded',sans-serif;font-size:11px;color:rgba(253,246,240,.7);letter-spacing:.06em}
+.winner-name{font-family:'Unbounded',sans-serif;font-size:16px;color:#FDF6F0;font-weight:400;margin-top:2px}
+.winner-trophy{font-size:22px;margin-left:auto;flex-shrink:0}
+.winner-body{padding:1rem 1.25rem}
+.winner-score{display:flex;align-items:baseline;gap:6px;margin-bottom:.75rem;padding-bottom:.75rem;border-bottom:1px solid rgba(92,105,55,.1)}
+.score-num{font-family:'Unbounded',sans-serif;font-size:28px;color:#F0803B;font-weight:400}
+.score-label{font-size:11px;color:rgba(92,105,55,.6);letter-spacing:.04em}
+.winner-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.stat{background:rgba(92,105,55,.05);border-radius:8px;padding:.5rem .6rem}
+.stat-label{font-size:9px;color:rgba(92,105,55,.55);letter-spacing:.04em;margin-bottom:2px;text-transform:uppercase}
+.stat-value{font-size:15px;font-weight:700;color:#5C6937}
+
+/* DETAIL TABLES */
+.detail-section{padding:0 1.5rem 2.5rem}
+.studio-block{margin-bottom:2rem}
+.studio-header{background:#5C6937;border-radius:12px 12px 0 0;padding:.75rem 1.25rem;display:flex;align-items:center;gap:10px}
+.studio-header-name{font-family:'Unbounded',sans-serif;font-size:12px;color:#FDF6F0;letter-spacing:.06em}
+.studio-header-star{color:#F0803B;font-size:14px}
+
+.table-wrap{overflow-x:auto;border:1px solid rgba(92,105,55,.15);border-top:none;border-radius:0 0 12px 12px}
+table{width:100%;border-collapse:collapse;min-width:700px}
+thead tr{background:rgba(92,105,55,.08)}
+thead th{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:600;color:#5C6937;letter-spacing:.06em;text-transform:uppercase;padding:.6rem .75rem;text-align:center;border-bottom:1px solid rgba(92,105,55,.12)}
+thead th:nth-child(2){text-align:left}
+tbody tr{border-bottom:1px solid rgba(92,105,55,.07);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(92,105,55,.03)}
+tbody tr.winner-row{background:#FDE8D8}
+tbody tr.winner-row:hover{background:#fddfc5}
+td{font-size:12px;color:#3A3A2A;padding:.6rem .75rem;text-align:center}
+td:nth-child(2){text-align:left;font-weight:500}
+td.winner-name-cell{color:#F0803B;font-weight:600}
+.rank-1{width:24px;height:24px;background:#F0803B;border-radius:50%;color:white;font-size:10px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif}
+.rank-other{width:24px;height:24px;background:rgba(92,105,55,.08);border-radius:50%;color:#5C6937;font-size:10px;font-weight:500;display:inline-flex;align-items:center;justify-content:center}
+.score-cell{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:400}
+.score-cell.top{color:#F0803B}
+.score-cell.mid{color:#5C6937}
+.score-cell.low{color:rgba(92,105,55,.5)}
+
+/* FOOTER */
+.footer{background:#5C6937;padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.footer span{font-size:10px;color:rgba(253,246,240,.45);letter-spacing:.06em}
+.footer a{color:rgba(240,128,59,.75);text-decoration:none}
+.footer-logo{display:flex;align-items:center;gap:8px}
+
+/* WINNERS + METHODOLOGY ROW */
+.winners-method-row{display:flex;align-items:flex-start;gap:0;background:#FDF6F0}
+.winners-section{flex:1;min-width:0}
+
+/* METHODOLOGY */
+.method-section{padding:1.5rem;background:rgba(92,105,55,.04);border-left:1px solid rgba(92,105,55,.08);width:340px;flex-shrink:0;display:flex;flex-direction:column}
+.method-grid{display:grid;grid-template-columns:1fr;gap:6px;margin-top:.75rem}
+.method-item{background:#FDF6F0;border:1px solid rgba(92,105,55,.12);border-radius:8px;padding:.5rem .85rem;display:flex;align-items:center;gap:10px}
+.method-weight{font-family:'Unbounded',sans-serif;font-size:14px;color:#F0803B;font-weight:400;flex-shrink:0;min-width:40px}
+.method-name{font-size:11px;color:#5C6937;line-height:1.3}
+.method-note{margin-top:1rem;font-size:10px;color:rgba(92,105,55,.6);line-height:1.6;font-style:italic;border-top:1px solid rgba(92,105,55,.1);padding-top:.75rem}
+
+.trophy-wrap{margin-left:auto;flex-shrink:0;display:flex;align-items:center;justify-content:center;width:52px;height:52px}
+.trophy-svg{animation:trophyFloat 2.4s ease-in-out infinite;transform-origin:center bottom;display:block}
+@keyframes trophyFloat{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  30%{transform:translateY(-6px) rotate(3deg)}
+  60%{transform:translateY(-3px) rotate(-1deg)}
+}
+.winner-studio-row{display:flex;align-items:center;gap:6px}
+.studio-heart{font-size:14px;line-height:1}
+#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999}
+
+/* SCORE POPUP */
+.score-cell{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+#score-popup{display:none;position:fixed;z-index:10000;background:#fff;border:1px solid rgba(92,105,55,.2);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.13);padding:1.25rem 1.5rem;min-width:260px;max-width:320px}
+#score-popup h4{font-family:'Unbounded',sans-serif;font-size:11px;color:#5C6937;letter-spacing:.06em;margin-bottom:.9rem}
+.popup-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.55rem;font-size:12px;color:#3A3A2A}
+.popup-row-label{color:rgba(92,105,55,.7);flex:1}
+.popup-row-val{font-weight:500;color:#5C6937;margin:0 8px;min-width:60px;text-align:right}
+.popup-row-pts{font-family:'Unbounded',sans-serif;font-size:11px;color:#F0803B;min-width:38px;text-align:right}
+.popup-total{border-top:1px solid rgba(92,105,55,.15);margin-top:.6rem;padding-top:.7rem;display:flex;justify-content:space-between;align-items:baseline}
+.popup-total-label{font-family:'Unbounded',sans-serif;font-size:10px;color:#5C6937;letter-spacing:.06em}
+.popup-total-score{font-family:'Unbounded',sans-serif;font-size:24px;color:#F0803B}
+#score-popup-close{position:absolute;top:10px;right:12px;cursor:pointer;font-size:16px;color:rgba(92,105,55,.4);line-height:1}
+
+/* TABS */
+.tab-bar{display:flex;gap:6px;padding:.75rem 1.25rem;background:rgba(92,105,55,.04);border-bottom:1px solid rgba(92,105,55,.1);flex-wrap:wrap}
+.tab-btn{font-family:'Unbounded',sans-serif;font-size:10px;letter-spacing:.05em;padding:.3rem .8rem;border-radius:20px;border:1px solid rgba(92,105,55,.2);background:transparent;color:#5C6937;cursor:pointer;transition:all .15s}
+.tab-btn.active{background:#5C6937;color:#FDF6F0;border-color:#5C6937}
+.tab-btn:hover:not(.active){background:rgba(92,105,55,.08)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+@media(max-width:768px){
+  .winners-method-row{flex-direction:column}
+  .method-section{width:100%;border-left:none;border-top:1px solid rgba(92,105,55,.08)}
+  /* Карточки победителей — на всю ширину */
+  .winners-section{padding:1.5rem .75rem}
+  .winners-grid{grid-template-columns:1fr;gap:12px}
+  /* Шапка карточки */
+  .winner-top{padding:1rem 1.25rem}
+  .winner-studio{font-size:13px}
+  .winner-name{font-size:18px;word-break:break-word;overflow-wrap:break-word}
+  .trophy-wrap{width:52px;flex-shrink:0}
+  .trophy-wrap>div:first-child{font-size:26px!important}
+  /* Статы внутри карточки */
+  .stat{padding:.6rem .75rem}
+  .stat-label{font-size:11px}
+  .stat-value{font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+
+<div id="score-popup">
+  <span id="score-popup-close">✕</span>
+  <h4>РАСЧЁТ БАЛЛА</h4>
+  <div id="score-popup-name" style="font-size:13px;font-weight:600;color:#5C6937;margin-bottom:.9rem"></div>
+  <div id="score-popup-rows"></div>
+  <div class="popup-total">
+    <span class="popup-total-label">ИТОГО</span>
+    <span class="popup-total-score" id="score-popup-total"></span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <svg class="deco" viewBox="0 0 900 260" fill="none">
+    <ellipse cx="450" cy="130" rx="380" ry="100" stroke="#FDF6F0" stroke-width=".8" opacity=".18"/>
+    <ellipse cx="450" cy="130" rx="380" ry="100" stroke="#FDF6F0" stroke-width=".8" opacity=".12" transform="rotate(45 450 130)"/>
+    <ellipse cx="450" cy="130" rx="380" ry="100" stroke="#FDF6F0" stroke-width=".8" opacity=".1" transform="rotate(-45 450 130)"/>
+    <circle cx="450" cy="130" r="14" stroke="#FDF6F0" stroke-width=".8" opacity=".22"/>
+    <path d="M800 30 L802 42 L814 44 L802 46 L800 58 L798 46 L786 44 L798 42 Z" fill="#F0803B" opacity=".6"/>
+    <path d="M90 190 L91.5 197 L99 198.5 L91.5 200 L90 207 L88.5 200 L81 198.5 L88.5 197 Z" fill="#FDF6F0" opacity=".25"/>
+    <path d="M120 230 C180 215 260 240 360 220 C460 200 540 228 640 212 C700 202 750 218 820 208" stroke="#FDF6F0" stroke-width=".7" opacity=".15" fill="none"/>
+  </svg>
+  <div class="hero-inner">
+    <div class="logo-row">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+        <ellipse cx="13" cy="13" rx="10" ry="10" stroke="#FDF6F0" stroke-width="1"/>
+        <ellipse cx="13" cy="13" rx="10" ry="4" stroke="#FDF6F0" stroke-width="1"/>
+        <circle cx="13" cy="13" r="2.5" stroke="#FDF6F0" stroke-width="1"/>
+      </svg>
+      <span class="logo-text">YOGA SPACE</span>
+    </div>
+    <h1>Сердца <i>Yoga Space</i></h1>
+    <div class="period" style="font-size:13px;color:rgba(253,246,240,.75);font-family:'Noto Serif Display',serif;font-style:italic;letter-spacing:.04em;margin-bottom:.4rem">Эти девушки могут всё</div>
+    <div class="period">ЯНВАРЬ · ФЕВРАЛЬ · МАРТ 2026</div>
+  </div>
+</div>
+
+<!-- WINNERS + METHODOLOGY -->
+<div class="winners-method-row">
+  <div class="winners-section">
+    <div class="section-label">ПОБЕДИТЕЛИ ПО СТУДИЯМ</div>
+    <div class="winners-grid" id="winners-grid"></div>
+  </div>
+
+  <div class="method-section">
+    <div class="section-label">МЕТОДОЛОГИЯ ОЦЕНКИ</div>
+    <div class="method-grid">
+      <div class="method-item"><span class="method-weight">60%</span><span class="method-name">Средние продажи в смену</span></div>
+      <div class="method-item"><span class="method-weight">30%</span><span class="method-name">Количество проданных First</span></div>
+      <div class="method-item"><span class="method-weight">10%</span><span class="method-name">Сумма продаж товаров</span></div>
+    </div>
+    <div class="method-note">
+      Каждый показатель нормируется относительно лучшего результата в студии и умножается на соответствующий вес. Итоговый балл отражает общую эффективность администратора: насколько результативно она работает в смену, продаёт абонементы First и товары.
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL TABLES -->
+<div class="detail-section">
+  <div class="section-label" style="margin-bottom:1.5rem">ДЕТАЛЬНЫЙ РЕЙТИНГ</div>
+  <div id="tables"></div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-logo">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <ellipse cx="10" cy="10" rx="8" ry="8" stroke="#FDF6F0" stroke-width=".8" opacity=".4"/>
+      <ellipse cx="10" cy="10" rx="8" ry="3.2" stroke="#FDF6F0" stroke-width=".8" opacity=".4"/>
+      <circle cx="10" cy="10" r="1.8" stroke="#FDF6F0" stroke-width=".8" opacity=".4"/>
+    </svg>
+    <span style="font-family:'Unbounded',sans-serif;font-size:9px;color:rgba(253,246,240,.4);letter-spacing:.1em">YOGA SPACE</span>
+  </div>
+  <span>© <a href="https://yogaspace.ru">yogaspace.ru</a></span>
+  <span>ЯНВАРЬ — МАРТ 2026</span>
+</div>
+
+<script>
+const data = {
+  'Дмитровка': {
+    winner: {name:'Андрианова Анна', score:71.8, смены:25, ps:70325, fsh:40, fr:392480, fshSm:1.60, frSm:15699, tov:259983, usl:1758116},
+    all: [
+      {place:1, name:'Андрианова Анна',    смены:25, usl:1758116, ps:70325, fsh:40, fr:392480, fshSm:1.60, frSm:15699, tov:259983, score:71.8},
+      {place:2, name:'Кузнецова Варя',     смены:19, usl:1544287, ps:81278, fsh:20, fr:145600, fshSm:1.05, frSm:7663,  tov:184477, score:60.1},
+      {place:3, name:'Гасимова Карина',    смены:36, usl:2290560, ps:63627, fsh:35, fr:404560, fshSm:0.97, frSm:11238, tov:240095, score:56.2},
+      {place:4, name:'Корниенко Екатерина',смены:21, usl:1497700, ps:71319, fsh:17, fr:168000, fshSm:0.81, frSm:8000,  tov:122016, score:33.8},
+      {place:5, name:'Антропова Вероника', смены:25, usl:1591510, ps:63660, fsh:23, fr:303520, fshSm:0.92, frSm:12141, tov:119668, score:30.7},
+      {place:6, name:'Коклева Лада',       смены:24, usl:1413885, ps:58912, fsh:22, fr:207760, fshSm:0.92, frSm:8657,  tov:166935, score:15.8},
+      {place:7, name:'Крупнова Яна',       смены:17, usl:1110770, ps:65339, fsh:14, fr:124000, fshSm:0.82, frSm:7294,  tov:140208, score:15.8},
+    ]
+  },
+  'Мясницкая': {
+    winner: {name:'Смокот Полина', score:97.1, смены:32, ps:65572, fsh:63, fr:509200, fshSm:1.97, frSm:15912, tov:192758, usl:2098309},
+    all: [
+      {place:1, name:'Смокот Полина',      смены:32, usl:2098309, ps:65572, fsh:63, fr:509200, fshSm:1.97, frSm:15912, tov:192758, score:97.1},
+      {place:2, name:'Корнеева Ольга',     смены:29, usl:1544350, ps:53253, fsh:39, fr:351600, fshSm:1.34, frSm:12124, tov:219458, score:60.7},
+      {place:3, name:'Павлова Виктория',   смены:32, usl:1317610, ps:41175, fsh:46, fr:342080, fshSm:1.44, frSm:10690, tov:197852, score:41.4},
+      {place:4, name:'Дайнеко Анна',       смены:19, usl:927235,  ps:48802, fsh:30, fr:299920, fshSm:1.58, frSm:15785, tov:187802, score:39.7},
+      {place:5, name:'Воробьева Ольга',    смены:31, usl:1094470, ps:35305, fsh:42, fr:369760, fshSm:1.35, frSm:11928, tov:203046, score:32.1},
+      {place:6, name:'Матюпатенко Алена',  смены:19, usl:792720,  ps:41722, fsh:26, fr:232720, fshSm:1.37, frSm:12248, tov:166933, score:20.4},
+      {place:7, name:'Григорова Дарья',    смены:20, usl:794230,  ps:39712, fsh:21, fr:169200, fshSm:1.05, frSm:8460,  tov:128123, score:7.7},
+    ]
+  },
+  'Никитская': {
+    winner: {name:'Барышникова Марина', score:99.6, смены:44, ps:44928, fsh:24, fr:186180, fshSm:0.55, frSm:4231, tov:132310, usl:1976811},
+    all: [
+      {place:1, name:'Барышникова Марина',  смены:44, usl:1976811, ps:44928, fsh:24, fr:186180, fshSm:0.55, frSm:4231, tov:132310, score:99.6},
+      {place:2, name:'Сидякина Виктория',   смены:19, usl:664851,  ps:34992, fsh:11, fr:85460,  fshSm:0.58, frSm:4498, tov:134639, score:43.9},
+      {place:3, name:'Мохова Валерия',      смены:27, usl:787264,  ps:29158, fsh:20, fr:119840, fshSm:0.74, frSm:4439, tov:91462,  score:41.8},
+      {place:4, name:'Солодовникова Настя', смены:30, usl:827645,  ps:27588, fsh:22, fr:82080,  fshSm:0.73, frSm:2736, tov:92541,  score:35.9},
+      {place:5, name:'Умрихина Анна',       смены:27, usl:615722,  ps:22805, fsh:12, fr:76940,  fshSm:0.44, frSm:2850, tov:88808,  score:12.2},
+      {place:6, name:'Кормилицина Анна',    смены:23, usl:492440,  ps:21410, fsh:11, fr:51860,  fshSm:0.48, frSm:2255, tov:71309,  score:0.8},
+    ]
+  },
+  'Чернышевская': {
+    winner: {name:'Нестерова Анастасия', score:99.3, смены:39, ps:34828, fsh:82, fr:533280, fshSm:2.10, frSm:13674, tov:305858, usl:1358275},
+    all: [
+      {place:1, name:'Нестерова Анастасия', смены:39, usl:1358275, ps:34828, fsh:82, fr:533280, fshSm:2.10, frSm:13674, tov:305858, score:99.3},
+      {place:2, name:'Фахретдинова Анна',   смены:45, usl:1122895, ps:24953, fsh:80, fr:528440, fshSm:1.78, frSm:11743, tov:209319, score:82.1},
+      {place:3, name:'Болдина Виктория',    смены:21, usl:652002,  ps:31048, fsh:35, fr:219500, fshSm:1.67, frSm:10452, tov:76393,  score:64.0},
+      {place:4, name:'Дятлова Яна',         смены:19, usl:491070,  ps:25846, fsh:28, fr:185440, fshSm:1.47, frSm:9760,  tov:119085, score:55.2},
+      {place:5, name:'Глазкова Серафима',   смены:29, usl:494420,  ps:17049, fsh:33, fr:228680, fshSm:1.14, frSm:7886,  tov:137800, score:46.8},
+      {place:6, name:'Бельтюкова Ксения',   смены:7,  usl:152185,  ps:21741, fsh:10, fr:70120,  fshSm:1.43, frSm:10017, tov:25009,  score:37.3},
+      {place:7, name:'Гагара Виктория',     смены:6,  usl:38290,   ps:6382,  fsh:1,  fr:9200,   fshSm:0.17, frSm:1533,  tov:16892,  score:10.9},
+    ]
+  }
+};
+
+// Пересчёт баллов по новой методологии
+Object.values(data).forEach(d => {
+  const maxPs  = Math.max(...d.all.map(r => r.ps));
+  const maxFsh = Math.max(...d.all.map(r => r.fsh));
+  const maxTov = Math.max(...d.all.map(r => r.tov));
+  const maxСм  = Math.max(...d.all.map(r => r.смены));
+  d.all.forEach(r => {
+    r.score = Math.round(
+      (r.ps / maxPs * 0.60 + r.fsh / maxFsh * 0.30 + r.tov / maxTov * 0.10) * 100
+    );
+  });
+  d.all.sort((a, b) => b.score - a.score);
+  d.all.forEach((r, i) => r.place = i + 1);
+  d.winner = d.all[0];
+});
+
+function fmt(n){return n.toLocaleString('ru-RU')}
+function scoreClass(s){ return s>=80?'top':s>=40?'mid':'low' }
+
+const studioHearts = {
+  'Дмитровка':    {color:'#F0803B', heart:'🧡'},
+  'Мясницкая':    {color:'#5B9BD5', heart:'💙'},
+  'Никитская':    {color:'#4CAF7D', heart:'💚'},
+  'Чернышевская': {color:'#FFFFFF', heart:'🤍'},
+};
+
+function goldenTrophy() {
+  return `<svg class="trophy-svg" width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#FFE87C"/>
+        <stop offset="40%" stop-color="#F5C518"/>
+        <stop offset="100%" stop-color="#B8860B"/>
+      </linearGradient>
+      <linearGradient id="gShine" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#FFF9C4" stop-opacity="0.7"/>
+        <stop offset="100%" stop-color="#F5C518" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="gBase" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#F5C518"/>
+        <stop offset="100%" stop-color="#8B6914"/>
+      </linearGradient>
+    </defs>
+    <!-- Cup body -->
+    <path d="M14 8 H30 V22 C30 28.627 26.627 32 22 32 C17.373 32 14 28.627 14 22 Z" fill="url(#gGold)" stroke="#B8860B" stroke-width="0.5"/>
+    <!-- Shine -->
+    <path d="M16 10 H24 V20 C24 24 22 26 19 27 C17 25 16 22 16 19 Z" fill="url(#gShine)"/>
+    <!-- Handles -->
+    <path d="M14 12 H10 C8.343 12 7 13.343 7 15 C7 17.761 9.239 20 12 20 L14 20" stroke="url(#gGold)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M30 12 H34 C35.657 12 37 13.343 37 15 C37 17.761 34.761 20 32 20 L30 20" stroke="url(#gGold)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- Stem -->
+    <rect x="19" y="32" width="6" height="5" rx="1" fill="url(#gBase)"/>
+    <!-- Base -->
+    <rect x="14" y="37" width="16" height="3" rx="1.5" fill="url(#gBase)" stroke="#8B6914" stroke-width="0.4"/>
+    <!-- Star on cup -->
+    <path d="M22 14 L23.2 17.4 L26.8 17.4 L23.9 19.6 L25.1 23 L22 20.8 L18.9 23 L20.1 19.6 L17.2 17.4 L20.8 17.4 Z" fill="#FFF9C4" opacity="0.9"/>
+  </svg>`;
+}
+
+// Winners grid
+const wg = document.getElementById('winners-grid');
+Object.entries(data).forEach(([studio, d]) => {
+  const w = d.winner;
+  const st = studioHearts[studio] || {heart:'🏆'};
+  wg.innerHTML += `
+    <div class="winner-card">
+      <div class="winner-top">
+        <div style="flex:1;min-width:0">
+          <div class="winner-studio-row">
+            <div class="winner-studio">${studio.toUpperCase()}</div>
+            <span class="studio-heart">${st.heart}</span>
+          </div>
+          <div class="winner-name">${w.name}</div>
+        </div>
+        <div class="trophy-wrap" style="flex-direction:column;gap:2px">
+          <div style="font-family:'Unbounded',sans-serif;font-size:26px;color:#F5C518;font-weight:400;line-height:1">${Math.round(w.score)}</div>
+          <div style="font-size:8px;color:rgba(253,246,240,.5);letter-spacing:.06em;text-transform:uppercase">балл</div>
+        </div>
+      </div>
+      <div class="winner-body">
+<div class="winner-stats">
+          <div class="stat"><div class="stat-label">Смены</div><div class="stat-value">${w.смены}</div></div>
+          <div class="stat"><div class="stat-label">Прод/смену</div><div class="stat-value">${fmt(w.ps)} ₽</div></div>
+          <div class="stat"><div class="stat-label">First шт</div><div class="stat-value">${w.fsh}</div></div>
+          <div class="stat"><div class="stat-label">First руб</div><div class="stat-value">${fmt(w.fr)} ₽</div></div>
+          <div class="stat" style="grid-column:1/-1"><div class="stat-label">Сумма продаж товаров</div><div class="stat-value">${fmt(w.tov)} ₽</div></div>
+        </div>
+      </div>
+    </div>`;
+});
+
+// Icon legend
+const legendDiv = document.createElement('div');
+legendDiv.style.cssText = 'display:flex;flex-wrap:wrap;gap:16px;padding:1rem 1.5rem;background:rgba(92,105,55,.04);border-top:1px solid rgba(92,105,55,.08);font-size:11px;color:rgba(92,105,55,.7)';
+legendDiv.innerHTML = `
+  <span style="display:flex;align-items:center;gap:6px">💰 — лидер по продажам услуг</span>
+  <span style="display:flex;align-items:center;gap:6px">🛍️ — лидер по продажам товаров</span>
+  <span style="display:flex;align-items:center;gap:6px">👥 — лидер по кол-ву First</span>
+`;
+document.querySelector('.detail-section').before(legendDiv);
+
+// Monthly data (ps = продажи в смену из источника)
+const monthlyData = {
+  'Дмитровка': {
+    hasFst: true,
+    jan: [
+      {name:'Кузнецова Варя',      смены:8,  usl:579976,  tov:84739,  ps:83089, fsh:4,  fr:24000},
+      {name:'Гасимова Карина',     смены:13, usl:940110,  tov:95722,  ps:79679, fsh:14, fr:223680},
+      {name:'Корниенко Екатерина', смены:9,  usl:609335,  tov:52710,  ps:73561, fsh:9,  fr:98560},
+      {name:'Антропова Вероника',  смены:7,  usl:433555,  tov:39850,  ps:67629, fsh:8,  fr:179120},
+      {name:'Андрианова Аня',      смены:6,  usl:347285,  tov:53909,  ps:66866, fsh:5,  fr:82480},
+      {name:'Коклева Лада',        смены:7,  usl:408300,  tov:43919,  ps:64603, fsh:6,  fr:51840},
+      {name:'Крупнова Яна',        смены:4,  usl:191485,  tov:59940,  ps:62856, fsh:4,  fr:37920},
+      {name:'Соня',                смены:5,  usl:179495,  tov:31049,  ps:42109, fsh:10, fr:60000},
+    ],
+    feb: [
+      {name:'Кузнецова Варя',      смены:5,  usl:427501,  tov:53972,  ps:96295, fsh:9,  fr:69360},
+      {name:'Андрианова Аня',      смены:9,  usl:709640,  tov:102585, ps:90247, fsh:22, fr:196640},
+      {name:'Корниенко Екатерина', смены:7,  usl:503390,  tov:29114,  ps:76072, fsh:6,  fr:52320},
+      {name:'Крупнова Яна',        смены:4,  usl:258050,  tov:20040,  ps:69523, fsh:5,  fr:40720},
+      {name:'Коклева Лада',        смены:9,  usl:564410,  tov:77666,  ps:71342, fsh:9,  fr:98080},
+      {name:'Антропова Вероника',  смены:8,  usl:513615,  tov:38224,  ps:68980, fsh:5,  fr:43920},
+      {name:'Соня',                смены:4,  usl:253240,  tov:15997,  ps:67309, fsh:7,  fr:47120},
+      {name:'Гасимова Карина',     смены:10, usl:578990,  tov:51517,  ps:63051, fsh:12, fr:105440},
+    ],
+    mar: [
+      {name:'Кузнецова Варя',      смены:6,  usl:536810,  tov:45766,  ps:97096, fsh:7,  fr:52240},
+      {name:'Корниенко Екатерина', смены:5,  usl:384975,  tov:40192,  ps:85033, fsh:2,  fr:17120},
+      {name:'Андрианова Аня',      смены:10, usl:701191,  tov:103489, ps:80468, fsh:13, fr:113360},
+      {name:'Крупнова Яна',        смены:9,  usl:661235,  tov:60227,  ps:80162, fsh:5,  fr:45360},
+      {name:'Антропова Вероника',  смены:10, usl:644340,  tov:41594,  ps:68593, fsh:10, fr:80480},
+      {name:'Гасимова Карина',     смены:13, usl:771460,  tov:92856,  ps:66486, fsh:9,  fr:75440},
+      {name:'Коклева Лада',        смены:8,  usl:441175,  tov:45350,  ps:60816, fsh:7,  fr:57840},
+      {name:'Лиза',                смены:1,  usl:50415,   tov:4813,   ps:55228, fsh:0,  fr:0},
+    ],
+  },
+  'Мясницкая': {
+    hasFst: true,
+    jan: [
+      {name:'Смокот Полина',      смены:10, usl:710830, tov:45300, ps:75613, fsh:16, fr:121600},
+      {name:'Дайнеко Анна',       смены:4,  usl:188525, tov:45722, ps:58562, fsh:5,  fr:41200},
+      {name:'Матюпатенко Алена',  смены:8,  usl:379455, tov:69297, ps:56094, fsh:14, fr:125840},
+      {name:'Павлова Виктория',   смены:12, usl:548200, tov:51302, ps:49959, fsh:22, fr:158080},
+      {name:'Корнеева Ольга',     смены:10, usl:367405, tov:74625, ps:44203, fsh:12, fr:118480},
+      {name:'Воробьева Ольга',    смены:11, usl:358845, tov:54680, ps:37593, fsh:16, fr:130880},
+      {name:'Григорова Дарья',    смены:5,  usl:106730, tov:13051, ps:23956, fsh:4,  fr:29120},
+    ],
+    feb: [
+      {name:'Корнеева Ольга',     смены:9,  usl:746625, tov:83337, ps:92218, fsh:12, fr:112400},
+      {name:'Смокот Полина',      смены:10, usl:673085, tov:49800, ps:72289, fsh:22, fr:173440},
+      {name:'Дайнеко Анна',       смены:8,  usl:372290, tov:81584, ps:56734, fsh:15, fr:176480},
+      {name:'Григорова Дарья',    смены:7,  usl:306415, tov:46211, ps:50375, fsh:8,  fr:67040},
+      {name:'Матюпатенко Алена',  смены:6,  usl:209815, tov:28962, ps:48222, fsh:8,  fr:77280},
+      {name:'Павлова Виктория',   смены:7,  usl:262820, tov:39339, ps:43166, fsh:3,  fr:28240},
+      {name:'Воробьева Ольга',    смены:9,  usl:260370, tov:41734, ps:33839, fsh:9,  fr:74480},
+    ],
+    mar: [
+      {name:'Смокот Полина',      смены:12, usl:714394, tov:97658,  ps:67671, fsh:25, fr:214160},
+      {name:'Дайнеко Анна',       смены:7,  usl:366420, tov:60496,  ps:60988, fsh:10, fr:82240},
+      {name:'Григорова Дарья',    смены:8,  usl:381085, tov:68861,  ps:56243, fsh:9,  fr:73040},
+      {name:'Матюпатенко Алена',  смены:5,  usl:203450, tov:68674,  ps:54425, fsh:4,  fr:29600},
+      {name:'Воробьева Ольга',    смены:11, usl:475255, tov:106633, ps:52899, fsh:17, fr:164400},
+      {name:'Корнеева Ольга',     смены:10, usl:430320, tov:61496,  ps:49182, fsh:15, fr:120720},
+      {name:'Павлова Виктория',   смены:13, usl:506590, tov:107211, ps:47215, fsh:21, fr:155760},
+    ],
+  },
+  'Никитская': {
+    hasFst: true,
+    jan: [
+      {name:'Барышникова Марина',  смены:15, usl:737736, tov:35718, ps:51564, fsh:9,  fr:54780},
+      {name:'Сидякина Виктория',   смены:6,  usl:279370, tov:32085, ps:51909, fsh:4,  fr:25960},
+      {name:'Мохова Валерия',      смены:10, usl:310620, tov:43225, ps:35385, fsh:9,  fr:64320},
+      {name:'Солодовникова Настя', смены:9,  usl:235060, tov:26590, ps:29072, fsh:4,  fr:28640},
+      {name:'Умрихина Анна',       смены:6,  usl:139777, tov:23937, ps:27286, fsh:3,  fr:19980},
+      {name:'Кормилицина Анна',    смены:6,  usl:101800, tov:23985, ps:20964, fsh:3,  fr:16660},
+    ],
+    feb: [
+      {name:'Барышникова Марина',  смены:14, usl:676453, tov:65483, ps:52995, fsh:10, fr:84580},
+      {name:'Умрихина Анна',       смены:10, usl:331637, tov:41683, ps:37332, fsh:5,  fr:38720},
+      {name:'Солодовникова Настя', смены:11, usl:271480, tov:40116, ps:28327, fsh:11, fr:23040},
+      {name:'Мохова Валерия',      смены:7,  usl:184724, tov:13251, ps:28282, fsh:4,  fr:24320},
+      {name:'Сидякина Виктория',   смены:7,  usl:168898, tov:31069, ps:28567, fsh:2,  fr:4500},
+      {name:'Кормилицина Анна',    смены:7,  usl:128580, tov:18792, ps:21053, fsh:4,  fr:12160},
+    ],
+    mar: [
+      {name:'Сидякина Виктория',   смены:6,  usl:216583, tov:71485, ps:48011, fsh:5,  fr:55000},
+      {name:'Барышникова Марина',  смены:15, usl:562622, tov:31109, ps:39582, fsh:5,  fr:46820},
+      {name:'Солодовникова Настя', смены:10, usl:321105, tov:25835, ps:34694, fsh:7,  fr:30400},
+      {name:'Мохова Валерия',      смены:10, usl:291920, tov:34986, ps:32691, fsh:7,  fr:31200},
+      {name:'Кормилицина Анна',    смены:10, usl:262060, tov:28532, ps:29059, fsh:4,  fr:23040},
+      {name:'Умрихина Анна',       смены:11, usl:144308, tov:23188, ps:15227, fsh:4,  fr:18240},
+    ],
+  },
+  'Чернышевская': {
+    hasFst: true,
+    jan: [
+      {name:'Нестерова Анастасия', смены:11, usl:307155, tov:96463,  ps:36693, fsh:24, fr:178720},
+      {name:'Фахретдинова Анна',   смены:13, usl:340825, tov:69683,  ps:31578, fsh:22, fr:135200},
+      {name:'Елизавета',           смены:8,  usl:222532, tov:25595,  ps:31016, fsh:18, fr:111000},
+      {name:'Болдина Виктория',    смены:6,  usl:142850, tov:9353,   ps:25367, fsh:6,  fr:42600},
+      {name:'Бельтюкова Ксения',   смены:4,  usl:65515,  tov:17642,  ps:20789, fsh:2,  fr:14200},
+      {name:'Глазкова Серафима',   смены:12, usl:136565, tov:56382,  ps:16079, fsh:9,  fr:72640},
+      {name:'Гагара Виктория',     смены:6,  usl:38290,  tov:16892,  ps:9197,  fsh:1,  fr:9200},
+    ],
+    feb: [
+      {name:'Нестерова Анастасия', смены:14, usl:414746, tov:73198,  ps:34853, fsh:24, fr:151840},
+      {name:'Бельтюкова Ксения',   смены:3,  usl:86170,  tov:6610,   ps:30927, fsh:8,  fr:55920},
+      {name:'Дятлова Яна',         смены:5,  usl:90870,  tov:40420,  ps:26258, fsh:7,  fr:55120},
+      {name:'Болдина Виктория',    смены:8,  usl:185292, tov:28690,  ps:26748, fsh:15, fr:94300},
+      {name:'Фахретдинова Анна',   смены:16, usl:342225, tov:50511,  ps:24546, fsh:29, fr:210440},
+      {name:'Глазкова Серафима',   смены:10, usl:195665, tov:33999,  ps:22966, fsh:15, fr:102640},
+    ],
+    mar: [
+      {name:'Нестерова Анастасия', смены:14, usl:636374, tov:136197, ps:55184, fsh:34, fr:202720},
+      {name:'Болдина Виктория',    смены:7,  usl:323860, tov:38350,  ps:51744, fsh:14, fr:82600},
+      {name:'Дятлова Яна',         смены:14, usl:400200, tov:78665,  ps:34205, fsh:21, fr:130320},
+      {name:'Фахретдинова Анна',   смены:16, usl:439845, tov:89125,  ps:33061, fsh:29, fr:182800},
+      {name:'Глазкова Серафима',   смены:7,  usl:162190, tov:47420,  ps:29944, fsh:9,  fr:53400},
+      {name:'Гагара Виктория',     смены:0,  usl:19825,  tov:2057,   ps:0,     fsh:2,  fr:14200},
+    ],
+  },
+};
+
+// Sort monthly alphabetically, assign places
+Object.values(monthlyData).forEach(d => {
+  ['jan','feb','mar'].forEach(m => {
+    d[m].sort((a,b) => a.name.localeCompare(b.name, 'ru'));
+    d[m].forEach((r,i) => r.place = i+1);
+  });
+});
+
+function switchTab(sid, tab) {
+  document.querySelectorAll(`#studio-${sid} .tab-btn`).forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll(`#studio-${sid} .tab-pane`).forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
+}
+
+function monthlyThead(hasFst) {
+  return `<th>#</th><th>Имя</th><th>Смены</th><th>Продажи услуг</th><th>Прод. в смену</th>${hasFst ? '<th>First шт</th><th>First руб</th>' : ''}<th>Товары</th>`;
+}
+
+function monthlyTbody(rows, hasFst) {
+  const maxUsl = Math.max(...rows.map(r=>r.usl));
+  const maxTov = Math.max(...rows.map(r=>r.tov));
+  const maxFsh = hasFst ? Math.max(...rows.map(r=>r.fsh||0)) : 0;
+  return rows.map(r => {
+    const re = `<span class="rank-other">${r.place}</span>`;
+    const icons = [];
+    if(r.usl === maxUsl) icons.push('<span title="Лидер по продажам услуг" style="font-size:14px">💰</span>');
+    if(r.tov === maxTov) icons.push('<span title="Лидер по продажам товаров" style="font-size:14px">🛍️</span>');
+    if(hasFst && r.fsh && r.fsh === maxFsh) icons.push('<span title="Лидер по кол-ву First" style="font-size:14px">👥</span>');
+    const iconsHtml = icons.length ? `<span style="margin-left:5px">${icons.join('')}</span>` : '';
+    const fst = hasFst ? `<td>${r.fsh||'—'}</td><td>${r.fr ? fmt(r.fr) : '—'}</td>` : '';
+    return `<tr>
+      <td>${re}</td>
+      <td style="white-space:nowrap">${r.name}${iconsHtml}</td>
+      <td>${r.смены}</td><td>${fmt(r.usl)}</td><td>${fmt(r.ps)}</td>${fst}<td>${fmt(r.tov)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// Detail tables
+const tb = document.getElementById('tables');
+Object.entries(data).forEach(([studio, d]) => {
+  const sid = studio.replace(/\s+/g,'-');
+  const md = monthlyData[studio];
+  const hasFst = md.hasFst;
+  const maxUsl = Math.max(...d.all.map(r=>r.usl));
+  const maxTov = Math.max(...d.all.map(r=>r.tov));
+  const maxFsh = Math.max(...d.all.map(r=>r.fsh));
+  const maxPs  = Math.max(...d.all.map(r=>r.ps));
+  let q1rows = '';
+  d.all.forEach(r => {
+    const isW = r.place === 1;
+    const rankEl = isW ? `<span class="rank-1">1</span>` : `<span class="rank-other">${r.place}</span>`;
+    const icons = [];
+    if(r.usl === maxUsl) icons.push('<span title="Лидер по продажам услуг" style="font-size:14px">💰</span>');
+    if(r.tov === maxTov) icons.push('<span title="Лидер по продажам товаров" style="font-size:14px">🛍️</span>');
+    if(r.fsh === maxFsh) icons.push('<span title="Лидер по кол-ву First" style="font-size:14px">👥</span>');
+    const iconsHtml = icons.length ? `<span style="margin-left:5px">${icons.join('')}</span>` : '';
+    const breakdown = JSON.stringify({
+      name: r.name,
+      ps:   {val: r.ps,  max: maxPs,  w: 60, pts: +(r.ps /maxPs *60).toFixed(1)},
+      fsh:  {val: r.fsh, max: maxFsh, w: 30, pts: +(r.fsh/maxFsh*30).toFixed(1)},
+      tov:  {val: r.tov, max: maxTov, w: 10, pts: +(r.tov/maxTov*10).toFixed(1)},
+      total: Math.round(r.score)
+    });
+    q1rows += `
+      <tr class="${isW?'winner-row':''}">
+        <td>${rankEl}</td>
+        <td class="${isW?'winner-name-cell':''}" style="white-space:nowrap">${r.name}${iconsHtml}</td>
+        <td>${r.смены}</td><td>${fmt(r.usl)}</td><td>${fmt(r.ps)}</td>
+        <td>${r.fsh}</td><td>${fmt(r.fr)}</td><td>${fmt(r.tov)}</td>
+        <td class="score-cell ${scoreClass(r.score)}" data-breakdown='${breakdown.replace(/'/g,"&#39;")}'>${Math.round(r.score)}</td>
+      </tr>`;
+  });
+  tb.innerHTML += `
+    <div class="studio-block" id="studio-${sid}">
+      <div class="studio-header">
+        <span class="studio-header-star">✦</span>
+        <span class="studio-header-name">${studio.toUpperCase()}</span>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="q1"  onclick="switchTab('${sid}','q1')">1 КВАРТАЛ</button>
+        <button class="tab-btn"        data-tab="jan" onclick="switchTab('${sid}','jan')">ЯНВАРЬ</button>
+        <button class="tab-btn"        data-tab="feb" onclick="switchTab('${sid}','feb')">ФЕВРАЛЬ</button>
+        <button class="tab-btn"        data-tab="mar" onclick="switchTab('${sid}','mar')">МАРТ</button>
+      </div>
+      <div class="tab-pane active" data-tab="q1">
+        <div class="table-wrap"><table>
+          <thead><tr><th>#</th><th>Имя</th><th>Смены</th><th>Продажи услуг</th>
+            <th>Прод. в смену</th><th>First шт</th><th>First руб</th><th>Товары</th><th>Балл</th>
+          </tr></thead>
+          <tbody>${q1rows}</tbody>
+        </table></div>
+      </div>
+      <div class="tab-pane" data-tab="jan">
+        <div class="table-wrap"><table>
+          <thead><tr>${monthlyThead(hasFst)}</tr></thead>
+          <tbody>${monthlyTbody(md.jan, hasFst)}</tbody>
+        </table></div>
+      </div>
+      <div class="tab-pane" data-tab="feb">
+        <div class="table-wrap"><table>
+          <thead><tr>${monthlyThead(hasFst)}</tr></thead>
+          <tbody>${monthlyTbody(md.feb, hasFst)}</tbody>
+        </table></div>
+      </div>
+      <div class="tab-pane" data-tab="mar">
+        <div class="table-wrap"><table>
+          <thead><tr>${monthlyThead(hasFst)}</tr></thead>
+          <tbody>${monthlyTbody(md.mar, hasFst)}</tbody>
+        </table></div>
+      </div>
+    </div>`;
+});
+
+// CONFETTI
+(function(){
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#F0803B','#F5C518','#5C6937','#5B9BD5','#4CAF7D','#FDF6F0','#FFE87C','#F0803B','#B8860B'];
+  const pieces = [];
+  const count = 140;
+  for(let i=0;i<count;i++){
+    pieces.push({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height - canvas.height,
+      w: Math.random()*10+5,
+      h: Math.random()*5+3,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      rot: Math.random()*Math.PI*2,
+      rotSpeed: (Math.random()-.5)*0.15,
+      vx: (Math.random()-.5)*2,
+      vy: Math.random()*3+2,
+      opacity: 1,
+      shape: Math.random()>0.5?'rect':'circle'
+    });
+  }
+  let frame = 0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let alive = false;
+    pieces.forEach(p=>{
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.rotSpeed;
+      if(frame>120) p.opacity = Math.max(0, p.opacity - 0.008);
+      if(p.y < canvas.height + 20) alive = true;
+      ctx.save();
+      ctx.globalAlpha = p.opacity;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      if(p.shape==='circle'){
+        ctx.beginPath();
+        ctx.arc(0,0,p.w/2,0,Math.PI*2);
+        ctx.fill();
+      } else {
+        ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      }
+      ctx.restore();
+    });
+    frame++;
+    if(alive && frame < 300) requestAnimationFrame(draw);
+    else { ctx.clearRect(0,0,canvas.width,canvas.height); canvas.remove(); }
+  }
+  setTimeout(draw, 200);
+})();
+
+// SCORE POPUP
+(function(){
+  const popup = document.getElementById('score-popup');
+  const closeBtn = document.getElementById('score-popup-close');
+
+  document.addEventListener('click', function(e) {
+    const cell = e.target.closest('.score-cell[data-breakdown]');
+    if (cell) {
+      const b = JSON.parse(cell.dataset.breakdown);
+      document.getElementById('score-popup-name').textContent = b.name;
+      document.getElementById('score-popup-rows').innerHTML = `
+        <div class="popup-row">
+          <span class="popup-row-label">Продажи в смену (60%)</span>
+          <span class="popup-row-val">${b.ps.val.toLocaleString('ru-RU')} ₽</span>
+          <span class="popup-row-pts">+${b.ps.pts}</span>
+        </div>
+        <div class="popup-row">
+          <span class="popup-row-label">Кол-во First (30%)</span>
+          <span class="popup-row-val">${b.fsh.val} шт</span>
+          <span class="popup-row-pts">+${b.fsh.pts}</span>
+        </div>
+        <div class="popup-row">
+          <span class="popup-row-label">Товары (10%)</span>
+          <span class="popup-row-val">${b.tov.val.toLocaleString('ru-RU')} ₽</span>
+          <span class="popup-row-pts">+${b.tov.pts}</span>
+        </div>
+`;
+      document.getElementById('score-popup-total').textContent = b.total;
+
+      const rect = cell.getBoundingClientRect();
+      popup.style.display = 'block';
+      const pw = popup.offsetWidth;
+      const ph = popup.offsetHeight;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      let left, top;
+      if (vw < 600) {
+        // На мобильном — центрируем по экрану
+        left = Math.max(8, (vw - pw) / 2);
+        top  = Math.max(8, (vh - ph) / 2);
+      } else {
+        // На десктопе — слева от ячейки, выравниваем по центру ячейки
+        left = rect.left - pw - 10;
+        if (left < 8) left = rect.right + 10;
+        top = rect.top - ph / 2;
+        // Не выходим за верхний и нижний края viewport
+        top = Math.max(8, Math.min(top, vh - ph - 8));
+      }
+      popup.style.left = left + 'px';
+      popup.style.top  = top + 'px';
+      e.stopPropagation();
+    } else if (!popup.contains(e.target)) {
+      popup.style.display = 'none';
+    }
+  });
+
+  closeBtn.addEventListener('click', () => popup.style.display = 'none');
+})();
+</script>
+</body>
+</html>

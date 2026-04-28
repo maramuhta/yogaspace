@@ -501,17 +501,17 @@ const TRIAL={
 // ── ДАННЫЕ ПО НЕДЕЛЯМ (администраторы) ──
 const ADMINS_WEEKLY={
   '13–19 апр':[
-    {name:'Марина',abon:139780,tovar:4391, shifts:3,newQty:3,newRub:51500},
-    {name:'Вика',  abon:75261, tovar:10720,shifts:2,newQty:1,newRub:13600},
-    {name:'Настя', abon:63760, tovar:6622, shifts:2,newQty:1,newRub:13600},
-    {name:'Аня К', abon:43040, tovar:20253,shifts:4,newQty:1,newRub:13600},
-    {name:'Лера',  abon:34880, tovar:11058,shifts:2,newQty:1,newRub:24900},
+    {name:'Марина',abon:139780,tovar:4391, shifts:3,newQty:3,newRub:46000},
+    {name:'Вика',  abon:75261, tovar:10720,shifts:2,newQty:3,newRub:23040},
+    {name:'Настя', abon:63760, tovar:6622, shifts:2,newQty:1,newRub:10880},
+    {name:'Аня К', abon:43040, tovar:20253,shifts:4,newQty:4,newRub:71860},
+    {name:'Лера',  abon:34880, tovar:11058,shifts:2,newQty:0,newRub:0    },
     {name:'Аня',   abon:21040, tovar:944,  shifts:1,newQty:0,newRub:0    },
   ],
   '20–26 апр':[
-    {name:'Марина',abon:139780,tovar:5531, shifts:3,newQty:3,newRub:22800},
-    {name:'Вика',  abon:75261, tovar:5617, shifts:2,newQty:2,newRub:15200},
-    {name:'Настя', abon:63760, tovar:13461,shifts:4,newQty:4,newRub:30400},
+    {name:'Марина',abon:139780,tovar:5531, shifts:3,newQty:2,newRub:16960},
+    {name:'Вика',  abon:75261, tovar:5617, shifts:2,newQty:0,newRub:0    },
+    {name:'Настя', abon:63760, tovar:13461,shifts:4,newQty:2,newRub:12160},
     {name:'Аня К', abon:43040, tovar:2910, shifts:2,newQty:0,newRub:0    },
     {name:'Лера',  abon:34880, tovar:3998, shifts:3,newQty:0,newRub:0    },
     {name:'Аня',   abon:21040, tovar:2150, shifts:1,newQty:0,newRub:0    },
@@ -525,24 +525,33 @@ const TRIAL_PIE ={labels:['Настя','Лера','Вика','Аня К'],conver
 const TRIAL_PIE2={labels:['8 занятий','4 занятия','20 занятий','10 Майсор'],qty:[8,16,2,1],revenue:[108800,121600,55200,13000],colors:['#5c6937','#cae7fb','#f0803b','#9b89c4']};
 
 const NEWBIES_WEEKLY={
-  '13–19 апр':{labels:['Марина','Лера','Аня К','Вика','Настя'],qty:[3,1,1,1,1],revenue:[51500,24900,13600,13600,13600],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4','#7aab8a']},
-  '20–26 апр':{labels:['Настя','Марина','Вика'],qty:[4,3,2],revenue:[30400,22800,15200],colors:['#5C6937','#A2B9C9','#F0803B']},
+  '13–19 апр':{labels:['Аня К','Марина','Вика','Настя'],qty:[4,3,3,1],revenue:[71860,46000,23040,10880],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
+  '20–26 апр':{labels:['Марина','Настя'],qty:[2,2],revenue:[16960,12160],colors:['#5C6937','#A2B9C9']},
 };
 const NEWBIES=NEWBIES_WEEKLY['20–26 апр'];
 
 const FIRST_DAY_WEEKLY={
   '13–19 апр':{
     rows:[
-      {name:'Марина', trial:10, soldQty:3, soldRub:51500, conv:30},
-      {name:'Настя',  trial:19, soldQty:1, soldRub:13600, conv:5 },
-      {name:'Лера',   trial:3,  soldQty:1, soldRub:24900, conv:33},
-      {name:'Аня К',  trial:2,  soldQty:1, soldRub:13600, conv:50},
-      {name:'Вика',   trial:0,  soldQty:1, soldRub:13600, conv:0 },
+      {name:'Аня К',  trial:25, soldQty:4, soldRub:71860, conv:16},
+      {name:'Марина', trial:8,  soldQty:3, soldRub:46000, conv:38},
+      {name:'Вика',   trial:3,  soldQty:3, soldRub:23040, conv:100},
+      {name:'Настя',  trial:5,  soldQty:1, soldRub:10880, conv:20},
+      {name:'Лера',   trial:3,  soldQty:0, soldRub:0,     conv:0 },
       {name:'Аня',    trial:1,  soldQty:0, soldRub:0,     conv:0 },
     ],
-    total:{trial:35, soldQty:7, soldRub:117200, conv:20}
+    total:{trial:45, soldQty:11, soldRub:151780, conv:24}
   },
-  '20–26 апр':{rows:[], total:{trial:0, soldQty:0, soldRub:0, conv:0}},
+  '20–26 апр':{
+    rows:[
+      {name:'Марина', trial:10, soldQty:2, soldRub:16960, conv:20},
+      {name:'Настя',  trial:19, soldQty:2, soldRub:12160, conv:11},
+      {name:'Лера',   trial:3,  soldQty:0, soldRub:0,     conv:0 },
+      {name:'Аня К',  trial:2,  soldQty:0, soldRub:0,     conv:0 },
+      {name:'Аня',    trial:1,  soldQty:0, soldRub:0,     conv:0 },
+    ],
+    total:{trial:35, soldQty:4, soldRub:29120, conv:11}
+  },
 };
 const FIRST_DAY=FIRST_DAY_WEEKLY['13–19 апр'];
 

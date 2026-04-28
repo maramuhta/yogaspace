@@ -85,6 +85,9 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
 .pill-ok{background:#e8f0d8;color:var(--g)}.pill-warn{background:var(--peach);color:var(--o)}.pill-bad{background:#fce8e8;color:#c0522a}
 /* Visit view toggle */
 .vbtn{padding:5px 14px;border-radius:16px;border:1px solid var(--border);background:var(--bg);color:var(--g);font-family:'Jost',sans-serif;font-size:11px;font-weight:500;cursor:pointer;transition:all .15s}
+.week-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.wtab{padding:5px 14px;border-radius:20px;border:1px solid var(--green-20,rgba(92,105,55,.2));background:transparent;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;color:var(--g);cursor:pointer;transition:all .15s;letter-spacing:.02em;}
+.wtab.active,.wtab:hover{background:var(--g);color:#fff;border-color:var(--g);}
 .vbtn:hover{border-color:var(--g)}.vbtn.active{background:var(--g);color:#fff;border-color:var(--g)}
 /* Empty */
 .empty{display:flex;flex-direction:column;align-items:center;padding:80px 24px;text-align:center;color:var(--muted)}
@@ -411,9 +414,15 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
     <div class="card purple"><div class="card-lbl">Продажи First</div><div class="card-val purple" id="aa-new">—</div><div class="card-sub" id="aa-new-rub">—</div></div>
     <div class="card orange"><div class="card-lbl">Ср. чек новичка</div><div class="card-val orange" id="aa-new-avg">—</div><div class="card-sub">First 20%</div></div>
   </div>
+  <!-- Переключатель недель -->
+  <div class="week-tabs" id="adminWeekTabs">
+    <button class="wtab active" data-week="20–26 апр">20–26 апр</button>
+    <button class="wtab" data-week="13–19 апр">13–19 апр</button>
+    <button class="wtab" data-week="total">Итог апреля</button>
+  </div>
   <!-- [FIX 7] Сначала таблица -->
   <div class="panel">
-    <h3>Детализация</h3><div class="panel-sub"></div>
+    <h3>Детализация</h3><div class="panel-sub" id="adminWeekLabel">20–26 апр</div>
     <div class="twrap"><table>
       <thead><tr><th style="width:32px">#</th><th>Администратор</th><th class="r">Услуги</th><th class="r">Товары</th><th class="r">Итого</th><th class="r">Смены</th><th class="r">В смену</th><th class="r">First, шт.</th><th class="r">Новым, руб.</th></tr></thead>
       <tbody id="aAdminTable"></tbody>
@@ -438,7 +447,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
   </div>
   <!-- Покупка первого абонемента новичкам Недели -->
   <div class="panel">
-    <h3>Покупка первого абонемента новичкам Недели</h3><div class="panel-sub">20–26 апр</div>
+    <h3>Продажа первого абонемента новичкам Недели</h3><div class="panel-sub">20–26 апр</div>
     <div class="twrap"><table>
       <thead><tr><th>Администратор</th><th class="r">Пробных гостей</th><th class="r">Продажи, шт.</th><th class="r">Продажи, руб.</th><th class="r">Конверсия</th></tr></thead>
       <tbody id="aFirstDayTable"></tbody>
@@ -489,30 +498,53 @@ const TRIAL={
 };
 
 
-const ADMINS=[
-  {name:'Марина',abon:139780,tovar:5531, shifts:3,newQty:3,newRub:22800},
-  {name:'Вика',  abon:75261, tovar:5617, shifts:2,newQty:2,newRub:15200},
-  {name:'Настя', abon:63760, tovar:13461,shifts:4,newQty:4,newRub:30400},
-  {name:'Аня К', abon:43040, tovar:2910, shifts:2,newQty:0,newRub:0    },
-  {name:'Лера',  abon:34880, tovar:3998, shifts:3,newQty:0,newRub:0    },
-  {name:'Аня',   abon:21040, tovar:2150, shifts:1,newQty:0,newRub:0    },
-].map(d=>({...d,total:d.abon+d.tovar,perShift:d.shifts>0?Math.round((d.abon+d.tovar)/d.shifts):0}))
- .sort((a,b)=>b.total-a.total);
+// ── ДАННЫЕ ПО НЕДЕЛЯМ (администраторы) ──
+const ADMINS_WEEKLY={
+  '13–19 апр':[
+    {name:'Марина',abon:138140,tovar:5531, shifts:3,newQty:3,newRub:22800},
+    {name:'Вика',  abon:77200, tovar:5617, shifts:2,newQty:2,newRub:15200},
+    {name:'Настя', abon:54840, tovar:13461,shifts:5,newQty:4,newRub:30400},
+    {name:'Аня К', abon:42100, tovar:2910, shifts:3,newQty:0,newRub:0    },
+    {name:'Лера',  abon:37640, tovar:3998, shifts:3,newQty:0,newRub:0    },
+    {name:'Аня',   abon:30640, tovar:2150, shifts:1,newQty:0,newRub:0    },
+  ],
+  '20–26 апр':[
+    {name:'Марина',abon:139780,tovar:5531, shifts:3,newQty:3,newRub:22800},
+    {name:'Вика',  abon:75261, tovar:5617, shifts:2,newQty:2,newRub:15200},
+    {name:'Настя', abon:63760, tovar:13461,shifts:4,newQty:4,newRub:30400},
+    {name:'Аня К', abon:43040, tovar:2910, shifts:2,newQty:0,newRub:0    },
+    {name:'Лера',  abon:34880, tovar:3998, shifts:3,newQty:0,newRub:0    },
+    {name:'Аня',   abon:21040, tovar:2150, shifts:1,newQty:0,newRub:0    },
+  ],
+};
+function prepAdmins(arr){return arr.map(d=>({...d,total:d.abon+d.tovar,perShift:d.shifts>0?Math.round((d.abon+d.tovar)/d.shifts):0})).sort((a,b)=>b.total-a.total);}
+// Текущая неделя (для графика First/Trial)
+const ADMINS=prepAdmins(ADMINS_WEEKLY['20–26 апр']);
 
 const TRIAL_PIE ={labels:['Настя','Лера','Вика','Аня К'],conversions:[2,1,1,1],revenue:[12160,10880,10400,6080],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']};
 const TRIAL_PIE2={labels:['8 занятий','4 занятия','20 занятий','10 Майсор'],qty:[8,16,2,1],revenue:[108800,121600,55200,13000],colors:['#5c6937','#cae7fb','#f0803b','#9b89c4']};
-const NEWBIES   ={labels:['Настя','Марина','Вика'],qty:[4,3,2],revenue:[30400,22800,15200],colors:['#5C6937','#A2B9C9','#F0803B']};
-const FIRST_DAY={
-  rows:[
-    {name:'Настя',  trial:19, soldQty:2, soldRub:12160, conv:11},
-    {name:'Марина', trial:10, soldQty:2, soldRub:16960, conv:20},
-    {name:'Аня К',  trial:2,  soldQty:0, soldRub:0,     conv:0},
-    {name:'Лера',   trial:3,  soldQty:0, soldRub:0,     conv:0},
-    {name:'Аня',    trial:1,  soldQty:0, soldRub:0,     conv:0},
-    {name:'Вика',   trial:0,  soldQty:0, soldRub:0,     conv:0},
-  ],
-  total:{trial:35, soldQty:4, soldRub:29120, conv:11}
+
+const NEWBIES_WEEKLY={
+  '13–19 апр':{labels:['Настя','Марина','Вика'],qty:[4,3,2],revenue:[30400,22800,15200],colors:['#5C6937','#A2B9C9','#F0803B']},
+  '20–26 апр':{labels:['Настя','Марина','Вика'],qty:[4,3,2],revenue:[30400,22800,15200],colors:['#5C6937','#A2B9C9','#F0803B']},
 };
+const NEWBIES=NEWBIES_WEEKLY['20–26 апр'];
+
+const FIRST_DAY_WEEKLY={
+  '13–19 апр':{
+    rows:[
+      {name:'Настя',  trial:19, soldQty:2, soldRub:12160, conv:11},
+      {name:'Марина', trial:10, soldQty:2, soldRub:16960, conv:20},
+      {name:'Аня К',  trial:2,  soldQty:0, soldRub:0,     conv:0},
+      {name:'Лера',   trial:3,  soldQty:0, soldRub:0,     conv:0},
+      {name:'Аня',    trial:1,  soldQty:0, soldRub:0,     conv:0},
+      {name:'Вика',   trial:0,  soldQty:0, soldRub:0,     conv:0},
+    ],
+    total:{trial:35, soldQty:4, soldRub:29120, conv:11}
+  },
+  '20–26 апр':{rows:[], total:{trial:0, soldQty:0, soldRub:0, conv:0}},
+};
+const FIRST_DAY=FIRST_DAY_WEEKLY['13–19 апр'];
 
 // [FIX 2] Правильный итог апреля
 const MONTHLY={
@@ -1098,39 +1130,80 @@ function renderMonth(prefix){
   })();
 
   // ── 5. АДМИНИСТРАТОРЫ ──
+  // Рендер карточек шапки всегда по текущей неделе (20–26 апр)
   (function(){
-    const active=ADMINS.filter(a=>a.total>0);
-    const totalAbon=ADMINS.reduce((s,a)=>s+a.abon,0);
-    const totalTovar=ADMINS.reduce((s,a)=>s+a.tovar,0);
+    const cur=prepAdmins(ADMINS_WEEKLY['20–26 апр']);
+    const totalAbon=cur.reduce((s,a)=>s+a.abon,0);
+    const totalTovar=cur.reduce((s,a)=>s+a.tovar,0);
     const totalAll=totalAbon+totalTovar;
-    const totalNew=ADMINS.reduce((s,a)=>s+a.newQty,0);
-    const totalNewR=ADMINS.reduce((s,a)=>s+a.newRub,0);
-    const leader=active[0];
+    const totalNew=cur.reduce((s,a)=>s+a.newQty,0);
+    const totalNewR=cur.reduce((s,a)=>s+a.newRub,0);
+    const leader=cur.filter(a=>a.total>0)[0];
     const pfx=prefix==='mar'?'ma':'aa';
     document.getElementById(pfx+'-total').textContent=fmtK(totalAll);
     document.getElementById(pfx+'-abon').textContent=fmtK(totalAbon);
     document.getElementById(pfx+'-tovar').textContent=fmtK(totalTovar);
-    const totalShiftsAll=ADMINS.reduce((s,a)=>s+a.shifts,0);
+    const totalShiftsAll=cur.reduce((s,a)=>s+a.shifts,0);
     document.getElementById(pfx+'-avg').textContent=fmtK(Math.round(totalAll/totalShiftsAll));
-    document.getElementById(pfx+'-leader').textContent=leader.name;
-    document.getElementById(pfx+'-leader-val').textContent=fmt(leader.total);
+    if(leader){document.getElementById(pfx+'-leader').textContent=leader.name;document.getElementById(pfx+'-leader-val').textContent=fmt(leader.total);}
     document.getElementById(pfx+'-new').textContent=totalNew+' чел.';
     document.getElementById(pfx+'-new-rub').textContent=fmt(totalNewR);
+    if(prefix==='apr'){const avgNew=totalNew>0?Math.round(totalNewR/totalNew):0;document.getElementById('aa-new-avg').textContent=avgNew>0?fmtK(avgNew):'—';}
+  })();
 
-    // [FIX 7] Сначала таблица
-    const tb=document.getElementById(prefix==='mar'?'mAdminTable':'aAdminTable');
-    const maxTotal=Math.max(...ADMINS.map(a=>a.total));
-    const maxTovar=Math.max(...ADMINS.map(a=>a.tovar),1);
-    const maxAbon=Math.max(...ADMINS.map(a=>a.abon));
-    const maxTovarVal=Math.max(...ADMINS.map(a=>a.tovar));
-    const maxNewQty=Math.max(...ADMINS.map(a=>a.newQty));
-    ADMINS.forEach((adm,rank)=>{
+  // ── Функция рендера детализации по выбранной неделе ──
+  let _admChart=null, _newbiesChart=null;
+
+  function renderAdminWeek(weekKey){
+    // Обновить метку
+    const lbl=document.getElementById('adminWeekLabel');
+    if(lbl) lbl.textContent=weekKey==='total'?'Итог апреля':weekKey;
+
+    // Собрать данные
+    let admins, newbies, firstDay;
+    if(weekKey==='total'){
+      // Агрегируем все недели
+      const allKeys=Object.keys(ADMINS_WEEKLY);
+      const allNames=[...new Set(allKeys.flatMap(k=>ADMINS_WEEKLY[k].map(a=>a.name)))];
+      const raw=allNames.map(name=>{
+        const weeks=allKeys.map(k=>ADMINS_WEEKLY[k].find(a=>a.name===name)||{abon:0,tovar:0,shifts:0,newQty:0,newRub:0});
+        return {name,abon:weeks.reduce((s,w)=>s+w.abon,0),tovar:weeks.reduce((s,w)=>s+w.tovar,0),
+          shifts:weeks.reduce((s,w)=>s+w.shifts,0),newQty:weeks.reduce((s,w)=>s+w.newQty,0),newRub:weeks.reduce((s,w)=>s+w.newRub,0)};
+      });
+      admins=prepAdmins(raw);
+      // NEWBIES: объединяем по имени
+      const nMap={};
+      allKeys.forEach(k=>{const nb=NEWBIES_WEEKLY[k];if(!nb)return;nb.labels.forEach((l,i)=>{if(!nMap[l])nMap[l]={qty:0,rev:0,color:nb.colors[i]};nMap[l].qty+=nb.qty[i];nMap[l].rev+=nb.revenue[i];});});
+      const nl=Object.keys(nMap);
+      newbies={labels:nl,qty:nl.map(l=>nMap[l].qty),revenue:nl.map(l=>nMap[l].rev),colors:nl.map(l=>nMap[l].color)};
+      // FIRST_DAY: объединяем по имени
+      const fdMap={};
+      allKeys.forEach(k=>{const fd=FIRST_DAY_WEEKLY[k];if(!fd||!fd.rows.length)return;fd.rows.forEach(r=>{if(!fdMap[r.name])fdMap[r.name]={trial:0,soldQty:0,soldRub:0};fdMap[r.name].trial+=r.trial;fdMap[r.name].soldQty+=r.soldQty;fdMap[r.name].soldRub+=r.soldRub;});});
+      const fdNames=Object.keys(fdMap);
+      const fdRows=fdNames.map(n=>{const d=fdMap[n];const conv=d.trial>0?Math.round(d.soldQty/d.trial*100):0;return{name:n,...d,conv};});
+      const fdTot={trial:fdRows.reduce((s,r)=>s+r.trial,0),soldQty:fdRows.reduce((s,r)=>s+r.soldQty,0),soldRub:fdRows.reduce((s,r)=>s+r.soldRub,0)};
+      fdTot.conv=fdTot.trial>0?Math.round(fdTot.soldQty/fdTot.trial*100):0;
+      firstDay={rows:fdRows,total:fdTot};
+    } else {
+      admins=prepAdmins(ADMINS_WEEKLY[weekKey]||[]);
+      newbies=NEWBIES_WEEKLY[weekKey]||{labels:[],qty:[],revenue:[],colors:[]};
+      firstDay=FIRST_DAY_WEEKLY[weekKey]||{rows:[],total:{trial:0,soldQty:0,soldRub:0,conv:0}};
+    }
+
+    // Таблица детализации
+    const tb=document.getElementById('aAdminTable');
+    tb.innerHTML='';
+    const maxTotal=Math.max(...admins.map(a=>a.total),1);
+    const maxTovar=Math.max(...admins.map(a=>a.tovar),1);
+    const maxAbon=Math.max(...admins.map(a=>a.abon),1);
+    const maxNewQty=Math.max(...admins.map(a=>a.newQty),1);
+    admins.forEach((adm,rank)=>{
       const tr=document.createElement('tr');
       const bc=rank===0?'b1':rank===1?'b2':rank===2?'b3':'bn';
       const pb=Math.round(adm.total/maxTotal*100);
-      const badges=(adm.abon===maxAbon?'<span title="Лидер по продажам услуг" style="font-size:13px;margin-left:4px">💰</span>':'')
-        +(adm.tovar===maxTovarVal?'<span title="Лидер по продажам товаров" style="font-size:13px;margin-left:4px">🛍️</span>':'')
-        +(maxNewQty>0&&adm.newQty===maxNewQty?'<span title="Лидер по кол-ву новичков" style="font-size:13px;margin-left:4px">👥</span>':'');
+      const badges=(adm.abon===Math.max(...admins.map(a=>a.abon))?'<span title="Лидер по продажам услуг" style="font-size:13px;margin-left:4px">💰</span>':'')
+        +(adm.tovar===Math.max(...admins.map(a=>a.tovar))?'<span title="Лидер по продажам товаров" style="font-size:13px;margin-left:4px">🛍️</span>':'')
+        +(maxNewQty>0&&adm.newQty===Math.max(...admins.map(a=>a.newQty))?'<span title="Лидер по кол-ву новичков" style="font-size:13px;margin-left:4px">👥</span>':'');
       tr.innerHTML=`<td><span class="bx ${bc}">${rank+1}</span></td><td style="font-weight:500">${adm.name}${badges}</td>
         <td class="r"><div class="mbar"><div class="mbar-bg"><div class="mbar-fill" style="width:${pb}%"></div></div><span class="mbar-val">${fmt(adm.abon)}</span></div></td>
         <td class="r"><div class="mbar"><div class="mbar-bg"><div class="mbar-fill o" style="width:${Math.round(adm.tovar/maxTovar*100)}%"></div></div><span class="mbar-val">${fmt(adm.tovar)}</span></div></td>
@@ -1142,15 +1215,17 @@ function renderMonth(prefix){
       tb.appendChild(tr);
     });
     const tf=document.createElement('tr');tf.className='tfoot';
-    const totalShifts=ADMINS.reduce((s,a)=>s+a.shifts,0);
-    tf.innerHTML=`<td colspan="2">ВСЕГО</td><td class="r">${fmt(totalAbon)}</td><td class="r">${fmt(totalTovar)}</td>
-      <td class="r">${fmt(totalAll)}</td><td class="r">${totalShifts}</td><td class="r">${fmt(Math.round(totalAll/totalShifts))}</td>
-      <td class="r">${totalNew}</td><td class="r">${fmt(totalNewR)}</td>`;
+    const tA=admins.reduce((s,a)=>s+a.abon,0),tT=admins.reduce((s,a)=>s+a.tovar,0),tAll=tA+tT;
+    const tS=admins.reduce((s,a)=>s+a.shifts,0),tN=admins.reduce((s,a)=>s+a.newQty,0),tNR=admins.reduce((s,a)=>s+a.newRub,0);
+    tf.innerHTML=`<td colspan="2">ВСЕГО</td><td class="r">${fmt(tA)}</td><td class="r">${fmt(tT)}</td>
+      <td class="r">${fmt(tAll)}</td><td class="r">${tS}</td><td class="r">${fmt(tS>0?Math.round(tAll/tS):0)}</td>
+      <td class="r">${tN}</td><td class="r">${fmt(tNR)}</td>`;
     tb.appendChild(tf);
 
-    // Потом график
-    const P=prefix==='mar'?'Mar':'Apr';
-    new Chart(document.getElementById('chart'+P+'Admins'),{type:'bar',
+    // График услуги/товары
+    if(_admChart){_admChart.destroy();_admChart=null;}
+    const active=admins.filter(a=>a.total>0);
+    _admChart=new Chart(document.getElementById('chartAprAdmins'),{type:'bar',
       data:{labels:active.map(a=>a.name),datasets:[
         {label:'Услуги',data:active.map(a=>a.abon),backgroundColor:G,borderRadius:4},
         {label:'Товары',data:active.map(a=>a.tovar),backgroundColor:O,borderRadius:4},
@@ -1160,26 +1235,28 @@ function renderMonth(prefix){
         scales:{x:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}},y:{stacked:true,grid:{display:false}}}}
     });
 
-    // Потом First (только апрель)
-    if(prefix==='apr'){
-      const avgNew=totalNew>0?Math.round(totalNewR/totalNew):0;
-      document.getElementById('aa-new-avg').textContent=avgNew>0?fmtK(avgNew):'—';
-      new Chart(document.getElementById('chartAprNewbies'),{type:'bar',
-        data:{labels:NEWBIES.labels,datasets:[{label:'Продажи новичкам',data:NEWBIES.revenue,backgroundColor:NEWBIES.colors,borderRadius:6,
+    // График NEWBIES
+    if(_newbiesChart){_newbiesChart.destroy();_newbiesChart=null;}
+    if(newbies.labels.length){
+      _newbiesChart=new Chart(document.getElementById('chartAprNewbies'),{type:'bar',
+        data:{labels:newbies.labels,datasets:[{label:'Продажи новичкам',data:newbies.revenue,backgroundColor:newbies.colors,borderRadius:6,
           datalabels:{anchor:'end',align:'end',font:{size:10,weight:'600'},color:G,formatter:v=>Math.round(v/1000)+'к'}}]},
         options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
           plugins:{datalabels:{display:true},legend:{display:false},tooltip:{callbacks:{label:ctx=>'Продажи: '+fmt(ctx.raw)}}},
           scales:{x:{grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}},y:{grid:{display:false}}}}
       });
-      const legEl=document.getElementById('aNewbiesLegend');
-      const totalRev=NEWBIES.revenue.reduce((s,v)=>s+v,0);
-      const totalQty=NEWBIES.qty.reduce((s,v)=>s+v,0);
-      NEWBIES.labels.forEach((lbl,i)=>{const avg=Math.round(NEWBIES.revenue[i]/NEWBIES.qty[i]);legEl.innerHTML+=`<div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:2px;background:${NEWBIES.colors[i]};flex-shrink:0"></div><span><b>${lbl}</b> — ${NEWBIES.qty[i]} чел., ${fmt(NEWBIES.revenue[i])}, ср.чек ${fmt(avg)}</span></div>`;});
-      legEl.innerHTML+=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--light);font-weight:600">Итого: ${totalQty} новичков · ${fmt(totalRev)} · ср.чек ${fmt(Math.round(totalRev/totalQty))}</div>`;
+    }
+    const legEl=document.getElementById('aNewbiesLegend');legEl.innerHTML='';
+    if(newbies.labels.length){
+      const tRev=newbies.revenue.reduce((s,v)=>s+v,0),tQty=newbies.qty.reduce((s,v)=>s+v,0);
+      newbies.labels.forEach((l,i)=>{const avg=newbies.qty[i]>0?Math.round(newbies.revenue[i]/newbies.qty[i]):0;legEl.innerHTML+=`<div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:2px;background:${newbies.colors[i]};flex-shrink:0"></div><span><b>${l}</b> — ${newbies.qty[i]} чел., ${fmt(newbies.revenue[i])}, ср.чек ${fmt(avg)}</span></div>`;});
+      legEl.innerHTML+=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--light);font-weight:600">Итого: ${tQty} новичков · ${fmt(tRev)} · ср.чек ${fmt(tQty>0?Math.round(tRev/tQty):0)}</div>`;
+    } else {legEl.innerHTML='<div style="color:var(--muted);font-size:12px">Нет данных</div>';}
 
-      // Таблица "Покупка первого абонемента новичкам Недели"
-      const fdTb=document.getElementById('aFirstDayTable');
-      FIRST_DAY.rows.forEach(r=>{
+    // Таблица FIRST_DAY
+    const fdTb=document.getElementById('aFirstDayTable');fdTb.innerHTML='';
+    if(firstDay.rows.length){
+      firstDay.rows.forEach(r=>{
         const tr=document.createElement('tr');
         const convColor=r.conv>=30?G:r.conv>=15?O:'#bbb';
         tr.innerHTML=`<td style="font-weight:500">${r.name}</td>
@@ -1192,14 +1269,24 @@ function renderMonth(prefix){
       const tfoot=document.createElement('tr');
       tfoot.className='tfoot';
       tfoot.innerHTML=`<td>Итого</td>
-        <td class="r">${FIRST_DAY.total.trial}</td>
-        <td class="r"><b>${FIRST_DAY.total.soldQty}</b></td>
-        <td class="r">${fmt(FIRST_DAY.total.soldRub)}</td>
-        <td class="r"><span style="font-weight:600">${FIRST_DAY.total.conv}%</span></td>`;
+        <td class="r">${firstDay.total.trial}</td>
+        <td class="r"><b>${firstDay.total.soldQty}</b></td>
+        <td class="r">${fmt(firstDay.total.soldRub)}</td>
+        <td class="r"><span style="font-weight:600">${firstDay.total.conv}%</span></td>`;
       fdTb.appendChild(tfoot);
     }
-  })();
-}
+  }
+
+  // ── INIT tabs ──
+  renderAdminWeek('20–26 апр');
+  document.querySelectorAll('#adminWeekTabs .wtab').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#adminWeekTabs .wtab').forEach(b=>b.classList.remove('active'));
+      this.classList.add('active');
+      renderAdminWeek(this.dataset.week);
+    });
+  });
+})();
 
 // ── INIT ──────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function(){

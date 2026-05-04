@@ -519,12 +519,12 @@ const ADMINS_WEEKLY={
     {name:'Аня',   abon:21040, tovar:2150, shifts:1,newQty:0,newRub:0    },
   ],
   '27 апр–3 мая':[
-    {name:'Марина',abon:165150,tovar:4924, shifts:4,newQty:3,newRub:22800},
-    {name:'Лера',  abon:127990,tovar:10015,shifts:2,newQty:3,newRub:22800},
+    {name:'Марина',abon:165150,tovar:4924, shifts:4,newQty:3,newRub:31660},
+    {name:'Лера',  abon:127990,tovar:10015,shifts:2,newQty:3,newRub:18240},
     {name:'Вика',  abon:92160, tovar:16885,shifts:2,newQty:0,newRub:0    },
-    {name:'Настя', abon:53520, tovar:6701, shifts:2,newQty:1,newRub:7600 },
+    {name:'Настя', abon:53520, tovar:6701, shifts:2,newQty:1,newRub:6080 },
     {name:'Аня К', abon:46360, tovar:6867, shifts:3,newQty:0,newRub:0    },
-    {name:'Лера З',abon:6080,  tovar:8578, shifts:1,newQty:1,newRub:7600 },
+    {name:'Лера З',abon:6080,  tovar:8578, shifts:1,newQty:1,newRub:6080 },
   ],
 };
 function prepAdmins(arr){return arr.map(d=>({...d,total:d.abon+d.tovar,perShift:d.shifts>0?Math.round((d.abon+d.tovar)/d.shifts):0})).sort((a,b)=>b.total-a.total);}
@@ -532,12 +532,12 @@ function prepAdmins(arr){return arr.map(d=>({...d,total:d.abon+d.tovar,perShift:
 const ADMINS=prepAdmins(ADMINS_WEEKLY['27 апр–3 мая']);
 
 const TRIAL_PIE ={labels:['Настя','Лера','Вика','Аня К'],conversions:[2,1,1,1],revenue:[12160,10880,10400,6080],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']};
-const TRIAL_PIE2={labels:['8 занятий'],qty:[8],revenue:[60800],colors:['#5c6937']};
+const TRIAL_PIE2={labels:['8 занятий','Другие пакеты'],qty:[18,9],revenue:[136800,163400],colors:['#5c6937','#A2B9C9']};
 
 const NEWBIES_WEEKLY={
   '13–19 апр':{labels:['Аня К','Марина','Вика','Настя'],qty:[4,3,3,1],revenue:[71860,46000,23040,10880],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
   '20–26 апр':{labels:['Марина','Настя'],qty:[2,2],revenue:[16960,12160],colors:['#5C6937','#A2B9C9']},
-  '27 апр–3 мая':{labels:['Марина','Лера','Настя','Лера З'],qty:[3,3,1,1],revenue:[22800,22800,7600,7600],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
+  '27 апр–3 мая':{labels:['Марина','Лера','Настя','Лера З'],qty:[3,3,1,1],revenue:[31660,18240,6080,6080],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
 };
 const NEWBIES=NEWBIES_WEEKLY['27 апр–3 мая'];
 
@@ -563,8 +563,19 @@ const FIRST_DAY_WEEKLY={
     ],
     total:{trial:35, soldQty:4, soldRub:29120, conv:11}
   },
+  '27 апр–3 мая':{
+    rows:[
+      {name:'Марина', trial:9, soldQty:3, soldRub:31660, conv:33},
+      {name:'Лера',   trial:6, soldQty:3, soldRub:18240, conv:50},
+      {name:'Аня К',  trial:5, soldQty:0, soldRub:0,     conv:0 },
+      {name:'Настя',  trial:4, soldQty:1, soldRub:6080,  conv:25},
+      {name:'Вика',   trial:3, soldQty:0, soldRub:0,     conv:0 },
+      {name:'Лера З', trial:1, soldQty:1, soldRub:6080,  conv:100},
+    ],
+    total:{trial:28, soldQty:8, soldRub:62060, conv:29}
+  },
 };
-const FIRST_DAY=FIRST_DAY_WEEKLY['20–26 апр'];
+const FIRST_DAY=FIRST_DAY_WEEKLY['27 апр–3 мая'];
 
 // [FIX 2] Правильный итог апреля
 const MONTHLY={
@@ -1012,8 +1023,8 @@ function renderMonth(prefix){
     const marchIdx2=W.isMarch.map((m,i)=>m?i:-1).filter(i=>i>=0);
     const monthIdxs=isMar?marchIdx2:aprIdx2;
     // Официальные итоги месяца
-    const officialVisits={apr:1399,mar:null};
-    const officialFirst={apr:138,mar:null};
+    const officialVisits={apr:1472,mar:null};
+    const officialFirst={apr:135,mar:null};
     const totalVisits=(!isMar&&officialVisits.apr)?officialVisits.apr:monthIdxs.reduce((s,i)=>s+W.visits[i],0);
     const totalFirst=(!isMar&&officialFirst.apr)?officialFirst.apr:monthIdxs.reduce((s,i)=>s+W.first[i],0);
     safeSetV(pfx+'-total', fmtN(totalVisits));

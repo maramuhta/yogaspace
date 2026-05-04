@@ -446,6 +446,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
       <div style="flex:1;min-width:260px;position:relative;height:200px"><canvas id="chartAprNewbies"></canvas></div>
       <div id="aNewbiesLegend" style="flex:1;min-width:200px;font-size:12px;line-height:2.1;align-self:center"></div>
     </div>
+    <div id="aNewbiesTypes" style="margin-top:12px;padding-top:10px;border-top:1px solid var(--light);display:none"></div>
   </div>
   <!-- Покупка первого абонемента новичкам Недели -->
   <div class="panel">
@@ -537,7 +538,8 @@ const TRIAL_PIE2={labels:['4 занятия','8 занятий','20 заняти
 const NEWBIES_WEEKLY={
   '13–19 апр':{labels:['Аня К','Марина','Вика','Настя'],qty:[4,3,3,1],revenue:[71860,46000,23040,10880],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
   '20–26 апр':{labels:['Марина','Настя'],qty:[2,2],revenue:[16960,12160],colors:['#5C6937','#A2B9C9']},
-  '27 апр–3 мая':{labels:['Марина','Лера','Настя','Лера З'],qty:[3,3,1,1],revenue:[31660,18240,6080,6080],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
+  '27 апр–3 мая':{labels:['Марина','Лера','Настя','Лера З'],qty:[3,3,1,1],revenue:[31660,18240,6080,6080],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4'],
+    types:[{label:'4 занятия',qty:6},{label:'8 занятий',qty:1},{label:'СТАРТ (инд.)',qty:1}]},
 };
 const NEWBIES=NEWBIES_WEEKLY['27 апр–3 мая'];
 
@@ -1283,6 +1285,20 @@ function renderMonth(prefix){
       newbies.labels.forEach((l,i)=>{const avg=newbies.qty[i]>0?Math.round(newbies.revenue[i]/newbies.qty[i]):0;legEl.innerHTML+=`<div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:2px;background:${newbies.colors[i]};flex-shrink:0"></div><span><b>${l}</b> — ${newbies.qty[i]} чел., ${fmt(newbies.revenue[i])}, ср.чек ${fmt(avg)}</span></div>`;});
       legEl.innerHTML+=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--light);font-weight:600">Итого: ${tQty} новичков · ${fmt(tRev)} · ср.чек ${fmt(tQty>0?Math.round(tRev/tQty):0)}</div>`;
     } else {legEl.innerHTML='<div style="color:var(--muted);font-size:12px">Нет данных</div>';}
+
+    // Типы абонементов First
+    const typesEl=document.getElementById('aNewbiesTypes');
+    if(typesEl){
+      const types=newbies.types;
+      if(types&&types.length){
+        typesEl.style.display='block';
+        const typeColors=['#5c6937','#A2B9C9','#F0803B','#9b89c4','#aeb49c','#e8c87a'];
+        typesEl.innerHTML='<div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px">По типам абонементов</div>'
+          +types.map((t,i)=>`<span style="display:inline-flex;align-items:center;gap:5px;background:${typeColors[i%typeColors.length]}18;border:1px solid ${typeColors[i%typeColors.length]}44;border-radius:20px;padding:3px 10px;font-size:12px;margin:2px 4px 2px 0"><span style="width:7px;height:7px;border-radius:50%;background:${typeColors[i%typeColors.length]};display:inline-block"></span><b>${t.label}</b> — ${t.qty} шт.</span>`).join('');
+      } else {
+        typesEl.style.display='none';
+      }
+    }
 
     // Таблица FIRST_DAY
     const fdTb=document.getElementById('aFirstDayTable');fdTb.innerHTML='';

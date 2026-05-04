@@ -420,6 +420,8 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
     <button class="wtab active" data-week="27 апр–3 мая">27 апр–3 мая</button>
     <button class="wtab" data-week="20–26 апр">20–26 апр</button>
     <button class="wtab" data-week="13–19 апр">13–19 апр</button>
+    <button class="wtab" data-week="6–12 апр">6–12 апр</button>
+    <button class="wtab" data-week="1–5 апр">1–5 апр</button>
     <button class="wtab" data-week="total">Итог апреля</button>
   </div>
   <!-- [FIX 7] Сначала таблица -->
@@ -503,6 +505,22 @@ const TRIAL={
 
 // ── ДАННЫЕ ПО НЕДЕЛЯМ (администраторы) ──
 const ADMINS_WEEKLY={
+  '1–5 апр':[
+    {name:'Аня К', abon:128120,tovar:8494, shifts:2,newQty:1,newRub:6080 },
+    {name:'Марина',abon:83720, tovar:9832, shifts:3,newQty:1,newRub:10880},
+    {name:'Вика',  abon:60420, tovar:7564, shifts:2,newQty:1,newRub:6080 },
+    {name:'Лера',  abon:36420, tovar:3542, shifts:1,newQty:0,newRub:0    },
+    {name:'Настя', abon:31080, tovar:1805, shifts:1,newQty:0,newRub:0    },
+    {name:'Аня',   abon:22620, tovar:7012, shifts:1,newQty:1,newRub:10880},
+  ],
+  '6–12 апр':[
+    {name:'Марина',abon:119780,tovar:33964,shifts:5,newQty:0,newRub:0    },
+    {name:'Настя', abon:105240,tovar:4803, shifts:3,newQty:2,newRub:12160},
+    {name:'Аня К', abon:66990, tovar:3946, shifts:2,newQty:1,newRub:6080 },
+    {name:'Вика',  abon:44320, tovar:4224, shifts:2,newQty:1,newRub:10400},
+    {name:'Лера',  abon:30460, tovar:2232, shifts:1,newQty:1,newRub:10880},
+    {name:'Аня',   abon:26400, tovar:629,  shifts:1,newQty:0,newRub:0    },
+  ],
   '13–19 апр':[
     {name:'Марина',abon:139780,tovar:4391, shifts:3,newQty:3,newRub:46000},
     {name:'Вика',  abon:75261, tovar:10720,shifts:2,newQty:3,newRub:23040},
@@ -536,6 +554,8 @@ const TRIAL_PIE ={labels:['Настя','Лера','Вика','Аня К'],conver
 const TRIAL_PIE2={labels:['4 занятия','8 занятий','20 занятий','10 занятий (майсор)','Другое'],qty:[18,7,1,1,1],revenue:[109440,76160,24240,10400,19920],colors:['#5c6937','#A2B9C9','#F0803B','#9b89c4','#aeb49c']};
 
 const NEWBIES_WEEKLY={
+  '1–5 апр':{labels:['Марина','Аня','Аня К','Вика'],qty:[1,1,1,1],revenue:[10880,10880,6080,6080],colors:['#5C6937','#e8c87a','#aeb49c','#F0803B']},
+  '6–12 апр':{labels:['Настя','Лера','Вика','Аня К'],qty:[2,1,1,1],revenue:[12160,10880,10400,6080],colors:['#9b89c4','#A2B9C9','#F0803B','#aeb49c']},
   '13–19 апр':{labels:['Аня К','Марина','Вика','Настя'],qty:[4,3,3,1],revenue:[71860,46000,23040,10880],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
   '20–26 апр':{labels:['Марина','Настя'],qty:[2,2],revenue:[16960,12160],colors:['#5C6937','#A2B9C9']},
   '27 апр–3 мая':{labels:['Марина','Лера','Настя','Лера З'],qty:[3,3,1,1],revenue:[31660,18240,6080,6080],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4'],
@@ -544,6 +564,17 @@ const NEWBIES_WEEKLY={
 const NEWBIES=NEWBIES_WEEKLY['27 апр–3 мая'];
 
 const FIRST_DAY_WEEKLY={
+  '6–12 апр':{
+    rows:[
+      {name:'Аня К',  trial:13, soldQty:1, soldRub:6080,  conv:8 },
+      {name:'Настя',  trial:11, soldQty:2, soldRub:12160, conv:18},
+      {name:'Марина', trial:7,  soldQty:0, soldRub:0,     conv:0 },
+      {name:'Вика',   trial:5,  soldQty:1, soldRub:10400, conv:20},
+      {name:'Лера',   trial:3,  soldQty:1, soldRub:10880, conv:33},
+      {name:'Аня',    trial:0,  soldQty:0, soldRub:0,     conv:0 },
+    ],
+    total:{trial:39, soldQty:5, soldRub:39520, conv:13}
+  },
   '13–19 апр':{
     rows:[
       {name:'Аня К',  trial:25, soldQty:4, soldRub:71860, conv:16},

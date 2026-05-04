@@ -105,7 +105,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
 <header class="hd">
   <div class="hd-logo">
     <svg viewBox="0 0 30 30" fill="none"><ellipse cx="15" cy="15" rx="9.5" ry="9.5" stroke="#fdf6f0" stroke-width="1.1"/><ellipse cx="15" cy="15" rx="13.5" ry="5.5" stroke="#fdf6f0" stroke-width="1.1" transform="rotate(-24 15 15)"/></svg>
-    <div><div class="hd-name">Yoga Space · Никитская</div><div class="hd-sub">обновлено 27 апр 2026</div></div>
+    <div><div class="hd-name">Yoga Space · Никитская</div><div class="hd-sub">обновлено 4 мая 2026</div></div>
   </div>
   <div class="hd-badge" id="hd-badge">2026</div>
 </header>
@@ -251,7 +251,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
 <div class="sec" id="mar-sec-admins">
   <p class="eyebrow">Администраторы · март 2026</p>
   <div class="cards">
-    <div class="card"><div class="card-lbl">Всего продаж</div><div class="card-val" id="ma-total">—</div><div class="card-sub">20–26 апр</div></div>
+    <div class="card"><div class="card-lbl">Всего продаж</div><div class="card-val" id="ma-total">—</div><div class="card-sub">27 апр–3 мая</div></div>
     <div class="card"><div class="card-lbl">Услуги</div><div class="card-val" id="ma-abon">—</div><div class="card-sub">абонементы</div></div>
     <div class="card orange"><div class="card-lbl">Товары</div><div class="card-val orange" id="ma-tovar">—</div><div class="card-sub">розничные</div></div>
     <div class="card blue"><div class="card-lbl">Среднее / адм.</div><div class="card-val blue" id="ma-avg">—</div><div class="card-sub">активные</div></div>
@@ -267,7 +267,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
     </table></div>
   </div>
   <div class="panel">
-    <h3>Услуги и товары по администраторам</h3><div class="panel-sub">20–26 апр</div>
+    <h3>Услуги и товары по администраторам</h3><div class="panel-sub">27 апр–3 мая</div>
     <div class="chart-h"><canvas id="chartMarAdmins"></canvas></div>
     <div class="legend">
       <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Услуги</div>
@@ -406,7 +406,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
 <div class="sec" id="apr-sec-admins">
   <p class="eyebrow">Администраторы · апрель 2026</p>
   <div class="cards">
-    <div class="card"><div class="card-lbl">Всего продаж</div><div class="card-val" id="aa-total">—</div><div class="card-sub">20–26 апр</div></div>
+    <div class="card"><div class="card-lbl">Всего продаж</div><div class="card-val" id="aa-total">—</div><div class="card-sub">27 апр–3 мая</div></div>
     <div class="card"><div class="card-lbl">Услуги</div><div class="card-val" id="aa-abon">—</div><div class="card-sub">абонементы</div></div>
     <div class="card orange"><div class="card-lbl">Товары</div><div class="card-val orange" id="aa-tovar">—</div><div class="card-sub">розничные</div></div>
     <div class="card blue"><div class="card-lbl">Среднее в смену</div><div class="card-val blue" id="aa-avg">—</div><div class="card-sub">все смены</div></div>
@@ -416,13 +416,14 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
   </div>
   <!-- Переключатель недель -->
   <div class="week-tabs" id="adminWeekTabs">
-    <button class="wtab active" data-week="20–26 апр">20–26 апр</button>
+    <button class="wtab active" data-week="27 апр–3 мая">27 апр–3 мая</button>
+    <button class="wtab" data-week="20–26 апр">20–26 апр</button>
     <button class="wtab" data-week="13–19 апр">13–19 апр</button>
     <button class="wtab" data-week="total">Итог апреля</button>
   </div>
   <!-- [FIX 7] Сначала таблица -->
   <div class="panel">
-    <h3>Детализация</h3><div class="panel-sub" id="adminWeekLabel">20–26 апр</div>
+    <h3>Детализация</h3><div class="panel-sub" id="adminWeekLabel">27 апр–3 мая</div>
     <div class="twrap"><table>
       <thead><tr><th style="width:32px">#</th><th>Администратор</th><th class="r">Услуги</th><th class="r">Товары</th><th class="r">Итого</th><th class="r">Смены</th><th class="r">В смену</th><th class="r">First, шт.</th><th class="r">Новым, руб.</th></tr></thead>
       <tbody id="aAdminTable"></tbody>
@@ -430,7 +431,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
   </div>
   <!-- Услуги и товары -->
   <div class="panel">
-    <h3>Услуги и товары по администраторам</h3><div class="panel-sub">20–26 апр</div>
+    <h3>Услуги и товары по администраторам</h3><div class="panel-sub">27 апр–3 мая</div>
     <div class="chart-h"><canvas id="chartAprAdmins"></canvas></div>
     <div class="legend">
       <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Услуги</div>
@@ -439,7 +440,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
   </div>
   <!-- Продажи новичкам First 20% -->
   <div class="panel">
-    <h3>Продажи новичкам — First 20% · 20–26 апр</h3><div class="panel-sub"></div>
+    <h3>Продажи новичкам — First 20% · 27 апр–3 мая</h3><div class="panel-sub"></div>
     <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
       <div style="flex:1;min-width:260px;position:relative;height:200px"><canvas id="chartAprNewbies"></canvas></div>
       <div id="aNewbiesLegend" style="flex:1;min-width:200px;font-size:12px;line-height:2.1;align-self:center"></div>
@@ -447,7 +448,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
   </div>
   <!-- Покупка первого абонемента новичкам Недели -->
   <div class="panel">
-    <h3>Продажа первого абонемента новичкам Недели</h3><div class="panel-sub">20–26 апр</div>
+    <h3>Продажа первого абонемента новичкам Недели</h3><div class="panel-sub">27 апр–3 мая</div>
     <div class="twrap"><table>
       <thead><tr><th>Администратор</th><th class="r">Пробных гостей</th><th class="r">Продажи, шт.</th><th class="r">Продажи, руб.</th><th class="r">Конверсия</th></tr></thead>
       <tbody id="aFirstDayTable"></tbody>
@@ -467,34 +468,34 @@ Chart.register(ChartDataLabels);
 
 // ── ДАННЫЕ ────────────────────────────────────
 const WEEKS={
-  labels:['9–15 мар','16–22 мар','23–29 мар','30 мар–5 апр','6–12 апр','13–19 апр','20–26 апр'],
-  abon:  [479000,505000,578000,616000,456000,664590,476300],
-  tovar: [64000, 39000, 62000, 50000, 50000, 53986, 33668],
-  visits:[331,310,339,338,350,359,352],
-  first: [32, 40, 37, 28, 39, 37, 34],
-  plan:  [587000,587000,587000,607000,607000,607000,607000],
-  isMarch:[true,true,true,true,false,false,false],
+  labels:['9–15 мар','16–22 мар','23–29 мар','30 мар–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая'],
+  abon:  [479000,505000,578000,616000,456000,664590,476300,565860],
+  tovar: [64000, 39000, 62000, 50000, 50000, 53986, 33668,53969],
+  visits:[331,310,339,338,350,359,352,297],
+  first: [32, 40, 37, 28, 39, 37, 34, 21],
+  plan:  [587000,587000,587000,607000,607000,607000,607000,607000],
+  isMarch:[true,true,true,true,false,false,false,false],
 };
 WEEKS.total=WEEKS.abon.map((a,i)=>a+WEEKS.tovar[i]);
 
 const CATS={
   labels:WEEKS.labels,isMarch:WEEKS.isMarch,
-  abon: {morn:[161,155,334,327,163,293,177],eve:[162,165,146,149,165,192,161],wknd:[156,185,98,140,128,179,135]},
-  tovar:{morn:[22,5,49,15,15,30,13],       eve:[33,21,11,22,13,19,11],      wknd:[9,13,2,13,22,5,10]},
+  abon: {morn:[161,155,334,327,163,293,177,258],eve:[162,165,146,149,165,192,161,147],wknd:[156,185,98,140,128,179,135,162]},
+  tovar:{morn:[22,5,49,15,15,30,13,25],         eve:[33,21,11,22,13,19,11,14],       wknd:[9,13,2,13,22,5,10,15]},
 };
 const toRub=arr=>arr.map(v=>v*1000);
 
 const VISITS_TIME={
-  morn: [null,null,null,null,null,114,96],
-  eve:  [null,null,null,null,null,122,148],
-  wknd: [null,null,null,null,null,123,108],
+  morn: [null,null,null,null,null,114,96,135],
+  eve:  [null,null,null,null,null,122,148,77],
+  wknd: [null,null,null,null,null,123,108,85],
 };
 
 const TRIAL={
   labels:WEEKS.labels,isMarch:WEEKS.isMarch,
-  visits:[331,310,339,338,350,359,352],
-  trial: [32, 40, 37, 28, 39, 32, 34],
-  conversion:[3,4,4,5,5,8,9],
+  visits:[331,310,339,338,350,359,352,297],
+  trial: [32, 40, 37, 28, 39, 32, 34, 21],
+  conversion:[3,4,4,5,5,8,9,8],
 };
 
 
@@ -516,19 +517,28 @@ const ADMINS_WEEKLY={
     {name:'Лера',  abon:34880, tovar:3998, shifts:3,newQty:0,newRub:0    },
     {name:'Аня',   abon:21040, tovar:2150, shifts:1,newQty:0,newRub:0    },
   ],
+  '27 апр–3 мая':[
+    {name:'Марина',abon:165150,tovar:4924, shifts:4,newQty:3,newRub:22800},
+    {name:'Лера',  abon:127990,tovar:10015,shifts:2,newQty:3,newRub:22800},
+    {name:'Вика',  abon:92160, tovar:16885,shifts:2,newQty:0,newRub:0    },
+    {name:'Настя', abon:53520, tovar:6701, shifts:2,newQty:1,newRub:7600 },
+    {name:'Аня К', abon:46360, tovar:6867, shifts:3,newQty:0,newRub:0    },
+    {name:'Лера З',abon:6080,  tovar:8578, shifts:1,newQty:1,newRub:7600 },
+  ],
 };
 function prepAdmins(arr){return arr.map(d=>({...d,total:d.abon+d.tovar,perShift:d.shifts>0?Math.round((d.abon+d.tovar)/d.shifts):0})).sort((a,b)=>b.total-a.total);}
 // Текущая неделя (для графика First/Trial)
-const ADMINS=prepAdmins(ADMINS_WEEKLY['20–26 апр']);
+const ADMINS=prepAdmins(ADMINS_WEEKLY['27 апр–3 мая']);
 
 const TRIAL_PIE ={labels:['Настя','Лера','Вика','Аня К'],conversions:[2,1,1,1],revenue:[12160,10880,10400,6080],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']};
-const TRIAL_PIE2={labels:['8 занятий','4 занятия','20 занятий','10 Майсор'],qty:[8,16,2,1],revenue:[108800,121600,55200,13000],colors:['#5c6937','#cae7fb','#f0803b','#9b89c4']};
+const TRIAL_PIE2={labels:['8 занятий'],qty:[8],revenue:[60800],colors:['#5c6937']};
 
 const NEWBIES_WEEKLY={
   '13–19 апр':{labels:['Аня К','Марина','Вика','Настя'],qty:[4,3,3,1],revenue:[71860,46000,23040,10880],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
   '20–26 апр':{labels:['Марина','Настя'],qty:[2,2],revenue:[16960,12160],colors:['#5C6937','#A2B9C9']},
+  '27 апр–3 мая':{labels:['Марина','Лера','Настя','Лера З'],qty:[3,3,1,1],revenue:[22800,22800,7600,7600],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
 };
-const NEWBIES=NEWBIES_WEEKLY['20–26 апр'];
+const NEWBIES=NEWBIES_WEEKLY['27 апр–3 мая'];
 
 const FIRST_DAY_WEEKLY={
   '13–19 апр':{
@@ -553,7 +563,7 @@ const FIRST_DAY_WEEKLY={
     total:{trial:35, soldQty:4, soldRub:29120, conv:11}
   },
 };
-const FIRST_DAY=FIRST_DAY_WEEKLY['13–19 апр'];
+const FIRST_DAY=FIRST_DAY_WEEKLY['20–26 апр'];
 
 // [FIX 2] Правильный итог апреля
 const MONTHLY={
@@ -579,19 +589,19 @@ const planPill=(p)=>{
   return `<span class="pill ${cls}">${p}%</span>`;
 };
 
-// Данные посещений по дням и часам (неделя 20-26 апр)
+// Данные посещений по дням и часам (неделя 27 апр–3 мая)
 const VISITS_DAYS = {
-  labels: ['Пн 20','Вт 21','Ср 22','Чт 23','Пт 24','Сб 25','Вс 26'],
-  visits: [38, 51, 60, 59, 36, 51, 57],
-  morn:   [19, 17, 28, 17, 15, 51, 43],
+  labels: ['Вс 27','Пн 28','Вт 29','Ср 30','Чт 1','Пт 2','Сб 3'],
+  visits: [34, 54, 43, 42, 35, 38, 51],
+  morn:   [34, 25, 24, 19, 29, 38, 51],
   day:    [0,   0,  0,  0,  0,  0,  0],
-  eve:    [19, 34, 32, 42, 21,  0, 14],
+  eve:    [0,  29, 19, 23,  6,  0,  0],
   first:  [0,   0,  0,  0,  0,  0,  0],
-  isWknd: [false,false,false,false,false,true,true],
+  isWknd: [true,false,false,false,false,false,true],
 };
 const VISITS_HOURS = {
   labels: ['6:00','7:00','8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'],
-  visits: [22, 11, 23, 6, 34, 27, 15, 24, 21, 7, 6, 22, 21, 53, 60],
+  visits: [13, 10, 22, 4, 27, 32, 21, 35, 14, 12, 4, 22, 18, 29, 34],
   // утро = до 16 (включая 15), вечер = с 16
   colors: function(){
     return this.labels.map(h=>{
@@ -631,21 +641,21 @@ function switchVisitView(pfx, view, btn){
     legend.innerHTML=`
       <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Будни</div>
       <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Выходные</div>
-      <div class="leg" style="color:var(--muted);font-size:11px">20–26 апр · итого 352</div>`;
+      <div class="leg" style="color:var(--muted);font-size:11px">27 апр–3 мая · итого 297</div>`;
   } else {
     _visitCharts[pfx]=buildVisitHoursChart(canvasId);
     legend.innerHTML=`
-      <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро до 15:30 · 106 чел.</div>
-      <div class="leg"><div class="leg-dot" style="background:#aeb49c"></div>Выходные · 123 чел.</div>
-      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Вечер 15:30+ · 130 чел.</div>`;
+      <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро до 15:30 · 135 чел.</div>
+      <div class="leg"><div class="leg-dot" style="background:#aeb49c"></div>Выходные · 85 чел.</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Вечер 15:30+ · 77 чел.</div>`;
   }
 }
 
 function buildVisitWeeksChart(canvasId,isMar){
-  // Утро 6-11, День 12-16, Вечер 17+ (данные 13-19 апр из файла посещений)
-  const morn  = [null,null,null,null,null,106,81];
-  const eve   = [null,null,null,null,null,130,126];
-  const wknd  = [null,null,null,null,null,123,94];
+  // Утро 6-11, День 12-16, Вечер 17+ (данные до 27 апр–3 мая)
+  const morn  = [null,null,null,null,null,106,81,71];
+  const eve   = [null,null,null,null,null,130,126,141];
+  const wknd  = [null,null,null,null,null,123,94,85];
   const total = WEEKS.visits;
   const hasBreakdown = i => morn[i] !== null;
 
@@ -1139,9 +1149,9 @@ function renderMonth(prefix){
   })();
 
   // ── 5. АДМИНИСТРАТОРЫ ──
-  // Рендер карточек шапки всегда по текущей неделе (20–26 апр)
+  // Рендер карточек шапки всегда по текущей неделе (27 апр–3 мая)
   (function(){
-    const cur=prepAdmins(ADMINS_WEEKLY['20–26 апр']);
+    const cur=prepAdmins(ADMINS_WEEKLY['27 апр–3 мая']);
     const totalAbon=cur.reduce((s,a)=>s+a.abon,0);
     const totalTovar=cur.reduce((s,a)=>s+a.tovar,0);
     const totalAll=totalAbon+totalTovar;
@@ -1287,7 +1297,7 @@ function renderMonth(prefix){
   }
 
   // ── INIT tabs ──
-  renderAdminWeek('20–26 апр');
+  renderAdminWeek('27 апр–3 мая');
   document.querySelectorAll('#adminWeekTabs .wtab').forEach(btn=>{
     btn.addEventListener('click',function(){
       document.querySelectorAll('#adminWeekTabs .wtab').forEach(b=>b.classList.remove('active'));

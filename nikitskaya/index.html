@@ -547,6 +547,15 @@ const ADMINS_WEEKLY={
   ],
 };
 function prepAdmins(arr){return arr.map(d=>({...d,total:d.abon+d.tovar,perShift:d.shifts>0?Math.round((d.abon+d.tovar)/d.shifts):0})).sort((a,b)=>b.total-a.total);}
+// Итог апреля — данные из официальных отчётов (услуги и товары paid, First из xlsx)
+const ADMINS_APR=[
+  {name:'Марина', abon:623070, tovar:57978, shifts:17, newQty:9, newRub:105500},
+  {name:'Аня К',  abon:484870, tovar:37713, shifts:12, newQty:3, newRub:84020 },
+  {name:'Настя',  abon:331160, tovar:31897, shifts:12, newQty:8, newRub:41280 },
+  {name:'Вика',   abon:274740, tovar:28126, shifts:8,  newQty:5, newRub:39520 },
+  {name:'Лера',   abon:215710, tovar:26671, shifts:7,  newQty:2, newRub:29120 },
+  {name:'Аня',    abon:80900,  tovar:10735, shifts:4,  newQty:1, newRub:10880 },
+];
 // Текущая неделя (для графика First/Trial)
 const ADMINS=prepAdmins(ADMINS_WEEKLY['27 апр–3 мая']);
 
@@ -1226,15 +1235,9 @@ function renderMonth(prefix){
     // Собрать данные
     let admins, newbies, firstDay;
     if(weekKey==='total'){
-      // Агрегируем все недели
+      // Используем официальные данные из отчётов за апрель
+      admins=prepAdmins(ADMINS_APR);
       const allKeys=Object.keys(ADMINS_WEEKLY);
-      const allNames=[...new Set(allKeys.flatMap(k=>ADMINS_WEEKLY[k].map(a=>a.name)))];
-      const raw=allNames.map(name=>{
-        const weeks=allKeys.map(k=>ADMINS_WEEKLY[k].find(a=>a.name===name)||{abon:0,tovar:0,shifts:0,newQty:0,newRub:0});
-        return {name,abon:weeks.reduce((s,w)=>s+w.abon,0),tovar:weeks.reduce((s,w)=>s+w.tovar,0),
-          shifts:weeks.reduce((s,w)=>s+w.shifts,0),newQty:weeks.reduce((s,w)=>s+w.newQty,0),newRub:weeks.reduce((s,w)=>s+w.newRub,0)};
-      });
-      admins=prepAdmins(raw);
       // NEWBIES: объединяем по имени
       const nMap={};
       allKeys.forEach(k=>{const nb=NEWBIES_WEEKLY[k];if(!nb)return;nb.labels.forEach((l,i)=>{if(!nMap[l])nMap[l]={qty:0,rev:0,color:nb.colors[i]};nMap[l].qty+=nb.qty[i];nMap[l].rev+=nb.revenue[i];});});

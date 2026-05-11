@@ -980,8 +980,9 @@ function renderMonth(prefix){
     safeSet(pfx+'-avg',  fmtK(avgWeek));
     safeSet(pfx+'-best', W.labels[bestIdx]);
     safeSet(pfx+'-best-val', fmt(W.total[bestIdx]));
-    // Карточка плана: берём план последней недели выбранного периода
-    const lastWeekIdx = isMar ? marchIdx[marchIdx.length-1] : W.plan.length-1;
+    // Карточка плана: берём план последней недели выбранного периода (исключаем майские)
+    const lastWeekIdx = isMar ? marchIdx[marchIdx.length-1]
+      : W.isMarch.reduce((last,m,i)=>(!m && !W.labels[i].includes('мая'))?i:last, -1);
     const lastPlan  = W.plan[lastWeekIdx];
     const lastTotal = W.total[lastWeekIdx];
     const planEl=document.getElementById(pfx+'-plan');

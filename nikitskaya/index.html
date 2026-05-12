@@ -1852,11 +1852,16 @@ function renderMayAdminWeek(weekKey){
     } else {
       const maxTotal=Math.max(...admins.map(a=>a.total),1);
       const maxTovar=Math.max(...admins.map(a=>a.tovar),1);
+      const maxPerShift=Math.max(...admins.filter(a=>a.shifts>0).map(a=>a.perShift),1);
+      const maxNewQty=Math.max(...admins.map(a=>a.newQty),1);
       admins.forEach((adm,rank)=>{
         const tr=document.createElement('tr');
         const bc=rank===0?'b1':rank===1?'b2':rank===2?'b3':'bn';
         const pb=Math.round(adm.total/maxTotal*100);
-        tr.innerHTML=`<td><span class="bx ${bc}">${rank+1}</span></td><td style="font-weight:500">${adm.name}</td>
+        const badges=(adm.tovar===Math.max(...admins.map(a=>a.tovar))?'<span title="Лидер по товарам" style="font-size:13px;margin-left:4px">🛍️</span>':'')
+          +(adm.shifts>0&&adm.perShift===maxPerShift?'<span title="Лучшая средняя в смену" style="font-size:13px;margin-left:4px">⚡</span>':'')
+          +(maxNewQty>0&&adm.newQty===Math.max(...admins.map(a=>a.newQty))?'<span title="Лидер по новичкам" style="font-size:13px;margin-left:4px">👥</span>':'');
+        tr.innerHTML=`<td><span class="bx ${bc}">${rank+1}</span></td><td style="font-weight:500">${adm.name}${badges}</td>
           <td class="r"><div class="mbar"><div class="mbar-bg"><div class="mbar-fill" style="width:${pb}%"></div></div><span class="mbar-val">${fmt(adm.abon)}</span></div></td>
           <td class="r"><div class="mbar"><div class="mbar-bg"><div class="mbar-fill o" style="width:${Math.round(adm.tovar/maxTovar*100)}%"></div></div><span class="mbar-val">${fmt(adm.tovar)}</span></div></td>
           <td class="r" style="font-weight:600">${fmt(adm.total)}</td>

@@ -422,15 +422,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
     <button class="wtab" data-week="13–19 апр">13–19 апр</button>
     <button class="wtab" data-week="total">Итог апреля</button>
   </div>
-  <!-- [FIX 7] Сначала таблица -->
-  <div class="panel">
-    <h3>Детализация</h3><div class="panel-sub" id="adminWeekLabel">27 апр–3 мая</div>
-    <div class="twrap"><table>
-      <thead><tr><th style="width:32px">#</th><th>Администратор</th><th class="r">Услуги</th><th class="r">Товары</th><th class="r">Итого</th><th class="r">Смены</th><th class="r">В смену</th><th class="r">First, шт.</th><th class="r">Новым, руб.</th></tr></thead>
-      <tbody id="aAdminTable"></tbody>
-    </table></div>
-  </div>
-  <!-- Услуги и товары -->
+  <!-- Услуги и товары — вверху под шапкой -->
   <div class="panel">
     <h3>Услуги и товары по администраторам</h3><div class="panel-sub">27 апр–3 мая</div>
     <div class="chart-h"><canvas id="chartAprAdmins"></canvas></div>
@@ -438,6 +430,14 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
       <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Услуги</div>
       <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Товары</div>
     </div>
+  </div>
+  <!-- Детализация -->
+  <div class="panel">
+    <h3>Детализация</h3><div class="panel-sub" id="adminWeekLabel">27 апр–3 мая</div>
+    <div class="twrap"><table>
+      <thead><tr><th style="width:32px">#</th><th>Администратор</th><th class="r">Услуги</th><th class="r">Товары</th><th class="r">Итого</th><th class="r">Смены</th><th class="r">В смену</th><th class="r">First, шт.</th><th class="r">Новым, руб.</th></tr></thead>
+      <tbody id="aAdminTable"></tbody>
+    </table></div>
   </div>
   <!-- Продажи новичкам First 20% -->
   <div class="panel">
@@ -468,25 +468,22 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
     <div class="card"><div class="card-lbl">Итого 1–10 мая</div><div class="card-val" id="mys-total">—</div><div class="card-sub">абонементы + товары</div></div>
     <div class="card"><div class="card-lbl">Абонементы</div><div class="card-val" id="mys-abon">—</div><div class="card-sub">услуги студии</div></div>
     <div class="card orange"><div class="card-lbl">Товары</div><div class="card-val orange" id="mys-tovar">—</div><div class="card-sub">розничные продажи</div></div>
-    <div class="card purple"><div class="card-lbl">План / нед.</div><div class="card-val purple" id="mys-plan">—</div><div class="card-sub">май 2026</div></div>
+    <div class="card purple"><div class="card-lbl">% плана мая</div><div class="card-val purple" id="mys-plan">—</div><div class="card-sub" id="mys-plan-sub">факт / норма дней</div></div>
+  </div>
+  <div class="panel">
+    <h3>Продажи по неделям</h3><div class="panel-sub">абонементы и товары · май 2026</div>
+    <div class="chart-h"><canvas id="chartMayWeekly"></canvas></div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Абонементы</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Товары</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--pu);height:3px;border-radius:0;border-top:2px dashed var(--pu)"></div>План</div>
+    </div>
   </div>
   <div class="panel">
     <h3>Детализация по неделям</h3><div class="panel-sub">данные 4–10 мая</div>
     <div class="twrap"><table>
       <thead><tr><th>Неделя</th><th class="r">Абонементы</th><th class="r">Товары</th><th class="r">Итого</th><th class="r">% плана нед.</th><th class="r">Посещения</th></tr></thead>
       <tbody id="mayWeekTable"></tbody>
-    </table></div>
-  </div>
-  <div class="panel">
-    <h3>Детализация по категориям</h3><div class="panel-sub">строки — категории · столбцы — недели мая</div>
-    <div class="twrap"><table id="mayCatsTable">
-      <thead><tr>
-        <th>Категория</th>
-        <th class="r" style="background:#7a6050;color:#fff">27 апр–3 мая</th>
-        <th class="r" style="background:#3a6080;color:#fff">4–10 мая</th>
-        <th class="r" style="background:#4a5429;color:#fff">Итого май</th>
-      </tr></thead>
-      <tbody id="mayCatsTableBody"></tbody>
     </table></div>
   </div>
   <div class="chart-row">
@@ -503,6 +500,18 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
       <h3>Товары по времени</h3><div class="panel-sub">утро · вечер · выходные</div>
       <div class="chart-h sm"><canvas id="chartMayTovarCats"></canvas></div>
     </div>
+  </div>
+  <div class="panel">
+    <h3>Детализация по категориям</h3><div class="panel-sub">строки — категории · столбцы — недели мая</div>
+    <div class="twrap"><table id="mayCatsTable">
+      <thead><tr>
+        <th>Категория</th>
+        <th class="r" style="background:#7a6050;color:#fff">27 апр–3 мая</th>
+        <th class="r" style="background:#3a6080;color:#fff">4–10 мая</th>
+        <th class="r" style="background:#4a5429;color:#fff">Итого май</th>
+      </tr></thead>
+      <tbody id="mayCatsTableBody"></tbody>
+    </table></div>
   </div>
 </div>
 
@@ -1580,7 +1589,45 @@ function renderMay(){
   safeSet('mys-total', fmtK(M.total));
   safeSet('mys-abon',  fmtK(M.abon));
   safeSet('mys-tovar', fmtK(M.tovar));
-  safeSet('mys-plan',  fmtK(plan));
+
+  // % выполнения плана: план 2 600 000 / дней в мае × пройденных дней
+  (function(){
+    const MAY_PLAN_MONTH=2600000, DAYS_IN_MAY=31;
+    const now=new Date();
+    const daysPassed=now.getMonth()===4?Math.min(now.getDate(),DAYS_IN_MAY):DAYS_IN_MAY;
+    const normForDays=Math.round(MAY_PLAN_MONTH/DAYS_IN_MAY*daysPassed);
+    const pct=normForDays>0?Math.round(M.total/normForDays*100):0;
+    const pctColor=pct>=100?'var(--g)':pct>=85?'var(--o)':'#c0522a';
+    safeSet('mys-plan', pct+'%');
+    const planSubEl=document.getElementById('mys-plan-sub');
+    if(planSubEl) planSubEl.innerHTML=`<span style="color:${pctColor};font-weight:600">${fmtN(daysPassed)} дн.</span> · норма ${fmtK(normForDays)}`;
+  })();
+
+  // График продаж по неделям мая
+  if(document.getElementById('chartMayWeekly')){
+    const mayIdxs=WEEKS.labels.map((_,i)=>i).filter(i=>WEEKS.isMay[i]);
+    const mLabels=mayIdxs.map(i=>WEEKS.labels[i]);
+    const mAbon=mayIdxs.map(i=>WEEKS.abon[i]);
+    const mTovar=mayIdxs.map(i=>WEEKS.tovar[i]);
+    const mTotal=mayIdxs.map(i=>WEEKS.total[i]);
+    const mPlan=mayIdxs.map(i=>WEEKS.plan[i]>0?WEEKS.plan[i]:null);
+    new Chart(document.getElementById('chartMayWeekly'),{type:'bar',
+      data:{labels:mLabels,datasets:[
+        {label:'Абонементы',data:mAbon,backgroundColor:G,
+          borderRadius:{topLeft:0,topRight:0,bottomLeft:5,bottomRight:5},order:2,stack:'s',
+          datalabels:{display:ctx=>(ctx.dataset.data[ctx.dataIndex]||0)>100000,anchor:'center',align:'center',font:{size:11,weight:'600'},color:'white',formatter:v=>v!=null?Math.round(v/1000).toLocaleString('ru-RU'):''}},
+        {label:'Товары',data:mTovar,backgroundColor:O,
+          borderRadius:{topLeft:5,topRight:5,bottomLeft:0,bottomRight:0},order:2,stack:'s',
+          datalabels:{anchor:'end',align:'end',offset:2,font:{size:11,weight:'600'},color:G,
+            formatter:(_,ctx)=>{const t=mTotal[ctx.dataIndex];return t!=null?Math.round(t).toLocaleString('ru-RU'):'';}}},
+        {label:'План',data:mPlan,type:'line',borderColor:PU,borderWidth:2,borderDash:[5,3],
+          pointBackgroundColor:PU,pointRadius:5,fill:false,order:1,datalabels:{display:false}},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}}}}
+    });
+  }
 
   // Таблица недель мая (isMay = true)
   const tb=document.getElementById('mayWeekTable');

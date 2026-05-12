@@ -422,7 +422,15 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
     <button class="wtab" data-week="13–19 апр">13–19 апр</button>
     <button class="wtab" data-week="total">Итог апреля</button>
   </div>
-  <!-- Услуги и товары — вверху под шапкой -->
+  <!-- Детализация — вверху под шапкой -->
+  <div class="panel">
+    <h3>Детализация</h3><div class="panel-sub" id="adminWeekLabel">27 апр–3 мая</div>
+    <div class="twrap"><table>
+      <thead><tr><th style="width:32px">#</th><th>Администратор</th><th class="r">Услуги</th><th class="r">Товары</th><th class="r">Итого</th><th class="r">Смены</th><th class="r">В смену</th><th class="r">First, шт.</th><th class="r">Новым, руб.</th></tr></thead>
+      <tbody id="aAdminTable"></tbody>
+    </table></div>
+  </div>
+  <!-- Услуги и товары -->
   <div class="panel">
     <h3>Услуги и товары по администраторам</h3><div class="panel-sub">27 апр–3 мая</div>
     <div class="chart-h"><canvas id="chartAprAdmins"></canvas></div>
@@ -430,14 +438,6 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
       <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Услуги</div>
       <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Товары</div>
     </div>
-  </div>
-  <!-- Детализация -->
-  <div class="panel">
-    <h3>Детализация</h3><div class="panel-sub" id="adminWeekLabel">27 апр–3 мая</div>
-    <div class="twrap"><table>
-      <thead><tr><th style="width:32px">#</th><th>Администратор</th><th class="r">Услуги</th><th class="r">Товары</th><th class="r">Итого</th><th class="r">Смены</th><th class="r">В смену</th><th class="r">First, шт.</th><th class="r">Новым, руб.</th></tr></thead>
-      <tbody id="aAdminTable"></tbody>
-    </table></div>
   </div>
   <!-- Продажи новичкам First 20% -->
   <div class="panel">
@@ -583,6 +583,14 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
     <button class="wtab active" data-week="4–10 мая">4–10 мая</button>
     <button class="wtab" data-week="27 апр–3 мая">27 апр–3 мая</button>
   </div>
+  <!-- Детализация — первая под шапкой -->
+  <div class="panel">
+    <h3>Детализация</h3><div class="panel-sub" id="mayAdminWeekLabel">4–10 мая</div>
+    <div class="twrap"><table>
+      <thead><tr><th style="width:32px">#</th><th>Администратор</th><th class="r">Услуги</th><th class="r">Товары</th><th class="r">Итого</th><th class="r">Смены</th><th class="r">В смену</th><th class="r">First, шт.</th><th class="r">Новым, руб.</th></tr></thead>
+      <tbody id="mayAdminTable"></tbody>
+    </table></div>
+  </div>
   <div class="panel">
     <h3>Услуги и товары по администраторам</h3><div class="panel-sub" id="mayAdminChartLabel">4–10 мая</div>
     <div class="chart-h"><canvas id="chartMayAdmins"></canvas></div>
@@ -597,13 +605,6 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
       <div style="flex:1;min-width:260px;position:relative;height:200px"><canvas id="chartMayNewbies"></canvas></div>
       <div id="mayNewbiesLegend" style="flex:1;min-width:200px;font-size:12px;line-height:2.1;align-self:center"></div>
     </div>
-  </div>
-  <div class="panel">
-    <h3>Детализация</h3><div class="panel-sub" id="mayAdminWeekLabel">4–10 мая</div>
-    <div class="twrap"><table>
-      <thead><tr><th style="width:32px">#</th><th>Администратор</th><th class="r">Услуги</th><th class="r">Товары</th><th class="r">Итого</th><th class="r">Смены</th><th class="r">В смену</th><th class="r">First, шт.</th><th class="r">Новым, руб.</th></tr></thead>
-      <tbody id="mayAdminTable"></tbody>
-    </table></div>
   </div>
   <div class="panel">
     <h3>Продажа первого абонемента новичкам</h3><div class="panel-sub" id="mayAdminWeekLabel2"></div>
@@ -766,7 +767,7 @@ const FIRST_DAY=FIRST_DAY_WEEKLY['4–10 мая'];
 // [FIX 2] Правильный итог апреля
 const MONTHLY={
   apr:{total:2555410,abon:2362290,tovar:193120},
-  may:{total:759585, abon:675835, tovar:83750},
+  may:{total:745140, abon:661390, tovar:83750},
   mar:null,
 };
 
@@ -1034,16 +1035,16 @@ const CATS_WEEKLY = {
   may: {
     cols: ['27 апр–3 мая','4–10 мая','Итого май'],
     rows: [
-      {name:'Абонементы на групповые занятия', vals:[135930,211960,347890]},
-      {name:'Разовые',                          vals:[47300, 74600, 121900]},
-      {name:'Абонементы индивидуальные',        vals:[59500, 8500,  68000]},
-      {name:'Абонементы майсор и разовые',      vals:[11700, 41300, 53000]},
-      {name:'Аренда',                            vals:[35000, 36000, 71000]},
-      {name:'Мероприятия',                       vals:[5000,  0,     5000]},
-      {name:'Товары',                            vals:[17417, 47197, 64614]},
-      {name:'Подарочный сертификат',             vals:[8500,  32600, 41100]},
-      {name:'ОНЛАЙН',                            vals:[11000, 7000,  18000]},
-      {name:'Прочее (др. студии)',               vals:[0,     0,     0]},
+      {name:'Абонементы на групповые занятия', vals:[135930,211960,382940]},
+      {name:'Разовые',                          vals:[47300, 74600, 105300]},
+      {name:'Абонементы индивидуальные',        vals:[59500, 8500,  16000]},
+      {name:'Абонементы майсор и разовые',      vals:[11700, 41300, 41300]},
+      {name:'Аренда',                            vals:[35000, 36000, 60000]},
+      {name:'Мероприятия',                       vals:[5000,  0,     -2500]},
+      {name:'Товары',                            vals:[17417, 47197, 83750]},
+      {name:'Подарочный сертификат',             vals:[8500,  32600, 32600]},
+      {name:'ОНЛАЙН',                            vals:[11000, 7000,  19000]},
+      {name:'Прочее (др. студии)',               vals:[0,     0,     6750]},
     ],
   },
   mar: {

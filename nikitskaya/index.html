@@ -489,6 +489,21 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
       <tbody id="mayCatsTableBody"></tbody>
     </table></div>
   </div>
+  <div class="chart-row">
+    <div class="panel" style="margin-bottom:0">
+      <h3>Услуги по времени</h3><div class="panel-sub">утро · вечер · выходные</div>
+      <div class="chart-h sm"><canvas id="chartMayAbonCats"></canvas></div>
+      <div class="legend" style="margin-top:8px">
+        <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Выходные</div>
+        <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Вечер</div>
+        <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро</div>
+      </div>
+    </div>
+    <div class="panel" style="margin-bottom:0">
+      <h3>Товары по времени</h3><div class="panel-sub">утро · вечер · выходные</div>
+      <div class="chart-h sm"><canvas id="chartMayTovarCats"></canvas></div>
+    </div>
+  </div>
 </div>
 
 <!-- МАЙ · Посещения -->
@@ -546,9 +561,33 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
 <!-- МАЙ · Администраторы -->
 <div class="sec" id="may-sec-admins">
   <p class="eyebrow">Администраторы · май 2026</p>
+  <div class="cards">
+    <div class="card"><div class="card-lbl">Всего продаж</div><div class="card-val" id="mya-total">—</div><div class="card-sub" id="mya-week-lbl">4–10 мая</div></div>
+    <div class="card"><div class="card-lbl">Услуги</div><div class="card-val" id="mya-abon">—</div><div class="card-sub">абонементы</div></div>
+    <div class="card orange"><div class="card-lbl">Товары</div><div class="card-val orange" id="mya-tovar">—</div><div class="card-sub">розничные</div></div>
+    <div class="card blue"><div class="card-lbl">Среднее в смену</div><div class="card-val blue" id="mya-avg">—</div><div class="card-sub">все смены</div></div>
+    <div class="card"><div class="card-lbl">Лидер</div><div class="card-val sm" id="mya-leader">—</div><div class="card-sub" id="mya-leader-val">—</div></div>
+    <div class="card purple"><div class="card-lbl">Продажи First</div><div class="card-val purple" id="mya-new">—</div><div class="card-sub" id="mya-new-rub">—</div></div>
+    <div class="card orange"><div class="card-lbl">Ср. чек новичка</div><div class="card-val orange" id="mya-new-avg">—</div><div class="card-sub">First 20%</div></div>
+  </div>
   <div class="week-tabs" id="mayAdminWeekTabs">
     <button class="wtab active" data-week="4–10 мая">4–10 мая</button>
     <button class="wtab" data-week="27 апр–3 мая">27 апр–3 мая</button>
+  </div>
+  <div class="panel">
+    <h3>Услуги и товары по администраторам</h3><div class="panel-sub" id="mayAdminChartLabel">4–10 мая</div>
+    <div class="chart-h"><canvas id="chartMayAdmins"></canvas></div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Услуги</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Товары</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Продажи новичкам — First 20%</h3><div class="panel-sub" id="mayNewbiesChartLabel">4–10 мая</div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
+      <div style="flex:1;min-width:260px;position:relative;height:200px"><canvas id="chartMayNewbies"></canvas></div>
+      <div id="mayNewbiesLegend" style="flex:1;min-width:200px;font-size:12px;line-height:2.1;align-self:center"></div>
+    </div>
   </div>
   <div class="panel">
     <h3>Детализация</h3><div class="panel-sub" id="mayAdminWeekLabel">4–10 мая</div>
@@ -661,6 +700,13 @@ const NEWBIES_WEEKLY={
   '4–10 мая':{labels:['Марина','Вика','Лера З','Лера'],qty:[4,2,1,1],revenue:[42400,21200,7600,7600],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
 };
 const NEWBIES=NEWBIES_WEEKLY['4–10 мая'];
+// Разрез продаж по времени для мая (утро <16ч / вечер ≥16ч / выходные)
+// 27 апр–3 мая: из CATS.abon[7]/tovar[7] × 1000; 4–10 мая: из 1С-отчётов
+const CATS_MAY_TIME={
+  labels:['27 апр–3 мая','4–10 мая'],
+  abon:{morn:[258000,149500],eve:[147000,107080],wknd:[162000,113280]},
+  tovar:{morn:[25000,17300],eve:[14000,15011],wknd:[15000,14887]},
+};
 
 const FIRST_DAY_WEEKLY={
   '13–19 апр':{
@@ -1652,6 +1698,28 @@ function renderMay(){
     if(legM2){legM2.style.display='';TRIAL_PIE2_MAY.labels.forEach((lbl,i)=>{const p=Math.round(TRIAL_PIE2_MAY.qty[i]/totQty2*100);const rev=TRIAL_PIE2_MAY.revenue[i];legM2.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="width:10px;height:10px;border-radius:2px;background:${TRIAL_PIE2_MAY.colors[i]};flex-shrink:0"></div><span><b>${lbl}</b> — ${TRIAL_PIE2_MAY.qty[i]} шт. (${p}%) · ${Math.round(rev/1000)}к ₽</span></div>`;});}
   }
 
+  // Графики продаж по времени (утро/вечер/выходные)
+  const mayStackChart=(canvasId,data,showSums)=>{
+    if(!document.getElementById(canvasId))return;
+    const sets=[{label:'Выходные',key:'wknd',c:G},{label:'Вечер',key:'eve',c:O},{label:'Утро',key:'morn',c:B}];
+    new Chart(document.getElementById(canvasId),{type:'bar',
+      data:{labels:CATS_MAY_TIME.labels,datasets:sets.map(s=>({
+        label:s.label,data:data[s.key],backgroundColor:s.c,borderRadius:3,stack:'s',
+        datalabels:{
+          display:ctx=>{const v=data[s.key][ctx.dataIndex];return showSums?v>500:v>20000;},
+          anchor:'center',align:'center',
+          font:{size:showSums?9:10,weight:'600'},color:'white',
+          formatter:v=>showSums?Math.round(v/1000)+'к':Math.round(v/1000),
+        },
+      }))},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}}}}
+    });
+  };
+  mayStackChart('chartMayAbonCats',CATS_MAY_TIME.abon,false);
+  mayStackChart('chartMayTovarCats',CATS_MAY_TIME.tovar,true);
+
   // Администраторы мая — рендер вкладок
   renderMayAdminWeek('4–10 мая');
   document.querySelectorAll('#mayAdminWeekTabs .wtab').forEach(btn=>{
@@ -1664,12 +1732,66 @@ function renderMay(){
 }
 
 function renderMayAdminWeek(weekKey){
-  const lbl=document.getElementById('mayAdminWeekLabel');
-  if(lbl) lbl.textContent=weekKey;
+  // Обновляем подписи
+  ['mayAdminWeekLabel','mayAdminWeekLabel2','mayAdminChartLabel','mayNewbiesChartLabel','mya-week-lbl'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.textContent=weekKey;
+  });
 
   const admins=prepAdmins(ADMINS_WEEKLY[weekKey]||[]);
   const newbies=NEWBIES_WEEKLY[weekKey]||{labels:[],qty:[],revenue:[],colors:[]};
   const firstDay=FIRST_DAY_WEEKLY[weekKey]||{rows:[],total:{trial:0,soldQty:0,soldRub:0,conv:0}};
+
+  // ── Карточки шапки ──
+  const tA=admins.reduce((s,a)=>s+a.abon,0);
+  const tT=admins.reduce((s,a)=>s+a.tovar,0);
+  const tAll=tA+tT;
+  const tS=admins.reduce((s,a)=>s+a.shifts,0);
+  const tN=admins.reduce((s,a)=>s+a.newQty,0);
+  const tNR=admins.reduce((s,a)=>s+a.newRub,0);
+  const leader=admins.filter(a=>a.total>0)[0];
+  const safeSet=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  safeSet('mya-total', fmtK(tAll));
+  safeSet('mya-abon',  fmtK(tA));
+  safeSet('mya-tovar', fmtK(tT));
+  safeSet('mya-avg',   tS>0?fmtK(Math.round(tAll/tS)):'—');
+  if(leader){safeSet('mya-leader',leader.name);safeSet('mya-leader-val',fmt(leader.total));}
+  safeSet('mya-new',     tN+' чел.');
+  safeSet('mya-new-rub', fmt(tNR));
+  safeSet('mya-new-avg', tN>0?fmtK(Math.round(tNR/tN)):'—');
+
+  // ── График услуги/товары ──
+  if(_mayAdmChart){_mayAdmChart.destroy();_mayAdmChart=null;}
+  const active=admins.filter(a=>a.total>0);
+  if(active.length&&document.getElementById('chartMayAdmins')){
+    _mayAdmChart=new Chart(document.getElementById('chartMayAdmins'),{type:'bar',
+      data:{labels:active.map(a=>a.name),datasets:[
+        {label:'Услуги',data:active.map(a=>a.abon),backgroundColor:G,borderRadius:4},
+        {label:'Товары',data:active.map(a=>a.tovar),backgroundColor:O,borderRadius:4},
+      ]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{datalabels:{display:false},legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)}}},
+        scales:{x:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}},y:{stacked:true,grid:{display:false}}}}
+    });
+  }
+
+  // ── График новичков ──
+  if(_mayNewbiesChart){_mayNewbiesChart.destroy();_mayNewbiesChart=null;}
+  const legEl=document.getElementById('mayNewbiesLegend');
+  if(legEl) legEl.innerHTML='';
+  if(newbies.labels.length&&document.getElementById('chartMayNewbies')){
+    _mayNewbiesChart=new Chart(document.getElementById('chartMayNewbies'),{type:'bar',
+      data:{labels:newbies.labels,datasets:[{label:'Продажи новичкам',data:newbies.revenue,backgroundColor:newbies.colors,borderRadius:6,
+        datalabels:{anchor:'end',align:'end',font:{size:10,weight:'600'},color:G,formatter:v=>Math.round(v/1000)+'к'}}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{datalabels:{display:true},legend:{display:false},tooltip:{callbacks:{label:ctx=>'Продажи: '+fmt(ctx.raw)}}},
+        scales:{x:{grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}},y:{grid:{display:false}}}}
+    });
+    if(legEl){
+      const tRev=newbies.revenue.reduce((s,v)=>s+v,0),tQty=newbies.qty.reduce((s,v)=>s+v,0);
+      newbies.labels.forEach((l,i)=>{const avg=newbies.qty[i]>0?Math.round(newbies.revenue[i]/newbies.qty[i]):0;legEl.innerHTML+=`<div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:2px;background:${newbies.colors[i]};flex-shrink:0"></div><span><b>${l}</b> — ${newbies.qty[i]} чел., ${fmt(newbies.revenue[i])}, ср.чек ${fmt(avg)}</span></div>`;});
+      legEl.innerHTML+=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--light);font-weight:600">Итого: ${tQty} новичков · ${fmt(tRev)} · ср.чек ${fmt(tQty>0?Math.round(tRev/tQty):0)}</div>`;
+    }
+  } else if(legEl){legEl.innerHTML='<div style="color:var(--muted);font-size:12px">Нет данных</div>';}
 
   // Если данных нет — заглушка
   const noData=admins.length===0;

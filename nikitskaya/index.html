@@ -1593,8 +1593,7 @@ function renderMay(){
   // % выполнения плана: план 2 600 000 / дней в мае × пройденных дней
   (function(){
     const MAY_PLAN_MONTH=2600000, DAYS_IN_MAY=31;
-    const now=new Date();
-    const daysPassed=now.getMonth()===4?Math.min(now.getDate(),DAYS_IN_MAY):DAYS_IN_MAY;
+    const daysPassed=10; // данные за 1–10 мая
     const normForDays=Math.round(MAY_PLAN_MONTH/DAYS_IN_MAY*daysPassed);
     const pct=normForDays>0?Math.round(M.total/normForDays*100):0;
     const pctColor=pct>=100?'var(--g)':pct>=85?'var(--o)':'#c0522a';

@@ -493,26 +493,54 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
 
 <!-- МАЙ · Посещения -->
 <div class="sec" id="may-sec-visits">
-  <p class="eyebrow">Посещения · май 2026</p>
+  <p class="eyebrow">Посещения и конверсия · май 2026</p>
   <div class="cards">
-    <div class="card blue"><div class="card-lbl">Всего 4–10 мая</div><div class="card-val blue" id="mys-vis-total">276</div><div class="card-sub">по данным CRM</div></div>
-    <div class="card blue"><div class="card-lbl">Первых 4–10 мая</div><div class="card-val blue" id="mys-vis-first">27</div><div class="card-sub">пробные посещения</div></div>
-    <div class="card purple"><div class="card-lbl">Продано First</div><div class="card-val purple">8</div><div class="card-sub">4–10 мая</div></div>
+    <div class="card blue"><div class="card-lbl">Всего посещений май</div><div class="card-val blue" id="mys-vis-total">573</div><div class="card-sub">нарастающим итогом</div></div>
+    <div class="card blue"><div class="card-lbl">Первых за май</div><div class="card-val blue" id="mys-vis-first">48</div><div class="card-sub">пробные посещения</div></div>
+    <div class="card purple"><div class="card-lbl">Продано First</div><div class="card-val purple">16</div><div class="card-sub">нарастающим итогом</div></div>
     <div class="card"><div class="card-lbl">Конверсия First</div><div class="card-val">33%</div><div class="card-sub">от первых посещений</div></div>
   </div>
+  <!-- Главный график посещений с переключателем -->
   <div class="panel" id="visitsPanelMay">
     <h3>Посещения — детализация</h3>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;padding-left:13px">
+      <button class="vbtn" onclick="switchVisitView('may','weeks',this)">По неделям</button>
       <button class="vbtn active" onclick="switchVisitView('may','days',this)">По дням недели</button>
       <button class="vbtn" onclick="switchVisitView('may','hours',this)">По часам</button>
     </div>
     <div class="chart-h" id="visitChartWrapMay"><canvas id="chartMayVisits"></canvas></div>
     <div class="legend" id="visitLegendMay">
-      <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Будни</div>
-      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Выходные</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро до 15:30</div>
+      <div class="leg"><div class="leg-dot" style="background:#aeb49c"></div>Выходные</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Вечер 15:30+</div>
       <div class="leg" style="color:var(--muted);font-size:11px">4–10 мая · итого 276</div>
     </div>
   </div>
+  <!-- Детализация по неделям -->
+  <div class="panel">
+    <h3>Детализация по неделям</h3><div class="panel-sub"></div>
+    <div class="twrap"><table>
+      <thead><tr><th>Неделя</th><th class="r">Всего</th><th class="r">Динамика</th><th class="r">Первые посещения</th><th class="r">%</th></tr></thead>
+      <tbody id="mysVisitTable"></tbody>
+    </table></div>
+  </div>
+  <!-- График First и конверсия -->
+  <div class="panel">
+    <h3>Первые посещения и покупки First</h3><div class="panel-sub">по неделям мая</div>
+    <div class="chart-h"><canvas id="chartMayTrialWeeks"></canvas></div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--pu)"></div>Первые посещения</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o);height:3px;border-radius:0;width:16px"></div>% конверсии</div>
+    </div>
+  </div>
+  <!-- Разрез по абонементам -->
+  <div class="panel">
+    <h3>First — разрез по абонементам</h3><div class="panel-sub">май 2026 накопительно</div>
+    <div style="position:relative;height:360px;width:100%"><canvas id="chartMayTrialPie2"></canvas></div>
+    <div id="mayTrialPieLegend2" style="display:none"></div>
+  </div>
+  <canvas id="chartMayTrialPie" style="display:none"></canvas>
+  <div id="mayTrialPieLegend" style="display:none"></div>
 </div>
 
 <!-- МАЙ · Администраторы -->
@@ -577,7 +605,7 @@ const TRIAL={
   labels:WEEKS.labels,isMarch:WEEKS.isMarch,
   visits:[331,  310,  339,  338,  350,  359,  352,  297,  276],
   trial: [32,   40,   37,   28,   39,   32,   34,   21,   27],
-  conversion:[3,4,   4,    5,    5,    8,    9,    8,    30],
+  conversion:[3,4,   4,    5,    5,    8,    9,    8,    8],
 };
 
 
@@ -622,6 +650,9 @@ const ADMINS=prepAdmins(ADMINS_WEEKLY['4–10 мая']);
 // TRIAL_PIE/PIE2 — апрель, неделя 27 апр–3 мая
 const TRIAL_PIE ={labels:['Марина','Лера','Настя','Лера З'],conversions:[3,3,1,1],revenue:[31660,18240,6080,6080],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']};
 const TRIAL_PIE2={labels:['4 занятия','8 занятий','СТАРТ (инд.)'],qty:[6,1,1],revenue:[36480,12160,13420],colors:['#5c6937','#cae7fb','#F0803B']};
+// TRIAL_PIE/PIE2 — май накопительно (27 апр–3 мая + 4–10 мая)
+const TRIAL_PIE_MAY ={labels:['Марина','Лера','Вика','Лера З','Настя'],qty:[7,4,2,2,1],revenue:[74060,25840,21200,13680,6080],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4','#c9d4a1']};
+const TRIAL_PIE2_MAY={labels:['4 занятия','8 занятий','СТАРТ (инд.)'],qty:[11,4,1],revenue:[74480,52960,13420],colors:['#5c6937','#cae7fb','#F0803B']};
 
 const NEWBIES_WEEKLY={
   '13–19 апр':{labels:['Аня К','Марина','Вика','Настя'],qty:[4,3,3,1],revenue:[71860,46000,23040,10880],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
@@ -703,25 +734,19 @@ const planPill=(p)=>{
 };
 
 // Данные посещений по дням и часам (неделя 27 апр–3 мая)
+// 4–10 мая: Пн4/Вт5/Ср6/Чт7/Пт8/Сб9/Вс10
 const VISITS_DAYS = {
-  labels: ['Вс 27','Пн 28','Вт 29','Ср 30','Чт 1','Пт 2','Сб 3'],
-  visits: [34, 54, 43, 42, 35, 38, 51],
-  morn:   [34, 25, 24, 19, 29, 38, 51],
+  labels: ['Пн 4','Вт 5','Ср 6','Чт 7','Пт 8','Сб 9','Вс 10'],
+  visits: [28, 43, 33, 50, 35, 24, 63],
+  morn:   [14, 15, 22, 20, 14, 24, 63],
   day:    [0,   0,  0,  0,  0,  0,  0],
-  eve:    [0,  29, 19, 23,  6,  0,  0],
+  eve:    [14, 28, 11, 30, 21,  0,  0],
   first:  [0,   0,  0,  0,  0,  0,  0],
-  isWknd: [true,false,false,false,false,false,true],
+  isWknd: [false,false,false,false,false,true,true],
 };
 const VISITS_HOURS = {
   labels: ['6:00','7:00','8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'],
-  visits: [13, 10, 22, 4, 27, 32, 21, 35, 14, 12, 4, 22, 18, 29, 34],
-  // утро = до 16 (включая 15), вечер = с 16
-  colors: function(){
-    return this.labels.map(h=>{
-      const hr=parseInt(h);
-      return hr<16?B:O;
-    });
-  }
+  visits: [16, 10, 16, 2, 26, 17, 23, 23, 21, 6, 8, 15, 21, 43, 29],
 };
 
 // Chart instances for visit view switching
@@ -743,24 +768,29 @@ function switchVisitView(pfx, view, btn){
   legend.innerHTML='';
 
   if(view==='weeks'){
-    _visitCharts[pfx]=buildVisitWeeksChart(canvasId,pfx==='mar');
-    legend.innerHTML=`
+    _visitCharts[pfx]= pfx==='may' ? buildVisitMayWeeksChart(canvasId) : buildVisitWeeksChart(canvasId,pfx==='mar');
+    const weeksLegend=`
       <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро до 15:30</div>
       <div class="leg"><div class="leg-dot" style="background:#aeb49c"></div>Выходные</div>
       <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Вечер 15:30+</div>
       <div class="leg"><div class="leg-dot" style="background:rgba(202,231,251,.7)"></div>Данных нет</div>
-      <div class="leg"><div class="leg-dot" style="background:var(--g);border-radius:50%"></div>Первые посещения (линия)</div>`;  } else if(view==='days'){
+      <div class="leg"><div class="leg-dot" style="background:var(--g);border-radius:50%"></div>Первые посещения (линия)</div>`;
+    legend.innerHTML=weeksLegend;
+  } else if(view==='days'){
     _visitCharts[pfx]=buildVisitDaysChart(canvasId);
+    const weekLabel=pfx==='may'?'4–10 мая · итого 276':'27 апр–3 мая · итого 297';
     legend.innerHTML=`
-      <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Будни</div>
-      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Выходные</div>
-      <div class="leg" style="color:var(--muted);font-size:11px">27 апр–3 мая · итого 297</div>`;
+      <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро до 15:30</div>
+      <div class="leg"><div class="leg-dot" style="background:#aeb49c"></div>Выходные</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Вечер 15:30+</div>
+      <div class="leg" style="color:var(--muted);font-size:11px">${weekLabel}</div>`;
   } else {
     _visitCharts[pfx]=buildVisitHoursChart(canvasId);
+    const isM=pfx==='may';
     legend.innerHTML=`
-      <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро до 15:30 · 135 чел.</div>
-      <div class="leg"><div class="leg-dot" style="background:#aeb49c"></div>Выходные · 85 чел.</div>
-      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Вечер 15:30+ · 77 чел.</div>`;
+      <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро до 15:30 · ${isM?'85':'135'} чел.</div>
+      <div class="leg"><div class="leg-dot" style="background:#aeb49c"></div>Выходные · ${isM?'87':'85'} чел.</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Вечер 15:30+ · ${isM?'104':'77'} чел.</div>`;
   }
 }
 
@@ -853,16 +883,59 @@ function buildVisitWeeksChart(canvasId,isMar){
 
 function buildVisitDaysChart(canvasId){
   const D=VISITS_DAYS;
+  const mornData = D.morn.map((v,i)=>D.isWknd[i]?null:v);
+  const eveData  = D.eve.map((v,i) =>D.isWknd[i]?null:v);
+  const wkndData = D.morn.map((v,i)=>D.isWknd[i]?v:null);
+  const totals   = D.visits;
   return new Chart(document.getElementById(canvasId),{type:'bar',
     data:{labels:D.labels,datasets:[
-      {label:'Посещений',data:D.visits,
-        backgroundColor:D.isWknd.map(w=>w?O:G),
-        borderRadius:6,
-        datalabels:{anchor:'end',align:'end',offset:2,font:{size:11,weight:'600'},color:G,formatter:v=>v}},
+      {label:'Утро до 15:30',data:mornData,backgroundColor:B,
+        borderRadius:{topLeft:0,topRight:0,bottomLeft:5,bottomRight:5},stack:'s',order:2,
+        datalabels:{display:ctx=>mornData[ctx.dataIndex]!=null&&mornData[ctx.dataIndex]>0,anchor:'center',align:'center',font:{size:10,weight:'600'},color:G,formatter:v=>v}},
+      {label:'Вечер 15:30+',data:eveData,backgroundColor:O,
+        borderRadius:{topLeft:5,topRight:5,bottomLeft:0,bottomRight:0},stack:'s',order:2,
+        datalabels:{display:ctx=>eveData[ctx.dataIndex]!=null&&eveData[ctx.dataIndex]>0,anchor:'center',align:'center',font:{size:10,weight:'600'},color:'white',formatter:v=>v}},
+      {label:'Выходные',data:wkndData,backgroundColor:SAGE,
+        borderRadius:5,stack:'s',order:2,
+        datalabels:{display:ctx=>wkndData[ctx.dataIndex]!=null,anchor:'center',align:'center',font:{size:10,weight:'600'},color:'white',formatter:v=>v}},
+      {label:'_total',data:totals,type:'bar',backgroundColor:'rgba(0,0,0,0)',borderWidth:0,stack:'_lbl',order:0,
+        datalabels:{display:true,anchor:'end',align:'end',offset:4,font:{size:11,weight:'700'},color:G,formatter:v=>v}},
     ]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.raw+' чел.'}}},
-      scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(92,105,55,.07)'},suggestedMax:85,ticks:{stepSize:10}}}}
+      plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{title:ctx=>ctx[0]?.label,label:ctx=>ctx.dataset.label!=='_total'?ctx.dataset.label+': '+ctx.raw+' чел.':null,filter:ctx=>ctx.dataset.label!=='_total'&&ctx.raw!=null}}},
+      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},suggestedMax:Math.max(...totals)*1.25}}}
+  });
+}
+
+function buildVisitMayWeeksChart(canvasId){
+  // Показываем только isMay-недели: 27 апр–3 мая (idx 7) и 4–10 мая (idx 8)
+  const mayIdxs = WEEKS.isMay.map((v,i)=>v?i:-1).filter(i=>i>=0);
+  const labels  = mayIdxs.map(i=>WEEKS.labels[i]);
+  const morn    = [135, 85];
+  const eve     = [77,  104];
+  const wknd    = [85,  87];
+  const total   = mayIdxs.map(i=>WEEKS.visits[i]);
+  const first   = mayIdxs.map(i=>WEEKS.first[i]);
+  return new Chart(document.getElementById(canvasId),{type:'bar',
+    data:{labels,datasets:[
+      {label:'Утро до 15:30',data:morn,backgroundColor:B,
+        borderRadius:{topLeft:0,topRight:0,bottomLeft:5,bottomRight:5},stack:'s',order:2,
+        datalabels:{display:true,anchor:'center',align:'center',font:{size:11,weight:'600'},color:G,formatter:v=>v}},
+      {label:'Вечер 15:30+',data:eve,backgroundColor:O,
+        borderRadius:{topLeft:0,topRight:0,bottomLeft:0,bottomRight:0},stack:'s',order:2,
+        datalabels:{display:true,anchor:'center',align:'center',font:{size:11,weight:'600'},color:'white',formatter:v=>v}},
+      {label:'Выходные',data:wknd,backgroundColor:SAGE,
+        borderRadius:{topLeft:5,topRight:5,bottomLeft:0,bottomRight:0},stack:'s',order:2,
+        datalabels:{display:true,anchor:'center',align:'center',font:{size:11,weight:'600'},color:'white',formatter:v=>v}},
+      {label:'_total',data:total,type:'bar',backgroundColor:'rgba(0,0,0,0)',borderWidth:0,stack:'_lbl',order:0,
+        datalabels:{display:true,anchor:'end',align:'end',offset:5,font:{size:12,weight:'700'},color:G,formatter:v=>v!=null?fmtN(v):''}},
+      {label:'Первые посещения',data:first,type:'line',
+        borderColor:G,pointBackgroundColor:G,pointRadius:6,borderWidth:2,fill:false,order:1,
+        datalabels:{display:true,anchor:'end',align:'top',offset:4,font:{size:11,weight:'600'},color:G,formatter:v=>v!=null?v+'':''}},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+' чел.'}}},
+      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},suggestedMax:Math.max(...total)*1.3}}}
   });
 }
 
@@ -1498,12 +1571,85 @@ function renderMay(){
   // Таблица категорий
   renderCatsTable('may');
 
-  // Посещения — карточки и график 4-10 мая
-  const may410Idx=WEEKS.labels.indexOf('4–10 мая');
-  safeSet('mys-vis-total', fmtN(WEEKS.visits[may410Idx]||0));
-  safeSet('mys-vis-first', fmtN(WEEKS.first[may410Idx]||0));
+  // Посещения — накопительные карточки мая
+  const mayIdxsVis=WEEKS.labels.map((_,i)=>i).filter(i=>WEEKS.isMay[i]);
+  const mayTotalVis=mayIdxsVis.reduce((s,i)=>s+(WEEKS.visits[i]||0),0);
+  const mayTotalFirst=mayIdxsVis.reduce((s,i)=>s+(WEEKS.first[i]||0),0);
+  safeSet('mys-vis-total', fmtN(mayTotalVis));
+  safeSet('mys-vis-first', fmtN(mayTotalFirst));
+
+  // График по дням (активный по умолчанию)
   if(document.getElementById('chartMayVisits')){
     _visitCharts['may']=buildVisitDaysChart('chartMayVisits');
+  }
+
+  // Таблица посещений по неделям
+  const mysVT=document.getElementById('mysVisitTable');
+  if(mysVT){
+    mysVT.innerHTML='';
+    mayIdxsVis.forEach((i,li)=>{
+      const tr=document.createElement('tr');
+      tr.style.fontWeight='600';
+      const prev=li>0?mayIdxsVis[li-1]:null;
+      const vis=WEEKS.visits[i], firstV=WEEKS.first[i];
+      const trendStr=(prev!==null&&vis!=null&&WEEKS.visits[prev]!=null)?trend(vis,WEEKS.visits[prev]):'';
+      tr.innerHTML=`<td>${WEEKS.labels[i]}</td>
+        <td class="r">${vis!=null?fmtN(vis):'—'}</td>
+        <td class="r">${trendStr}</td>
+        <td class="r">${firstV!=null?fmtN(firstV):'—'}</td>
+        <td class="r">${(vis!=null&&firstV!=null)?pct(firstV,vis):'—'}</td>`;
+      mysVT.appendChild(tr);
+    });
+  }
+
+  // График TrialWeeks для мая
+  if(document.getElementById('chartMayTrialWeeks')){
+    const mayLabels=mayIdxsVis.map(i=>WEEKS.labels[i]);
+    const mayCnv=mayIdxsVis.map(i=>TRIAL.conversion[i]);
+    const mayTrial=mayIdxsVis.map(i=>TRIAL.trial[i]);
+    const mayTrialRest=mayTrial.map((v,j)=>v!=null&&mayCnv[j]!=null?v-mayCnv[j]:null);
+    const mayConvPct=mayCnv.map((c,j)=>mayTrial[j]>0?Math.round(c/mayTrial[j]*100):0);
+    new Chart(document.getElementById('chartMayTrialWeeks'),{type:'bar',
+      data:{labels:mayLabels,datasets:[
+        {label:'Купили First',data:mayCnv,backgroundColor:'rgba(92,105,55,.82)',stack:'v',order:2,borderRadius:0,yAxisID:'y',
+          datalabels:{display:ctx=>mayCnv[ctx.dataIndex]>0,anchor:'center',align:'center',font:{size:11,weight:'700'},color:'#fff',formatter:v=>v>0?v+' абон.':''}},
+        {label:'Остальные первые',data:mayTrialRest,backgroundColor:'rgba(155,137,196,.55)',stack:'v',order:2,borderRadius:{topLeft:5,topRight:5},yAxisID:'y',
+          datalabels:{display:ctx=>mayTrialRest[ctx.dataIndex]>0,anchor:'center',align:'center',font:{size:10,weight:'600'},color:'#fff',formatter:v=>v>0?v:''}},
+        {label:'% конверсии',data:mayConvPct,type:'line',borderColor:O,pointBackgroundColor:O,pointRadius:6,borderWidth:2,fill:false,order:1,yAxisID:'y2',
+          datalabels:{display:true,anchor:'end',align:'top',offset:4,font:{size:11,weight:'700'},color:O,formatter:v=>v+'%'}},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw}}},
+        scales:{
+          x:{stacked:true,grid:{display:false}},
+          y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},title:{display:false}},
+          y2:{position:'right',grid:{display:false},ticks:{callback:v=>v+'%'},suggestedMax:60},
+        }}
+    });
+  }
+
+  // PIE графики мая
+  if(document.getElementById('chartMayTrialPie')){
+    new Chart(document.getElementById('chartMayTrialPie'),{type:'doughnut',
+      data:{labels:TRIAL_PIE_MAY.labels,datasets:[{data:TRIAL_PIE_MAY.qty,backgroundColor:TRIAL_PIE_MAY.colors,borderWidth:2}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{datalabels:{color:'white',font:{weight:'700',size:12},formatter:v=>v},legend:{display:false}}}});
+    const legM=document.getElementById('mayTrialPieLegend');
+    if(legM){legM.style.display='';TRIAL_PIE_MAY.labels.forEach((lbl,i)=>{legM.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="width:10px;height:10px;border-radius:2px;background:${TRIAL_PIE_MAY.colors[i]};flex-shrink:0"></div><span><b>${lbl}</b> — ${TRIAL_PIE_MAY.qty[i]} конв., ${fmt(TRIAL_PIE_MAY.revenue[i])}</span></div>`;});}
+  }
+  if(document.getElementById('chartMayTrialPie2')){
+    const totQty2=TRIAL_PIE2_MAY.qty.reduce((s,v)=>s+v,0);
+    new Chart(document.getElementById('chartMayTrialPie2'),{type:'doughnut',
+      data:{labels:TRIAL_PIE2_MAY.labels,datasets:[{data:TRIAL_PIE2_MAY.qty,backgroundColor:TRIAL_PIE2_MAY.colors,borderWidth:2,hoverOffset:10}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
+        plugins:{
+          datalabels:{color:'white',font:{weight:'700',size:13},
+            formatter:(v,ctx)=>{const p=Math.round(v/totQty2*100);return v+' шт.\n'+p+'%';}},
+          legend:{display:false},
+          tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.raw+' шт. ('+Math.round(ctx.raw/totQty2*100)+'%)'}}
+        }}
+    });
+    const legM2=document.getElementById('mayTrialPieLegend2');
+    if(legM2){legM2.style.display='';TRIAL_PIE2_MAY.labels.forEach((lbl,i)=>{const p=Math.round(TRIAL_PIE2_MAY.qty[i]/totQty2*100);const rev=TRIAL_PIE2_MAY.revenue[i];legM2.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="width:10px;height:10px;border-radius:2px;background:${TRIAL_PIE2_MAY.colors[i]};flex-shrink:0"></div><span><b>${lbl}</b> — ${TRIAL_PIE2_MAY.qty[i]} шт. (${p}%) · ${Math.round(rev/1000)}к ₽</span></div>`;});}
   }
 
   // Администраторы мая — рендер вкладок

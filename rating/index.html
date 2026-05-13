@@ -111,10 +111,12 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
 #score-popup-close{position:absolute;top:10px;right:12px;cursor:pointer;font-size:16px;color:rgba(92,105,55,.4);line-height:1}
 
 /* TABS */
-.tab-bar{display:flex;gap:6px;padding:.75rem 1.25rem;background:rgba(92,105,55,.04);border-bottom:1px solid rgba(92,105,55,.1);flex-wrap:wrap}
+.tab-bar{display:flex;align-items:center;gap:5px;padding:.75rem 1.25rem;background:rgba(92,105,55,.04);border-bottom:1px solid rgba(92,105,55,.1);flex-wrap:wrap}
 .tab-btn{font-family:'Unbounded',sans-serif;font-size:10px;letter-spacing:.05em;padding:.3rem .8rem;border-radius:20px;border:1px solid rgba(92,105,55,.2);background:transparent;color:#5C6937;cursor:pointer;transition:all .15s}
 .tab-btn.active{background:#5C6937;color:#FDF6F0;border-color:#5C6937}
-.tab-btn:hover:not(.active){background:rgba(92,105,55,.08)}
+.tab-btn:hover:not(.active):not(.tab-disabled){background:rgba(92,105,55,.08)}
+.tab-btn.tab-disabled{opacity:.35;cursor:not-allowed;color:rgba(92,105,55,.45);border-color:rgba(92,105,55,.1)}
+.tab-sep{width:1px;height:18px;background:rgba(92,105,55,.2);margin:0 4px;flex-shrink:0;align-self:center}
 .tab-pane{display:none}
 .tab-pane.active{display:block}
 
@@ -173,14 +175,14 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
     </div>
     <h1>Сердца <i>Yoga Space</i></h1>
     <div class="period" style="font-size:13px;color:rgba(253,246,240,.75);font-family:'Noto Serif Display',serif;font-style:italic;letter-spacing:.04em;margin-bottom:.4rem">Эти девушки могут всё</div>
-    <div class="period">ЯНВАРЬ · ФЕВРАЛЬ · МАРТ 2026</div>
+    <div class="period">АПРЕЛЬ 2026</div>
   </div>
 </div>
 
 <!-- WINNERS + METHODOLOGY -->
 <div class="winners-method-row">
   <div class="winners-section">
-    <div class="section-label">ПОБЕДИТЕЛИ ПО СТУДИЯМ</div>
+    <div class="section-label">ПОБЕДИТЕЛИ АПРЕЛЯ ПО СТУДИЯМ</div>
     <div class="winners-grid" id="winners-grid"></div>
   </div>
 
@@ -189,7 +191,7 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
     <div class="method-grid">
       <div class="method-item"><span class="method-weight">60%</span><span class="method-name">Средние продажи в смену</span></div>
       <div class="method-item"><span class="method-weight">30%</span><span class="method-name">Количество проданных First</span></div>
-      <div class="method-item"><span class="method-weight">10%</span><span class="method-name">Сумма продаж товаров</span></div>
+      <div class="method-item"><span class="method-weight">10%</span><span class="method-name">Средние продажи товаров в смену</span></div>
     </div>
     <div class="method-note">
       Каждый показатель нормируется относительно лучшего результата в студии и умножается на соответствующий вес. Итоговый балл отражает общую эффективность администратора: насколько результативно она работает в смену, продаёт абонементы First и товары.
@@ -214,7 +216,7 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
     <span style="font-family:'Unbounded',sans-serif;font-size:9px;color:rgba(253,246,240,.4);letter-spacing:.1em">YOGA SPACE</span>
   </div>
   <span>© <a href="https://yogaspace.ru">yogaspace.ru</a></span>
-  <span>ЯНВАРЬ — МАРТ 2026</span>
+  <span>АПРЕЛЬ 2026</span>
 </div>
 
 <script>
@@ -268,12 +270,11 @@ const data = {
   }
 };
 
-// Пересчёт баллов по новой методологии
+// Пересчёт баллов по новой методологии (Q1 — суммарные товары)
 Object.values(data).forEach(d => {
   const maxPs  = Math.max(...d.all.map(r => r.ps));
   const maxFsh = Math.max(...d.all.map(r => r.fsh));
   const maxTov = Math.max(...d.all.map(r => r.tov));
-  const maxСм  = Math.max(...d.all.map(r => r.смены));
   d.all.forEach(r => {
     r.score = Math.round(
       (r.ps / maxPs * 0.60 + r.fsh / maxFsh * 0.30 + r.tov / maxTov * 0.10) * 100
@@ -327,44 +328,14 @@ function goldenTrophy() {
   </svg>`;
 }
 
-// Winners grid
-const wg = document.getElementById('winners-grid');
-Object.entries(data).forEach(([studio, d]) => {
-  const w = d.winner;
-  const st = studioHearts[studio] || {heart:'🏆'};
-  wg.innerHTML += `
-    <div class="winner-card">
-      <div class="winner-top">
-        <div style="flex:1;min-width:0">
-          <div class="winner-studio-row">
-            <div class="winner-studio">${studio.toUpperCase()}</div>
-            <span class="studio-heart">${st.heart}</span>
-          </div>
-          <div class="winner-name">${w.name}</div>
-        </div>
-        <div class="trophy-wrap" style="flex-direction:column;gap:2px">
-          <div style="font-family:'Unbounded',sans-serif;font-size:26px;color:#F5C518;font-weight:400;line-height:1">${Math.round(w.score)}</div>
-          <div style="font-size:8px;color:rgba(253,246,240,.5);letter-spacing:.06em;text-transform:uppercase">балл</div>
-        </div>
-      </div>
-      <div class="winner-body">
-<div class="winner-stats">
-          <div class="stat"><div class="stat-label">Смены</div><div class="stat-value">${w.смены}</div></div>
-          <div class="stat"><div class="stat-label">Прод/смену</div><div class="stat-value">${fmt(w.ps)} ₽</div></div>
-          <div class="stat"><div class="stat-label">First шт</div><div class="stat-value">${w.fsh}</div></div>
-          <div class="stat"><div class="stat-label">First руб</div><div class="stat-value">${fmt(w.fr)} ₽</div></div>
-          <div class="stat" style="grid-column:1/-1"><div class="stat-label">Сумма продаж товаров</div><div class="stat-value">${fmt(w.tov)} ₽</div></div>
-        </div>
-      </div>
-    </div>`;
-});
+// Winners grid — рендерится после вычисления dataQ2 (см. ниже)
 
 // Icon legend
 const legendDiv = document.createElement('div');
 legendDiv.style.cssText = 'display:flex;flex-wrap:wrap;gap:16px;padding:1rem 1.5rem;background:rgba(92,105,55,.04);border-top:1px solid rgba(92,105,55,.08);font-size:11px;color:rgba(92,105,55,.7)';
 legendDiv.innerHTML = `
-  <span style="display:flex;align-items:center;gap:6px">💰 — лидер по продажам услуг</span>
-  <span style="display:flex;align-items:center;gap:6px">🛍️ — лидер по продажам товаров</span>
+  <span style="display:flex;align-items:center;gap:6px">💰 — лидер по средним продажам в смену</span>
+  <span style="display:flex;align-items:center;gap:6px">🛍️ — лидер по товарам в смену</span>
   <span style="display:flex;align-items:center;gap:6px">👥 — лидер по кол-ву First</span>
 `;
 document.querySelector('.detail-section').before(legendDiv);
@@ -403,6 +374,16 @@ const monthlyData = {
       {name:'Коклева Лада',        смены:8,  usl:441175,  tov:45350,  ps:60816, fsh:7,  fr:57840},
       {name:'Лиза',                смены:1,  usl:50415,   tov:4813,   ps:55228, fsh:0,  fr:0},
     ],
+    apr: [
+      {name:'Кузнецова Варя',      смены:7,  usl:543650,  tov:50947,  ps:84942, fsh:2,  fr:12000},
+      {name:'Андрианова Аня',      смены:10, usl:719695,  tov:95545,  ps:81524, fsh:11, fr:82320},
+      {name:'Антропова Вероника',  смены:12, usl:847036,  tov:44361,  ps:74283, fsh:12, fr:98560},
+      {name:'Гасимова Карина',     смены:11, usl:947465,  tov:65766,  ps:92112, fsh:11, fr:106480},
+      {name:'Корниенко Екатерина', смены:7,  usl:466150,  tov:35589,  ps:71677, fsh:7,  fr:66640},
+      {name:'Коклева Лада',        смены:8,  usl:577115,  tov:79289,  ps:82051, fsh:7,  fr:57360},
+      {name:'Соболева Ирина',      смены:2,  usl:56920,   tov:16090,  ps:36505, fsh:0,  fr:0},
+      {name:'Крупнова Яна',        смены:2,  usl:133130,  tov:10108,  ps:71619, fsh:2,  fr:12000},
+    ],
   },
   'Мясницкая': {
     hasFst: true,
@@ -433,6 +414,14 @@ const monthlyData = {
       {name:'Корнеева Ольга',     смены:10, usl:430320, tov:61496,  ps:49182, fsh:15, fr:120720},
       {name:'Павлова Виктория',   смены:13, usl:506590, tov:107211, ps:47215, fsh:21, fr:155760},
     ],
+    apr: [
+      {name:'Дайнеко Анна',       смены:6,  usl:279140, tov:18509,  ps:49608, fsh:3,  fr:23120},
+      {name:'Григорова Дарья',    смены:5,  usl:128365, tov:34643,  ps:32602, fsh:2,  fr:17120},
+      {name:'Смокот Полина',      смены:15, usl:758400, tov:143542, ps:60129, fsh:17, fr:117360},
+      {name:'Воробьева Ольга',    смены:16, usl:766730, tov:135114, ps:56365, fsh:31, fr:258640},
+      {name:'Корнеева Ольга',     смены:10, usl:505855, tov:75077,  ps:58093, fsh:13, fr:103984},
+      {name:'Павлова Виктория',   смены:8,  usl:408930, tov:57497,  ps:58303, fsh:6,  fr:51840},
+    ],
   },
   'Никитская': {
     hasFst: true,
@@ -459,6 +448,14 @@ const monthlyData = {
       {name:'Мохова Валерия',      смены:10, usl:291920, tov:34986, ps:32691, fsh:7,  fr:31200},
       {name:'Кормилицина Анна',    смены:10, usl:262060, tov:28532, ps:29059, fsh:4,  fr:23040},
       {name:'Умрихина Анна',       смены:11, usl:144308, tov:23188, ps:15227, fsh:4,  fr:18240},
+    ],
+    apr: [
+      {name:'Умрихина Анна',       смены:4,  usl:80900,  tov:10735, ps:22909, fsh:1,  fr:10880},
+      {name:'Сидякина Виктория',   смены:8,  usl:274740, tov:28125, ps:37858, fsh:7,  fr:48520},
+      {name:'Мохова Валерия',      смены:7,  usl:215710, tov:26670, ps:34626, fsh:2,  fr:10880},
+      {name:'Барышникова Марина',  смены:17, usl:623070, tov:57978, ps:40062, fsh:9,  fr:99420},
+      {name:'Кормилицина Анна',    смены:12, usl:484870, tov:37713, ps:43549, fsh:3,  fr:77760},
+      {name:'Солодовникова Настя', смены:12, usl:331160, tov:31897, ps:30255, fsh:8,  fr:45780},
     ],
   },
   'Чернышевская': {
@@ -488,37 +485,120 @@ const monthlyData = {
       {name:'Глазкова Серафима',   смены:7,  usl:162190, tov:47420,  ps:29944, fsh:9,  fr:53400},
       {name:'Гагара Виктория',     смены:0,  usl:19825,  tov:2057,   ps:0,     fsh:2,  fr:14200},
     ],
+    apr: [
+      {name:'Фахретдинова Анна',   смены:6,  usl:101250, tov:13066,  ps:19053, fsh:6,  fr:35200},
+      {name:'Нестерова Анастасия', смены:16, usl:722475, tov:123766, ps:52890, fsh:38, fr:323120},
+      {name:'Дятлова Яна',         смены:15, usl:596245, tov:84001,  ps:45350, fsh:27, fr:199680},
+      {name:'Бельтюкова Ксения',   смены:4,  usl:145565, tov:55530,  ps:50274, fsh:9,  fr:76840},
+      {name:'Гагара Виктория',     смены:5,  usl:191305, tov:41806,  ps:46622, fsh:12, fr:81000},
+      {name:'Болдина Виктория',    смены:5,  usl:118871, tov:47634,  ps:33301, fsh:10, fr:62600},
+      {name:'Фаррахова Алина',     смены:4,  usl:73450,  tov:10752,  ps:21051, fsh:3,  fr:23400},
+      {name:'Часовская Яна',       смены:4,  usl:69645,  tov:21419,  ps:22766, fsh:4,  fr:35920},
+    ],
   },
 };
 
 // Sort monthly alphabetically, assign places
 Object.values(monthlyData).forEach(d => {
-  ['jan','feb','mar'].forEach(m => {
+  ['jan','feb','mar','apr'].forEach(m => {
+    if (!d[m]) return;
     d[m].sort((a,b) => a.name.localeCompare(b.name, 'ru'));
     d[m].forEach((r,i) => r.place = i+1);
   });
 });
 
+// Q2 aggregate data (April only so far)
+const dataQ2 = {};
+Object.entries(monthlyData).forEach(([studio, md]) => {
+  const apr = md.apr;
+  const maxPs    = Math.max(...apr.map(r => r.ps))  || 1;
+  const maxFsh   = Math.max(...apr.map(r => r.fsh||0)) || 1;
+  const maxTovSm = Math.max(...apr.map(r => r.смены > 0 ? r.tov/r.смены : 0)) || 1;
+  const scored = apr.map(r => {
+    const tovSm = r.смены > 0 ? r.tov / r.смены : 0;
+    return {
+      ...r,
+      tovSm,
+      score: Math.round(((r.ps||0)/maxPs*0.60 + (r.fsh||0)/maxFsh*0.30 + tovSm/maxTovSm*0.10)*100)
+    };
+  });
+  scored.sort((a,b) => b.score - a.score);
+  scored.forEach((r,i) => r.place = i+1);
+  dataQ2[studio] = { all: scored, winner: scored[0] };
+});
+
+// Winners grid — апрельские лидеры из dataQ2
+(function(){
+  const wg = document.getElementById('winners-grid');
+  Object.entries(dataQ2).forEach(([studio, d2]) => {
+    const w = d2.winner;
+    const st = studioHearts[studio] || {heart:'🏆'};
+    wg.innerHTML += `
+      <div class="winner-card">
+        <div class="winner-top">
+          <div style="flex:1;min-width:0">
+            <div class="winner-studio-row">
+              <div class="winner-studio">${studio.toUpperCase()}</div>
+              <span class="studio-heart">${st.heart}</span>
+            </div>
+            <div class="winner-name">${w.name}</div>
+          </div>
+          <div class="trophy-wrap" style="flex-direction:column;gap:2px">
+            <div style="font-family:'Unbounded',sans-serif;font-size:26px;color:#F5C518;font-weight:400;line-height:1">${Math.round(w.score)}</div>
+            <div style="font-size:8px;color:rgba(253,246,240,.5);letter-spacing:.06em;text-transform:uppercase">балл</div>
+          </div>
+        </div>
+        <div class="winner-body">
+          <div class="winner-stats">
+            <div class="stat"><div class="stat-label">Смены</div><div class="stat-value">${w.смены}</div></div>
+            <div class="stat"><div class="stat-label">Прод/смену</div><div class="stat-value">${fmt(w.ps)} ₽</div></div>
+            <div class="stat"><div class="stat-label">First шт</div><div class="stat-value">${w.fsh||'—'}</div></div>
+            <div class="stat"><div class="stat-label">First руб</div><div class="stat-value">${w.fr?fmt(w.fr):'—'} ₽</div></div>
+            <div class="stat" style="grid-column:1/-1"><div class="stat-label">Товары/смену</div><div class="stat-value">${w.смены > 0 ? fmt(Math.round(w.tov/w.смены)) : '—'} ₽</div></div>
+          </div>
+        </div>
+      </div>`;
+  });
+})();
+
 function switchTab(sid, tab) {
-  document.querySelectorAll(`#studio-${sid} .tab-btn`).forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll(`#studio-${sid} .tab-btn:not(.tab-disabled)`).forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll(`#studio-${sid} .tab-pane`).forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
 }
 
-function monthlyThead(hasFst) {
+function monthlyThead(hasFst, perShift) {
+  if (perShift) {
+    const fstCols = hasFst ? '<th>First шт</th><th>First руб</th>' : '';
+    return `<th>#</th><th>Имя</th><th>Смены</th><th>Продажи услуг</th><th>Продажи товаров</th>${fstCols}<th>Услуги/смену</th><th>Товары/смену</th>`;
+  }
   return `<th>#</th><th>Имя</th><th>Смены</th><th>Продажи услуг</th><th>Прод. в смену</th>${hasFst ? '<th>First шт</th><th>First руб</th>' : ''}<th>Товары</th>`;
 }
 
-function monthlyTbody(rows, hasFst) {
-  const maxUsl = Math.max(...rows.map(r=>r.usl));
-  const maxTov = Math.max(...rows.map(r=>r.tov));
-  const maxFsh = hasFst ? Math.max(...rows.map(r=>r.fsh||0)) : 0;
+function monthlyTbody(rows, hasFst, perShift) {
+  const maxFsh   = hasFst ? Math.max(...rows.map(r=>r.fsh||0)) : 0;
+  const maxPs    = Math.max(...rows.map(r=>r.ps||0));
+  const maxTovSm = perShift ? (Math.max(...rows.map(r => r.смены > 0 ? r.tov/r.смены : 0)) || 0) : 0;
+  const maxTov   = perShift ? 0 : (Math.max(...rows.map(r=>r.tov)) || 0);
   return rows.map(r => {
+    const tovSm = r.смены > 0 ? r.tov / r.смены : 0;
     const re = `<span class="rank-other">${r.place}</span>`;
     const icons = [];
-    if(r.usl === maxUsl) icons.push('<span title="Лидер по продажам услуг" style="font-size:14px">💰</span>');
-    if(r.tov === maxTov) icons.push('<span title="Лидер по продажам товаров" style="font-size:14px">🛍️</span>');
+    if((r.ps||0) === maxPs && maxPs > 0) icons.push('<span title="Лидер по средним продажам в смену" style="font-size:14px">💰</span>');
+    if(perShift) {
+      if(tovSm === maxTovSm && maxTovSm > 0) icons.push('<span title="Лидер по товарам в смену" style="font-size:14px">🛍️</span>');
+    } else {
+      if(r.tov === maxTov && maxTov > 0) icons.push('<span title="Лидер по продажам товаров" style="font-size:14px">🛍️</span>');
+    }
     if(hasFst && r.fsh && r.fsh === maxFsh) icons.push('<span title="Лидер по кол-ву First" style="font-size:14px">👥</span>');
     const iconsHtml = icons.length ? `<span style="margin-left:5px">${icons.join('')}</span>` : '';
+    if (perShift) {
+      const fstCells = hasFst ? `<td>${r.fsh||'—'}</td><td>${r.fr ? fmt(r.fr) : '—'}</td>` : '';
+      return `<tr>
+        <td>${re}</td>
+        <td style="white-space:nowrap">${r.name}${iconsHtml}</td>
+        <td>${r.смены}</td><td>${fmt(r.usl)}</td><td>${fmt(r.tov)}</td>${fstCells}<td>${fmt(r.ps)}</td><td>${tovSm > 0 ? fmt(Math.round(tovSm)) : '—'}</td>
+      </tr>`;
+    }
     const fst = hasFst ? `<td>${r.fsh||'—'}</td><td>${r.fr ? fmt(r.fr) : '—'}</td>` : '';
     return `<tr>
       <td>${re}</td>
@@ -528,41 +608,80 @@ function monthlyTbody(rows, hasFst) {
   }).join('');
 }
 
+// Build Q1 aggregate rows
+function buildQ1Rows(d) {
+  const maxUsl = Math.max(...d.all.map(r=>r.usl));
+  const maxTov = Math.max(...d.all.map(r=>r.tov));
+  const maxFsh = Math.max(...d.all.map(r=>r.fsh));
+  const maxPs  = Math.max(...d.all.map(r=>r.ps));
+  let rows = '';
+  d.all.forEach(r => {
+    const isW = r.place === 1;
+    const rankEl = isW ? `<span class="rank-1">1</span>` : `<span class="rank-other">${r.place}</span>`;
+    const icons = [];
+    if(r.ps === maxPs) icons.push('<span title="Лидер по средним продажам в смену" style="font-size:14px">💰</span>');
+    if(r.tov === maxTov) icons.push('<span title="Лидер по продажам товаров" style="font-size:14px">🛍️</span>');
+    if(r.fsh === maxFsh) icons.push('<span title="Лидер по кол-ву First" style="font-size:14px">👥</span>');
+    const iconsHtml = icons.length ? `<span style="margin-left:5px">${icons.join('')}</span>` : '';
+    const breakdown = JSON.stringify({
+      name: r.name,
+      ps:  {val:r.ps,  max:maxPs,  w:60, pts:+(r.ps /maxPs *60).toFixed(1)},
+      fsh: {val:r.fsh, max:maxFsh, w:30, pts:+(r.fsh/maxFsh*30).toFixed(1)},
+      tov: {val:r.tov, max:maxTov, w:10, pts:+(r.tov/maxTov*10).toFixed(1)},
+      total: Math.round(r.score)
+    });
+    rows += `<tr class="${isW?'winner-row':''}">
+      <td>${rankEl}</td>
+      <td class="${isW?'winner-name-cell':''}" style="white-space:nowrap">${r.name}${iconsHtml}</td>
+      <td>${r.смены}</td><td>${fmt(r.usl)}</td><td>${fmt(r.ps)}</td>
+      <td>${r.fsh}</td><td>${fmt(r.fr)}</td><td>${fmt(r.tov)}</td>
+      <td class="score-cell ${scoreClass(r.score)}" data-breakdown='${breakdown.replace(/'/g,"&#39;")}'>${Math.round(r.score)}</td>
+    </tr>`;
+  });
+  return rows;
+}
+
+// Build Q2 aggregate rows (uses dataQ2, товары/смену)
+function buildQ2Rows(d2) {
+  const maxUsl   = Math.max(...d2.all.map(r=>r.usl)) || 1;
+  const maxTovSm = Math.max(...d2.all.map(r=>r.tovSm||0)) || 1;
+  const maxFsh   = Math.max(...d2.all.map(r=>r.fsh||0)) || 1;
+  const maxPs    = Math.max(...d2.all.map(r=>r.ps))  || 1;
+  let rows = '';
+  d2.all.forEach(r => {
+    const isW = r.place === 1;
+    const rankEl = isW ? `<span class="rank-1">1</span>` : `<span class="rank-other">${r.place}</span>`;
+    const icons = [];
+    if(r.ps === maxPs && r.ps > 0) icons.push('<span title="Лидер по средним продажам в смену" style="font-size:14px">💰</span>');
+    if((r.tovSm||0) === maxTovSm && maxTovSm > 0) icons.push('<span title="Лидер по товарам в смену" style="font-size:14px">🛍️</span>');
+    if(r.fsh && r.fsh === maxFsh) icons.push('<span title="Лидер по кол-ву First" style="font-size:14px">👥</span>');
+    const iconsHtml = icons.length ? `<span style="margin-left:5px">${icons.join('')}</span>` : '';
+    const breakdown = JSON.stringify({
+      name: r.name,
+      ps:  {val:r.ps||0,              max:maxPs,               w:60, pts:+((r.ps||0)/maxPs*60).toFixed(1)},
+      fsh: {val:r.fsh||0,             max:maxFsh,              w:30, pts:+((r.fsh||0)/maxFsh*30).toFixed(1)},
+      tov: {val:Math.round(r.tovSm||0), max:Math.round(maxTovSm), w:10, pts:+((r.tovSm||0)/maxTovSm*10).toFixed(1)},
+      total: Math.round(r.score)
+    });
+    rows += `<tr class="${isW?'winner-row':''}">
+      <td>${rankEl}</td>
+      <td class="${isW?'winner-name-cell':''}" style="white-space:nowrap">${r.name}${iconsHtml}</td>
+      <td>${r.смены}</td><td>${r.usl?fmt(r.usl):'—'}</td><td>${fmt(r.tov)}</td>
+      <td>${r.fsh||'—'}</td><td>${r.fr?fmt(r.fr):'—'}</td><td>${r.ps?fmt(r.ps):'—'}</td><td>${r.tovSm > 0 ? fmt(Math.round(r.tovSm)) : '—'}</td>
+      <td class="score-cell ${scoreClass(r.score)}" data-breakdown='${breakdown.replace(/'/g,"&#39;")}'>${Math.round(r.score)}</td>
+    </tr>`;
+  });
+  return rows;
+}
+
 // Detail tables
 const tb = document.getElementById('tables');
 Object.entries(data).forEach(([studio, d]) => {
   const sid = studio.replace(/\s+/g,'-');
   const md = monthlyData[studio];
   const hasFst = md.hasFst;
-  const maxUsl = Math.max(...d.all.map(r=>r.usl));
-  const maxTov = Math.max(...d.all.map(r=>r.tov));
-  const maxFsh = Math.max(...d.all.map(r=>r.fsh));
-  const maxPs  = Math.max(...d.all.map(r=>r.ps));
-  let q1rows = '';
-  d.all.forEach(r => {
-    const isW = r.place === 1;
-    const rankEl = isW ? `<span class="rank-1">1</span>` : `<span class="rank-other">${r.place}</span>`;
-    const icons = [];
-    if(r.usl === maxUsl) icons.push('<span title="Лидер по продажам услуг" style="font-size:14px">💰</span>');
-    if(r.tov === maxTov) icons.push('<span title="Лидер по продажам товаров" style="font-size:14px">🛍️</span>');
-    if(r.fsh === maxFsh) icons.push('<span title="Лидер по кол-ву First" style="font-size:14px">👥</span>');
-    const iconsHtml = icons.length ? `<span style="margin-left:5px">${icons.join('')}</span>` : '';
-    const breakdown = JSON.stringify({
-      name: r.name,
-      ps:   {val: r.ps,  max: maxPs,  w: 60, pts: +(r.ps /maxPs *60).toFixed(1)},
-      fsh:  {val: r.fsh, max: maxFsh, w: 30, pts: +(r.fsh/maxFsh*30).toFixed(1)},
-      tov:  {val: r.tov, max: maxTov, w: 10, pts: +(r.tov/maxTov*10).toFixed(1)},
-      total: Math.round(r.score)
-    });
-    q1rows += `
-      <tr class="${isW?'winner-row':''}">
-        <td>${rankEl}</td>
-        <td class="${isW?'winner-name-cell':''}" style="white-space:nowrap">${r.name}${iconsHtml}</td>
-        <td>${r.смены}</td><td>${fmt(r.usl)}</td><td>${fmt(r.ps)}</td>
-        <td>${r.fsh}</td><td>${fmt(r.fr)}</td><td>${fmt(r.tov)}</td>
-        <td class="score-cell ${scoreClass(r.score)}" data-breakdown='${breakdown.replace(/'/g,"&#39;")}'>${Math.round(r.score)}</td>
-      </tr>`;
-  });
+  const d2 = dataQ2[studio];
+
   tb.innerHTML += `
     <div class="studio-block" id="studio-${sid}">
       <div class="studio-header">
@@ -570,35 +689,54 @@ Object.entries(data).forEach(([studio, d]) => {
         <span class="studio-header-name">${studio.toUpperCase()}</span>
       </div>
       <div class="tab-bar">
-        <button class="tab-btn active" data-tab="q1"  onclick="switchTab('${sid}','q1')">1 КВАРТАЛ</button>
-        <button class="tab-btn"        data-tab="jan" onclick="switchTab('${sid}','jan')">ЯНВАРЬ</button>
-        <button class="tab-btn"        data-tab="feb" onclick="switchTab('${sid}','feb')">ФЕВРАЛЬ</button>
-        <button class="tab-btn"        data-tab="mar" onclick="switchTab('${sid}','mar')">МАРТ</button>
+        <button class="tab-btn active"    data-tab="q2sum" onclick="switchTab('${sid}','q2sum')">2 КВАРТАЛ</button>
+        <button class="tab-btn"           data-tab="apr"   onclick="switchTab('${sid}','apr')">АПРЕЛЬ</button>
+        <button class="tab-btn tab-disabled" disabled>МАЙ</button>
+        <button class="tab-btn tab-disabled" disabled>ИЮНЬ</button>
+        <span class="tab-sep"></span>
+        <button class="tab-btn"           data-tab="q1"  onclick="switchTab('${sid}','q1')">1 КВАРТАЛ</button>
+        <button class="tab-btn"           data-tab="jan" onclick="switchTab('${sid}','jan')">ЯНВАРЬ</button>
+        <button class="tab-btn"           data-tab="feb" onclick="switchTab('${sid}','feb')">ФЕВРАЛЬ</button>
+        <button class="tab-btn"           data-tab="mar" onclick="switchTab('${sid}','mar')">МАРТ</button>
       </div>
-      <div class="tab-pane active" data-tab="q1">
+      <div class="tab-pane active" data-tab="q2sum">
+        <div class="table-wrap"><table>
+          <thead><tr><th>#</th><th>Имя</th><th>Смены</th><th>Продажи услуг</th>
+            <th>Продажи товаров</th><th>First шт</th><th>First руб</th><th>Услуги/смену</th><th>Товары/смену</th><th>Балл</th>
+          </tr></thead>
+          <tbody>${buildQ2Rows(d2)}</tbody>
+        </table></div>
+      </div>
+      <div class="tab-pane" data-tab="apr">
+        <div class="table-wrap"><table>
+          <thead><tr>${monthlyThead(hasFst, true)}</tr></thead>
+          <tbody>${monthlyTbody(md.apr, hasFst, true)}</tbody>
+        </table></div>
+      </div>
+      <div class="tab-pane" data-tab="q1">
         <div class="table-wrap"><table>
           <thead><tr><th>#</th><th>Имя</th><th>Смены</th><th>Продажи услуг</th>
             <th>Прод. в смену</th><th>First шт</th><th>First руб</th><th>Товары</th><th>Балл</th>
           </tr></thead>
-          <tbody>${q1rows}</tbody>
+          <tbody>${buildQ1Rows(d)}</tbody>
         </table></div>
       </div>
       <div class="tab-pane" data-tab="jan">
         <div class="table-wrap"><table>
-          <thead><tr>${monthlyThead(hasFst)}</tr></thead>
-          <tbody>${monthlyTbody(md.jan, hasFst)}</tbody>
+          <thead><tr>${monthlyThead(hasFst, false)}</tr></thead>
+          <tbody>${monthlyTbody(md.jan, hasFst, false)}</tbody>
         </table></div>
       </div>
       <div class="tab-pane" data-tab="feb">
         <div class="table-wrap"><table>
-          <thead><tr>${monthlyThead(hasFst)}</tr></thead>
-          <tbody>${monthlyTbody(md.feb, hasFst)}</tbody>
+          <thead><tr>${monthlyThead(hasFst, false)}</tr></thead>
+          <tbody>${monthlyTbody(md.feb, hasFst, false)}</tbody>
         </table></div>
       </div>
       <div class="tab-pane" data-tab="mar">
         <div class="table-wrap"><table>
-          <thead><tr>${monthlyThead(hasFst)}</tr></thead>
-          <tbody>${monthlyTbody(md.mar, hasFst)}</tbody>
+          <thead><tr>${monthlyThead(hasFst, false)}</tr></thead>
+          <tbody>${monthlyTbody(md.mar, hasFst, false)}</tbody>
         </table></div>
       </div>
     </div>`;
@@ -681,7 +819,7 @@ Object.entries(data).forEach(([studio, d]) => {
           <span class="popup-row-pts">+${b.fsh.pts}</span>
         </div>
         <div class="popup-row">
-          <span class="popup-row-label">Товары (10%)</span>
+          <span class="popup-row-label">Товары/смену (10%)</span>
           <span class="popup-row-val">${b.tov.val.toLocaleString('ru-RU')} ₽</span>
           <span class="popup-row-pts">+${b.tov.pts}</span>
         </div>

@@ -960,14 +960,15 @@ function renderMonthlyHist() {
   fmTr.innerHTML = fmCells;
   tbody.appendChild(fmTr);
 
-  // ИТОГО
+  // ИТОГО (1С + Фитмост)
   const tf = document.createElement('tr');
   tf.className = 'tfoot';
   let footCells = '<td>ИТОГО</td>';
-  MONTHLY_CATS.totals.forEach(v => {
+  const colTotals = MONTHLY_CATS.totals.map((v,i) => v + MONTHLY_CATS.fitmost[i]);
+  colTotals.forEach(v => {
     footCells += `<td class="r">${fmt(v)}</td>`;
   });
-  const grandTotal = MONTHLY_CATS.totals.reduce((s,v) => s + v, 0);
+  const grandTotal = colTotals.reduce((s,v) => s + v, 0);
   footCells += `<td class="r">${fmt(grandTotal)}</td>`;
   tf.innerHTML = footCells;
   tbody.appendChild(tf);

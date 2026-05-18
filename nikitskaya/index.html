@@ -985,12 +985,12 @@ function buildVisitDaysChart(canvasId){
 }
 
 function buildVisitMayWeeksChart(canvasId){
-  // Показываем только isMay-недели: 27 апр–3 мая (idx 7) и 4–10 мая (idx 8)
+  // Показываем только isMay-недели: 27 апр–3 мая, 4–10 мая, 11–17 мая
   const mayIdxs = WEEKS.isMay.map((v,i)=>v?i:-1).filter(i=>i>=0);
   const labels  = mayIdxs.map(i=>WEEKS.labels[i]);
-  const morn    = [135, 85];
-  const eve     = [77,  104];
-  const wknd    = [85,  87];
+  const morn    = [135, 85,  103];
+  const eve     = [77,  104, 108];
+  const wknd    = [85,  87,  100];
   const total   = mayIdxs.map(i=>WEEKS.visits[i]);
   const first   = mayIdxs.map(i=>WEEKS.first[i]);
   return new Chart(document.getElementById(canvasId),{type:'bar',
@@ -1615,7 +1615,7 @@ function renderMay(){
   // % выполнения плана: план 2 600 000 / дней в мае × пройденных дней
   (function(){
     const MAY_PLAN_MONTH=2600000, DAYS_IN_MAY=31;
-    const daysPassed=10; // данные за 1–10 мая
+    const daysPassed=17; // данные за 1–17 мая
     const normForDays=Math.round(MAY_PLAN_MONTH/DAYS_IN_MAY*daysPassed);
     const pct=normForDays>0?Math.round(M.total/normForDays*100):0;
     const pctColor=pct>=100?'var(--g)':pct>=85?'var(--o)':'#c0522a';

@@ -573,6 +573,8 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
   </div>
   <div class="week-tabs" id="mayAdminWeekTabs">
     <button class="wtab active" data-week="18–24 мая">18–24 мая</button>
+    <button class="wtab" data-week="11–17 мая">11–17 мая</button>
+    <button class="wtab" data-week="4–10 мая">4–10 мая</button>
   </div>
   <div class="panel">
     <h3>Детализация</h3><div class="panel-sub" id="mayAdminWeekLabel">18–24 мая</div>
@@ -643,8 +645,8 @@ const VISITS_TIME={
 const TRIAL={
   labels:WEEKS.labels,isMarch:WEEKS.isMarch,
   visits:[331,310,339,338,350,359,352,297,276,311,318],
-  trial: [32, 40, 37, 28, 39, 32, 34, 21, 34],
-  conversion:[3,4,4,5,5,8,9,8,9],
+  trial: [32, 40, 37, 28, 39, 32, 34, 21, 27, 25, 34],
+  conversion:[3,4,4,5,5,8,9,8,8,7,9],
 };
 
 
@@ -690,6 +692,22 @@ const ADMINS_WEEKLY={
     {name:'Аня К', abon:46360, tovar:6867, shifts:3,newQty:0,newRub:0    },
     {name:'Лера З',abon:6080,  tovar:8578, shifts:1,newQty:1,newRub:6080 },
   ],
+  '4–10 мая':[
+    {name:'Марина',abon:156360,tovar:15294,shifts:4,newQty:4,newRub:42400},
+    {name:'Лера З',abon:94500, tovar:8592, shifts:3,newQty:1,newRub:7600 },
+    {name:'Аня К', abon:45340, tovar:16477,shifts:3,newQty:0,newRub:0    },
+    {name:'Вика',  abon:31960, tovar:5492, shifts:2,newQty:2,newRub:21200},
+    {name:'Лера',  abon:13320, tovar:1343, shifts:1,newQty:1,newRub:7600 },
+    {name:'Настя', abon:0,     tovar:0,    shifts:0,newQty:0,newRub:0    },
+  ],
+  '11–17 мая':[
+    {name:'Марина',abon:194805,tovar:3771, shifts:3,newQty:4,newRub:33920},
+    {name:'Настя', abon:152880,tovar:14326,shifts:3,newQty:1,newRub:10880},
+    {name:'Аня К', abon:48330, tovar:9271, shifts:3,newQty:1,newRub:10880},
+    {name:'Лера',  abon:45170, tovar:15301,shifts:3,newQty:0,newRub:0    },
+    {name:'Лера З',abon:43320, tovar:5529, shifts:2,newQty:1,newRub:6080 },
+    {name:'Вика',  abon:7500,  tovar:0,    shifts:0,newQty:0,newRub:0    },
+  ],
   '18–24 мая':[
     {name:'Аня К', abon:223860,tovar:15490,shifts:3,newQty:3,newRub:18240},
     {name:'Лера',  abon:168150,tovar:13216,shifts:2,newQty:1,newRub:43200},
@@ -712,10 +730,10 @@ const ADMINS_APR=[
 // Текущая неделя (для графика First/Trial)
 const ADMINS=prepAdmins(ADMINS_WEEKLY['18–24 мая']);
 const APR_ADMIN_WEEKS=['1–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая'];
-const MAY_ADMIN_WEEKS=['18–24 мая'];
+const MAY_ADMIN_WEEKS=['4–10 мая','11–17 мая','18–24 мая'];
 
 // TRIAL_PIE / TRIAL_PIE2 агрегируются по всем неделям мая динамически в renderTrialPie()
-const TRIAL_PIE_MAY_WEEKS=['18–24 мая']; // добавлять сюда новые недели мая по мере появления данных
+const TRIAL_PIE_MAY_WEEKS=['4–10 мая','11–17 мая','18–24 мая']; // добавлять сюда новые недели мая по мере появления данных
 function buildMayTrialPie(){
   const nMap={};
   TRIAL_PIE_MAY_WEEKS.forEach(k=>{
@@ -768,6 +786,8 @@ const NEWBIES_WEEKLY={
   '20–26 апр':{labels:['Марина','Настя'],qty:[2,2],revenue:[16960,12160],colors:['#5C6937','#A2B9C9']},
   '27 апр–3 мая':{labels:['Марина','Лера','Настя','Лера З'],qty:[3,3,1,1],revenue:[31660,18240,6080,6080],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4'],
     types:[{label:'4 занятия',qty:6},{label:'8 занятий',qty:1},{label:'СТАРТ (инд.)',qty:1}]},
+  '4–10 мая':{labels:['Марина','Вика','Лера З','Лера'],qty:[4,2,1,1],revenue:[42400,21200,7600,7600],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
+  '11–17 мая':{labels:['Марина','Настя','Аня К','Лера З'],qty:[4,1,1,1],revenue:[33920,10880,10880,6080],colors:['#5C6937','#A2B9C9','#F0803B','#9b89c4']},
   '18–24 мая':{labels:['Лера З','Аня К','Вика','Лера'],qty:[3,3,2,1],revenue:[27840,18240,12160,43200],colors:['#9b89c4','#aeb49c','#F0803B','#A2B9C9'],
     types:[{label:'4 занятия',qty:6},{label:'8 занятий',qty:2},{label:'Безлимит 3 мес',qty:1}]},
 };
@@ -816,6 +836,28 @@ const FIRST_DAY_WEEKLY={
       {name:'Лера З', trial:1, soldQty:1, soldRub:6080,  conv:100},
     ],
     total:{trial:28, soldQty:8, soldRub:62060, conv:29}
+  },
+  '4–10 мая':{
+    rows:[
+      {name:'Марина', trial:12, soldQty:4, soldRub:42400, conv:33},
+      {name:'Вика',   trial:4,  soldQty:2, soldRub:21200, conv:50},
+      {name:'Лера З', trial:7,  soldQty:1, soldRub:7600,  conv:14},
+      {name:'Лера',   trial:1,  soldQty:1, soldRub:7600,  conv:100},
+      {name:'Аня К',  trial:0,  soldQty:0, soldRub:0,     conv:0 },
+      {name:'Настя',  trial:0,  soldQty:0, soldRub:0,     conv:0 },
+    ],
+    total:{trial:24, soldQty:8, soldRub:78800, conv:33}
+  },
+  '11–17 мая':{
+    rows:[
+      {name:'Марина', trial:6,  soldQty:4, soldRub:33920, conv:67},
+      {name:'Лера',   trial:8,  soldQty:0, soldRub:0,     conv:0 },
+      {name:'Аня К',  trial:3,  soldQty:1, soldRub:10880, conv:33},
+      {name:'Лера З', trial:3,  soldQty:1, soldRub:6080,  conv:33},
+      {name:'Настя',  trial:2,  soldQty:1, soldRub:10880, conv:50},
+      {name:'Вика',   trial:0,  soldQty:0, soldRub:0,     conv:0 },
+    ],
+    total:{trial:22, soldQty:7, soldRub:61760, conv:32}
   },
   '18–24 мая':{
     rows:[

@@ -958,7 +958,7 @@ function switchVisitView(pfx, view, btn){
     legend.innerHTML=`
       <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Будни</div>
       <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Выходные</div>
-      <div class="leg" style="color:var(--muted);font-size:11px">${pfx==='may'?'18–24 мая (посл. неделя)':'18–24 мая'} · итого ${VISITS_DAYS.visits.reduce((s,v)=>s+v,0)}</div>\`;,
+      <div class="leg" style="color:var(--muted);font-size:11px">${pfx==='may'?'18–24 мая (посл. неделя)':'18–24 мая'} · итого ${VISITS_DAYS.visits.reduce((s,v)=>s+v,0)}</div>`;
   } else {
     _visitCharts[pfx]=buildVisitHoursChart(canvasId);
     legend.innerHTML=`

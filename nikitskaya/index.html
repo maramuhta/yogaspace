@@ -616,14 +616,14 @@ Chart.register(ChartDataLabels);
 
 // ── ДАННЫЕ ────────────────────────────────────
 const WEEKS={
-  labels:['9–15 мар','16–22 мар','23–29 мар','30 мар–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая','18–24 мая'],
-  abon:  [479000,505000,578000,616000,456000,664590,476300,565860,773110],
-  tovar: [64000, 39000, 62000, 50000, 50000, 53986, 33668,53969, 77801],
-  visits:[331,310,339,338,350,359,352,297,318],
-  first: [32, 40, 37, 28, 39, 37, 34, 21, 34],
-  plan:  [587000,587000,587000,607000,607000,607000,607000,607000,607000],
-  isMarch:[true,true,true,true,false,false,false,false,false],
-  isMay:  [false,false,false,false,false,false,false,false,true],
+  labels:['9–15 мар','16–22 мар','23–29 мар','30 мар–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая','4–10 мая','11–17 мая','18–24 мая'],
+  abon:  [479000,505000,578000,616000,456000,664590,476300,565860,409460,559665,773110],
+  tovar: [64000, 39000, 62000, 50000, 50000, 53986, 33668,53969, 47197, 48198, 77801],
+  visits:[331,310,339,338,350,359,352,297,276,311,318],
+  first: [32, 40, 37, 28, 39, 37, 34, 21, 27, 25, 34],
+  plan:  [587000,587000,587000,607000,607000,607000,607000,607000,607000,607000,607000],
+  isMarch:[true,true,true,true,false,false,false,false,false,false,false],
+  isMay:  [false,false,false,false,false,false,false,false,true,true,true],
 };
 WEEKS.total=WEEKS.abon.map((a,i)=>a+WEEKS.tovar[i]);
 
@@ -635,14 +635,14 @@ const CATS={
 const toRub=arr=>arr.map(v=>v*1000);
 
 const VISITS_TIME={
-  morn: [null,null,null,null,null,114,96,135,137],
-  eve:  [null,null,null,null,null,122,148,77, 85],
-  wknd: [null,null,null,null,null,123,108,85, 96],
+  morn: [null,null,null,null,null,114,96,135,null,null,137],
+  eve:  [null,null,null,null,null,122,148,77, null,null,85],
+  wknd: [null,null,null,null,null,123,108,85, null,null,96],
 };
 
 const TRIAL={
   labels:WEEKS.labels,isMarch:WEEKS.isMarch,
-  visits:[331,310,339,338,350,359,352,297,318],
+  visits:[331,310,339,338,350,359,352,297,276,311,318],
   trial: [32, 40, 37, 28, 39, 32, 34, 21, 34],
   conversion:[3,4,4,5,5,8,9,8,9],
 };
@@ -714,8 +714,52 @@ const ADMINS=prepAdmins(ADMINS_WEEKLY['18–24 мая']);
 const APR_ADMIN_WEEKS=['1–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая'];
 const MAY_ADMIN_WEEKS=['18–24 мая'];
 
-const TRIAL_PIE ={labels:['Лера З','Аня К','Вика','Лера'],conversions:[3,3,2,1],revenue:[27840,18240,12160,43200],colors:['#9b89c4','#aeb49c','#F0803B','#A2B9C9']};
-const TRIAL_PIE2={labels:['4 занятия','8 занятий','Безлимит 3 мес'],qty:[6,2,1],revenue:[36480,21760,43200],colors:['#5c6937','#A2B9C9','#F0803B']};
+// TRIAL_PIE / TRIAL_PIE2 агрегируются по всем неделям мая динамически в renderTrialPie()
+const TRIAL_PIE_MAY_WEEKS=['18–24 мая']; // добавлять сюда новые недели мая по мере появления данных
+function buildMayTrialPie(){
+  const nMap={};
+  TRIAL_PIE_MAY_WEEKS.forEach(k=>{
+    const nb=NEWBIES_WEEKLY[k];
+    if(!nb)return;
+    nb.labels.forEach((l,i)=>{
+      if(!nMap[l])nMap[l]={conv:0,rev:0,color:nb.colors[i]};
+      nMap[l].conv+=nb.qty[i];
+      nMap[l].rev +=nb.revenue[i];
+    });
+  });
+  const labels=Object.keys(nMap);
+  const palette=['#9b89c4','#aeb49c','#F0803B','#A2B9C9','#5c6937','#e8c87a'];
+  return {labels,conversions:labels.map(l=>nMap[l].conv),revenue:labels.map(l=>nMap[l].rev),
+    colors:labels.map((l,i)=>nMap[l].color||palette[i%palette.length])};
+}
+function buildMayTrialPie2(){
+  const tMap={};
+  TRIAL_PIE_MAY_WEEKS.forEach(k=>{
+    const nb=NEWBIES_WEEKLY[k];
+    if(!nb||!nb.types)return;
+    nb.types.forEach(t=>{
+      if(!tMap[t.label])tMap[t.label]={qty:0,rev:0};
+      tMap[t.label].qty+=t.qty;
+    });
+  });
+  // revenue from NEWBIES: match type qty * unit price
+  TRIAL_PIE_MAY_WEEKS.forEach(k=>{
+    const nb=NEWBIES_WEEKLY[k];
+    if(!nb||!nb.types)return;
+    // per-type revenue: distribute proportionally
+    const totalQty=nb.qty.reduce((s,v)=>s+v,0);
+    const totalRev=nb.revenue.reduce((s,v)=>s+v,0);
+    nb.types.forEach(t=>{
+      if(tMap[t.label])tMap[t.label].rev=(tMap[t.label].rev||0)+Math.round(t.qty/totalQty*totalRev);
+    });
+  });
+  const labels=Object.keys(tMap);
+  const pal=['#5c6937','#A2B9C9','#F0803B','#9b89c4','#aeb49c'];
+  return {labels,qty:labels.map(l=>tMap[l].qty),revenue:labels.map(l=>tMap[l].rev),
+    colors:labels.map((_,i)=>pal[i%pal.length])};
+}
+const TRIAL_PIE =buildMayTrialPie();
+const TRIAL_PIE2=buildMayTrialPie2();
 
 const NEWBIES_WEEKLY={
   '1–5 апр':{labels:['Марина','Аня','Аня К','Вика'],qty:[1,1,1,1],revenue:[10880,10880,6080,6080],colors:['#5C6937','#e8c87a','#aeb49c','#F0803B']},
@@ -853,7 +897,14 @@ function switchVisitView(pfx, view, btn){
   legend.innerHTML='';
 
   if(view==='weeks'){
-    _visitCharts[pfx]=buildVisitWeeksChart(canvasId,pfx==='mar');
+    let _idxFilt=null;
+    if(pfx==='may'){
+      const _aprI=WEEKS.isMarch.map((m,i)=>(!m&&!(WEEKS.isMay&&WEEKS.isMay[i]))?i:-1).filter(i=>i>=0);
+      const _mayI=WEEKS.isMay?WEEKS.isMay.map((m,i)=>m?i:-1).filter(i=>i>=0):[];
+      const _lastA=_aprI.length>0?_aprI[_aprI.length-1]:null;
+      _idxFilt=_lastA!==null?[_lastA,..._mayI]:_mayI;
+    }
+    _visitCharts[pfx]=buildVisitWeeksChart(canvasId,pfx==='mar',_idxFilt);
     legend.innerHTML=`
       <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро до 15:30</div>
       <div class="leg"><div class="leg-dot" style="background:#aeb49c"></div>Выходные</div>
@@ -864,7 +915,7 @@ function switchVisitView(pfx, view, btn){
     legend.innerHTML=`
       <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Будни</div>
       <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Выходные</div>
-      <div class="leg" style="color:var(--muted);font-size:11px">18–24 мая · итого 318</div>`;
+      <div class="leg" style="color:var(--muted);font-size:11px">${pfx==='may'?'18–24 мая (посл. неделя)':'18–24 мая'} · итого ${VISITS_DAYS.visits.reduce((s,v)=>s+v,0)}</div>\`;,
   } else {
     _visitCharts[pfx]=buildVisitHoursChart(canvasId);
     legend.innerHTML=`
@@ -874,31 +925,41 @@ function switchVisitView(pfx, view, btn){
   }
 }
 
-function buildVisitWeeksChart(canvasId,isMar){
-  // Утро 6-11, День 12-16, Вечер 17+ (данные до 18–24 мая)
-  const morn  = [null,null,null,null,null,106,81,71,137];
-  const eve   = [null,null,null,null,null,130,126,141,85];
-  const wknd  = [null,null,null,null,null,123,94,85,96];
-  const total = WEEKS.visits;
-  const hasBreakdown = i => morn[i] !== null;
+function buildVisitWeeksChart(canvasId,isMar,idxFilter){
+  // Утро 6-11, День 12-16, Вечер 17+
+  const _morn = [null,null,null,null,null,106,81,71,null,null,137];
+  const _eve  = [null,null,null,null,null,130,126,141,null,null,85];
+  const _wknd = [null,null,null,null,null,123,94,85,null,null,96];
+  const _total= WEEKS.visits;
+  const _first= WEEKS.first;
+  // Apply index filter for May comparison view
+  const idxs  = idxFilter || WEEKS.labels.map((_,i)=>i);
+  const morn  = idxs.map(i=>_morn[i]);
+  const eve   = idxs.map(i=>_eve[i]);
+  const wknd  = idxs.map(i=>_wknd[i]);
+  const total = idxs.map(i=>_total[i]);
+  const firstLine = idxs.map(i=>_first[i]);
+  // For color: dim the "last-apr" comparison bar (first in May filter)
+  const isAprComp = idxFilter ? idxs.map((_,li)=>li===0&&!(WEEKS.isMay&&WEEKS.isMay[idxs[0]])) : idxs.map(()=>false);
+  const hasBreakdown = li => morn[li] !== null;
 
   return new Chart(document.getElementById(canvasId),{type:'bar',
-    data:{labels:WEEKS.labels,datasets:[
+    data:{labels:idxs.map(i=>WEEKS.labels[i]),datasets:[
       // Недели без разбивки — единый голубой столбец
       {label:'Всего',
-        data:total.map((v,i)=>hasBreakdown(i)?null:v),
-        backgroundColor:WEEKS.labels.map((_,i)=>'rgba(202,231,251,.7)'),
+        data:total.map((v,li)=>hasBreakdown(li)?null:v),
+        backgroundColor:total.map((_,li)=>isAprComp[li]?'rgba(202,231,251,.45)':'rgba(202,231,251,.7)'),
         borderRadius:5, stack:'s', order:2,
         datalabels:{
           display:ctx=>!hasBreakdown(ctx.dataIndex) && total[ctx.dataIndex]!=null,
           anchor:'end',align:'end',offset:2,
           font:{size:10,weight:'600'},
-          color:'#6ab4d8',
+          color:ctx=>isAprComp[ctx.dataIndex]?'#aaa':'#6ab4d8',
           formatter:v=>v!=null?fmtN(v):''}},
       // Утро до 15:30 — нижний слой стека
       {label:'Утро до 15:30',
         data:morn,
-        backgroundColor:B,
+        backgroundColor:total.map((_,li)=>isAprComp[li]?'rgba(202,231,251,.35)':B),
         borderRadius:{topLeft:0,topRight:0,bottomLeft:5,bottomRight:5},
         stack:'s', order:2,
         datalabels:{
@@ -909,7 +970,7 @@ function buildVisitWeeksChart(canvasId,isMar){
       // Вечер 15:30+ — верхний слой
       {label:'Вечер 15:30+',
         data:eve,
-        backgroundColor:O,
+        backgroundColor:total.map((_,li)=>isAprComp[li]?'rgba(240,128,59,.35)':O),
         borderRadius:{topLeft:5,topRight:5,bottomLeft:0,bottomRight:0},
         stack:'s', order:2,
         datalabels:{
@@ -920,7 +981,7 @@ function buildVisitWeeksChart(canvasId,isMar){
       // Выходные — средний слой
       {label:'Выходные',
         data:wknd,
-        backgroundColor:'#aeb49c',
+        backgroundColor:total.map((_,li)=>isAprComp[li]?'rgba(174,180,156,.4)':'#aeb49c'),
         borderRadius:{topLeft:0,topRight:0,bottomLeft:0,bottomRight:0},
         stack:'s', order:2,
         datalabels:{
@@ -928,9 +989,9 @@ function buildVisitWeeksChart(canvasId,isMar){
           anchor:'center',align:'center',
           font:{size:10,weight:'600'},color:'white',
           formatter:v=>v!=null?v:''}},
-      // Невидимый датасет для цифры 359 — БЕЗ стека чтобы не поднимать столбец
+      // Невидимый датасет для итога
       {label:'_total',
-        data:total.map((v,i)=>hasBreakdown(i)?v:null),
+        data:total.map((v,li)=>hasBreakdown(li)?v:null),
         type:'bar',
         backgroundColor:'rgba(0,0,0,0)',
         borderColor:'rgba(0,0,0,0)',
@@ -940,10 +1001,11 @@ function buildVisitWeeksChart(canvasId,isMar){
         datalabels:{
           display:ctx=>hasBreakdown(ctx.dataIndex),
           anchor:'end',align:'end',offset:5,
-          font:{size:11,weight:'700'},color:G,
+          font:{size:11,weight:'700'},
+          color:ctx=>isAprComp[ctx.dataIndex]?'#aaa':G,
           formatter:v=>v!=null?fmtN(v):''}},
       // Линия первых посещений
-      {label:'Первые посещения',data:WEEKS.first,type:'line',
+      {label:'Первые посещения',data:firstLine,type:'line',
         borderColor:G,pointBackgroundColor:G,
         pointRadius:5,borderWidth:2,fill:false,order:1,
         datalabels:{display:true,anchor:'end',align:'top',offset:4,
@@ -956,7 +1018,7 @@ function buildVisitWeeksChart(canvasId,isMar){
       scales:{
         x:{stacked:true,grid:{display:false}},
         y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},
-          suggestedMax:Math.max(...WEEKS.visits)*1.32},
+          suggestedMax:Math.max(...total.filter(v=>v!=null))*1.32},
       }}
   });
 }
@@ -1335,7 +1397,9 @@ function renderMonth(prefix){
 
     // Построение через общий билдер (поддерживает переключение)
     const P=prefix==='mar'?'Mar':prefix==='may'?'May':'Apr';
-    _visitCharts[prefix]=buildVisitWeeksChart('chart'+P+'Visits',isMar);
+    const lastAprIdxV2=aprIdx.length>0?aprIdx[aprIdx.length-1]:null;
+    const visIdxFilter=isMay?(lastAprIdxV2!==null?[lastAprIdxV2,...mayIdxV]:mayIdxV):null;
+    _visitCharts[prefix]=buildVisitWeeksChart('chart'+P+'Visits',isMar,visIdxFilter);
 
     // Таблица посещений
     const tb=document.getElementById(prefix==='mar'?'mVisitTable':prefix==='may'?'myVisitTable':'aVisitTable');

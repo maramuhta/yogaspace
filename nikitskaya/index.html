@@ -629,14 +629,14 @@ const FIRST_DAY_WEEKLY={
   },
   '18–24 мая':{
     rows:[
-      {name:'Аня К',  trial:null, soldQty:3, soldRub:18240, conv:null},
-      {name:'Лера З', trial:null, soldQty:3, soldRub:27840, conv:null},
-      {name:'Лера',   trial:null, soldQty:1, soldRub:43200, conv:null},
-      {name:'Вика',   trial:null, soldQty:2, soldRub:12160, conv:null},
-      {name:'Марина', trial:null, soldQty:0, soldRub:0,     conv:null},
-      {name:'Настя',  trial:null, soldQty:0, soldRub:0,     conv:null},
+      {name:'Аня К',  trial:7,  soldQty:3, soldRub:18240, conv:43},
+      {name:'Лера З', trial:10, soldQty:3, soldRub:27840, conv:30},
+      {name:'Лера',   trial:7,  soldQty:1, soldRub:43200, conv:14},
+      {name:'Вика',   trial:7,  soldQty:2, soldRub:12160, conv:29},
+      {name:'Марина', trial:2,  soldQty:0, soldRub:0,     conv:0 },
+      {name:'Настя',  trial:4,  soldQty:0, soldRub:0,     conv:0 },
     ],
-    total:{trial:34, soldQty:9, soldRub:101440, conv:26}
+    total:{trial:37, soldQty:9, soldRub:101440, conv:24}
   },
 };
 const FIRST_DAY=FIRST_DAY_WEEKLY['18–24 мая'];
@@ -644,7 +644,7 @@ const FIRST_DAY=FIRST_DAY_WEEKLY['18–24 мая'];
 // [FIX 2] Правильный итог апреля
 const MONTHLY={
   apr:{total:2555410,abon:2362290,tovar:193120},
-  may:{total:2516693,abon:2282375,tovar:234318},
+  may:{total:2212478,abon:2001305,tovar:211173},
   mar:null,
 };
 
@@ -870,15 +870,15 @@ const CATS_WEEKLY = {
   may: {
     cols: ['18–24 мая','Итого май'],
     rows: [
-      {name:'Абонементы на групповые занятия', vals:[480910, 1309225]},
-      {name:'Разовые',                          vals:[96200,  469740 ]},
-      {name:'Абонементы индивидуальные',        vals:[91000,  135500 ]},
+      {name:'Абонементы на групповые занятия', vals:[480910, 1263595]},
+      {name:'Разовые',                          vals:[96200,  288300 ]},
+      {name:'Абонементы индивидуальные',        vals:[91000,  88000  ]},
       {name:'Абонементы майсор и разовые',      vals:[42600,  123910 ]},
-      {name:'Аренда',                            vals:[24000,  120000 ]},
-      {name:'Мероприятия',                       vals:[5600,   8100   ]},
-      {name:'Товары',                            vals:[77801,  234318 ]},
+      {name:'Аренда',                            vals:[24000,  109500 ]},
+      {name:'Мероприятия',                       vals:[5600,   3100   ]},
+      {name:'Товары',                            vals:[77801,  211173 ]},
       {name:'Подарочный сертификат',             vals:[32800,  73650  ]},
-      {name:'ОНЛАЙН',                            vals:[3000,   28000  ]},
+      {name:'ОНЛАЙН',                            vals:[3000,   37000  ]},
       {name:'Прочее (др. студии)',               vals:[7500,   14250  ]},
     ],
   },

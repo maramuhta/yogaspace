@@ -1229,6 +1229,7 @@ function renderMonth(prefix){
     const marchIdx=W.isMarch.map((m,i)=>m?i:-1).filter(i=>i>=0);
     const aprIdx0=W.isMarch.map((m,i)=>(!m&&!(WEEKS.isMay&&WEEKS.isMay[i]))?i:-1).filter(i=>i>=0);
     const mayIdx0=WEEKS.isMay?WEEKS.isMay.map((m,i)=>m?i:-1).filter(i=>i>=0):[];
+    const lastAprI=aprIdx0.length>0?aprIdx0[aprIdx0.length-1]:null;
     const curMonthIdx=isMar?marchIdx:isMay?mayIdx0:aprIdx0;
     const official=isMar?null:isMay?(MONTHLY.may||null):(MONTHLY.apr||null);
     const totalAll=official?official.total:curMonthIdx.reduce((s,i)=>s+W.total[i],0);
@@ -1297,7 +1298,6 @@ function renderMonth(prefix){
     // [FIX 3] График с линией плана
     const P=prefix==='mar'?'Mar':prefix==='may'?'May':'Apr';
     // Для мая показываем последнюю неделю апреля + все недели мая
-    const lastAprI=aprIdx0.length>0?aprIdx0[aprIdx0.length-1]:null;
     const chIdxs=isMay?(lastAprI!==null?[lastAprI,...mayIdx0]:mayIdx0):null;
     const chLabels=chIdxs?chIdxs.map(i=>W.labels[i]):W.labels;
     const chAbon  =chIdxs?chIdxs.map(i=>W.abon[i]):W.abon;

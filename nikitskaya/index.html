@@ -776,8 +776,6 @@ function buildMayTrialPie2(){
   return {labels,qty:labels.map(l=>tMap[l].qty),revenue:labels.map(l=>tMap[l].rev),
     colors:labels.map((_,i)=>pal[i%pal.length])};
 }
-const TRIAL_PIE =buildMayTrialPie();
-const TRIAL_PIE2=buildMayTrialPie2();
 
 const NEWBIES_WEEKLY={
   '1–5 апр':{labels:['Марина','Аня','Аня К','Вика'],qty:[1,1,1,1],revenue:[10880,10880,6080,6080],colors:['#5C6937','#e8c87a','#aeb49c','#F0803B']},
@@ -792,6 +790,9 @@ const NEWBIES_WEEKLY={
     types:[{label:'4 занятия',qty:6},{label:'8 занятий',qty:2},{label:'Безлимит 3 мес',qty:1}]},
 };
 const NEWBIES=NEWBIES_WEEKLY['18–24 мая'];
+// TRIAL_PIE агрегируется по всем неделям мая (определяется здесь, после NEWBIES_WEEKLY)
+const TRIAL_PIE =buildMayTrialPie();
+const TRIAL_PIE2=buildMayTrialPie2();
 
 const FIRST_DAY_WEEKLY={
   '6–12 апр':{

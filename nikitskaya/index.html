@@ -1634,7 +1634,7 @@ function renderMonth(prefix){
 
   // ── 5. АДМИНИСТРАТОРЫ ──
   (function(){
-    const latestWeek=isMay?'18–24 мая':'27 апр–3 мая';
+    const latestWeek=isMay?MAY_ADMIN_WEEKS[MAY_ADMIN_WEEKS.length-1]:'27 апр–3 мая';
     const cur=prepAdmins(ADMINS_WEEKLY[latestWeek]||[]);
     const totalAbon=cur.reduce((s,a)=>s+a.abon,0);
     const totalTovar=cur.reduce((s,a)=>s+a.tovar,0);

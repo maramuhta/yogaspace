@@ -754,12 +754,12 @@ const ADMINS_WEEKLY={
   ],
   // Итог мая: услуги из Май услуги.xlsx (оплата с учётом возврата), First из Ферст.xlsx
   'Итог мая':[
-    {name:'Марина',abon:738665,tovar:44490,shifts:13,shifts_morn:7,shifts_eve:6,shifts_p:5,newQty:11,newRub:107600,visitors:26},
-    {name:'Аня К', abon:496460,tovar:44629,shifts:13,shifts_morn:6,shifts_eve:7,shifts_p:4,newQty:9, newRub:80400, visitors:19},
-    {name:'Настя', abon:330480,tovar:44301,shifts:8, shifts_morn:5,shifts_eve:3,shifts_p:4,newQty:2, newRub:21200, visitors:12},
-    {name:'Лера',  abon:331340,tovar:33250,shifts:8, shifts_morn:4,shifts_eve:4,shifts_p:6,newQty:7, newRub:111600,visitors:22},
-    {name:'Лера З',abon:215920,tovar:25456,shifts:11,shifts_morn:5,shifts_eve:6,shifts_p:5,newQty:6, newRub:57600, visitors:27},
-    {name:'Вика',  abon:195080,tovar:19799,shifts:8, shifts_morn:4,shifts_eve:4,shifts_p:3,newQty:6, newRub:57000, visitors:20},
+    {name:'Марина',abon:738665,tovar:44927,shifts:13,shifts_morn:7,shifts_eve:6,shifts_p:5,newQty:11,newRub:107600,visitors:26},
+    {name:'Аня К', abon:496460,tovar:49385,shifts:13,shifts_morn:6,shifts_eve:7,shifts_p:4,newQty:9, newRub:80400, visitors:19},
+    {name:'Настя', abon:330480,tovar:45797,shifts:8, shifts_morn:5,shifts_eve:3,shifts_p:4,newQty:2, newRub:21200, visitors:12},
+    {name:'Лера',  abon:331340,tovar:37425,shifts:8, shifts_morn:4,shifts_eve:4,shifts_p:6,newQty:7, newRub:111600,visitors:22},
+    {name:'Лера З',abon:215920,tovar:34034,shifts:11,shifts_morn:5,shifts_eve:6,shifts_p:5,newQty:6, newRub:57600, visitors:27},
+    {name:'Вика',  abon:195080,tovar:36043,shifts:8, shifts_morn:4,shifts_eve:4,shifts_p:3,newQty:6, newRub:57000, visitors:20},
   ],
 };
 function prepAdmins(arr){return arr.map(d=>({...d,total:d.abon+d.tovar,perShift:d.shifts>0?Math.round((d.abon+d.tovar)/d.shifts):0})).sort((a,b)=>b.total-a.total);}

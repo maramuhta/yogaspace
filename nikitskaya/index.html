@@ -595,6 +595,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
     <button class="wtab" data-week="18–24 мая">18–24 мая</button>
     <button class="wtab" data-week="11–17 мая">11–17 мая</button>
     <button class="wtab" data-week="4–10 мая">4–10 мая</button>
+    <button class="wtab" data-week="Итог мая">Итог мая</button>
   </div>
   <div class="panel">
     <h3>Детализация</h3><div class="panel-sub" id="mayAdminWeekLabel">25–31 мая</div>
@@ -626,6 +627,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
       <tbody id="mayFirstDayTable"></tbody>
     </table></div>
   </div>
+  <div id="mayShiftsBreakdown" class="panel"></div>
 </div>
 
 </div><!-- /month-may -->
@@ -749,6 +751,15 @@ const ADMINS_WEEKLY={
     {name:'Вика',  abon:70440, tovar:5897, shifts:2,newQty:2, newRub:20600},
     {name:'Лера З',abon:42940, tovar:3840, shifts:2,newQty:1, newRub:13600},
     {name:'Лера',  abon:44800, tovar:3390, shifts:1,newQty:2, newRub:27200},
+  ],
+  // Итог мая: услуги из Май услуги.xlsx (оплата с учётом возврата), First из Ферст.xlsx
+  'Итог мая':[
+    {name:'Марина',abon:738665,tovar:44490,shifts:13,shifts_morn:7,shifts_eve:6,shifts_p:5,newQty:11,newRub:107600,visitors:26},
+    {name:'Аня К', abon:496460,tovar:44629,shifts:13,shifts_morn:6,shifts_eve:7,shifts_p:4,newQty:9, newRub:80400, visitors:19},
+    {name:'Настя', abon:330480,tovar:44301,shifts:8, shifts_morn:5,shifts_eve:3,shifts_p:4,newQty:2, newRub:21200, visitors:12},
+    {name:'Лера',  abon:331340,tovar:33250,shifts:8, shifts_morn:4,shifts_eve:4,shifts_p:6,newQty:7, newRub:111600,visitors:22},
+    {name:'Лера З',abon:215920,tovar:25456,shifts:11,shifts_morn:5,shifts_eve:6,shifts_p:5,newQty:6, newRub:57600, visitors:27},
+    {name:'Вика',  abon:195080,tovar:19799,shifts:8, shifts_morn:4,shifts_eve:4,shifts_p:3,newQty:6, newRub:57000, visitors:20},
   ],
 };
 function prepAdmins(arr){return arr.map(d=>({...d,total:d.abon+d.tovar,perShift:d.shifts>0?Math.round((d.abon+d.tovar)/d.shifts):0})).sort((a,b)=>b.total-a.total);}
@@ -1665,7 +1676,22 @@ function renderMonth(prefix){
 
     // Собрать данные
     let admins, newbies, firstDay;
-    if(weekKey==='total'){
+    if(weekKey==='Итог мая'){
+      admins=prepAdmins(ADMINS_WEEKLY['Итог мая']||[]);
+      // NEWBIES: агрегируем все недели мая
+      const nMapM={};
+      MAY_ADMIN_WEEKS.forEach(k=>{const nb=NEWBIES_WEEKLY[k];if(!nb)return;nb.labels.forEach((l,i)=>{if(!nMapM[l])nMapM[l]={qty:0,rev:0,color:nb.colors[i]};nMapM[l].qty+=nb.qty[i];nMapM[l].rev+=nb.revenue[i];});});
+      const nlM=Object.keys(nMapM);
+      newbies={labels:nlM,qty:nlM.map(l=>nMapM[l].qty),revenue:nlM.map(l=>nMapM[l].rev),colors:nlM.map(l=>nMapM[l].color)};
+      // FIRST_DAY: агрегируем все недели мая
+      const fdMapM={};
+      MAY_ADMIN_WEEKS.forEach(k=>{const fd=FIRST_DAY_WEEKLY[k];if(!fd||!fd.rows.length)return;fd.rows.forEach(r=>{if(!fdMapM[r.name])fdMapM[r.name]={trial:0,soldQty:0,soldRub:0};fdMapM[r.name].trial+=r.trial;fdMapM[r.name].soldQty+=r.soldQty;fdMapM[r.name].soldRub+=r.soldRub;});});
+      const fdNamesM=Object.keys(fdMapM);
+      const fdRowsM=fdNamesM.map(n=>{const d=fdMapM[n];const conv=d.trial>0?Math.round(d.soldQty/d.trial*100):0;return{name:n,...d,conv};});
+      const fdTotM={trial:fdRowsM.reduce((s,r)=>s+r.trial,0),soldQty:fdRowsM.reduce((s,r)=>s+r.soldQty,0),soldRub:fdRowsM.reduce((s,r)=>s+r.soldRub,0)};
+      fdTotM.conv=fdTotM.trial>0?Math.round(fdTotM.soldQty/fdTotM.trial*100):0;
+      firstDay={rows:fdRowsM,total:fdTotM};
+    } else if(weekKey==='total'){
       admins=prepAdmins(ADMINS_APR);
       const allKeys=prefix==='may'?MAY_ADMIN_WEEKS:APR_ADMIN_WEEKS;
       // NEWBIES: объединяем по имени
@@ -1785,6 +1811,23 @@ function renderMonth(prefix){
         <td class="r">${fmt(firstDay.total.soldRub)}</td>
         <td class="r"><span style="font-weight:600">${firstDay.total.conv}%</span></td>`;
       fdTb.appendChild(tfoot);
+    }
+    // ── Разбивка смен для Итог мая ──
+    const shiftsBl=document.getElementById(prefix==='may'?'mayShiftsBreakdown':'aShiftsBreakdown');
+    if(shiftsBl){
+      shiftsBl.innerHTML='';
+      if(weekKey==='Итог мая'){
+        const raw=ADMINS_WEEKLY['Итог мая']||[];
+        let html=`<div style="margin-top:18px"><h3 style="margin-bottom:8px">Распределение смен · май 2026</h3>
+<table class="stattable"><thead><tr><th>Администратор</th><th class="r">О-утро</th><th class="r">О-вечер</th><th class="r">О (итого)</th><th class="r">П (помощник)</th><th class="r">Всего</th><th class="r">Новых гостей</th></tr></thead><tbody>`;
+        raw.forEach(a=>{
+          const om=a.shifts_morn||0,oe=a.shifts_eve||0,o=a.shifts||0,p=a.shifts_p||0,vis=a.visitors||0;
+          html+=`<tr><td style="font-weight:500">${a.name}</td><td class="r">${om}</td><td class="r">${oe}</td><td class="r"><b>${o}</b></td><td class="r" style="color:var(--muted)">${p}</td><td class="r">${o+p}</td><td class="r">${vis}</td></tr>`;
+        });
+        const totOm=raw.reduce((s,a)=>s+(a.shifts_morn||0),0),totOe=raw.reduce((s,a)=>s+(a.shifts_eve||0),0),totO=raw.reduce((s,a)=>s+(a.shifts||0),0),totP=raw.reduce((s,a)=>s+(a.shifts_p||0),0),totVis=raw.reduce((s,a)=>s+(a.visitors||0),0);
+        html+=`</tbody><tfoot><tr class="tfoot"><td>Итого</td><td class="r">${totOm}</td><td class="r">${totOe}</td><td class="r"><b>${totO}</b></td><td class="r">${totP}</td><td class="r">${totO+totP}</td><td class="r">${totVis}</td></tr></tfoot></table></div>`;
+        shiftsBl.innerHTML=html;
+      }
     }
   }
 

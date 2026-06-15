@@ -728,9 +728,13 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
       <div class="leg"><div class="leg-dot" style="background:var(--o);height:3px;border-radius:0;width:16px"></div>% конверсии</div>
     </div>
   </div>
+  <div class="panel">
+    <h3>First — разрез по абонементам</h3><div class="panel-sub">июнь 2026</div>
+    <div style="position:relative;height:360px;width:100%"><canvas id="chartJunTrialPie2"></canvas></div>
+    <div id="juTrialPieLegend2"></div>
+  </div>
   <canvas id="chartJunTrialPie" style="display:none"></canvas>
   <div id="juTrialPieLegend" style="display:none"></div>
-  <div id="juTrialPieLegend2" style="display:none"></div>
 </div>
 
 <div class="sec" id="jun-sec-trial" style="display:none!important">
@@ -915,20 +919,20 @@ const ADMINS_WEEKLY={
     {name:'Лера',  abon:44800, tovar:3390, shifts:1,newQty:2, newRub:27200},
   ],
   '1–7 июн':[
-    {name:'Марина', abon:127770,tovar:9087, shifts:4,shifts_morn:2,shifts_eve:2,shifts_p:0,newQty:1,newRub:10880},
-    {name:'Аня К',  abon:76300, tovar:25165,shifts:3,shifts_morn:1,shifts_eve:2,shifts_p:1,newQty:2,newRub:12160},
+    {name:'Марина', abon:127770,tovar:9087, shifts:4,shifts_morn:2,shifts_eve:2,shifts_p:0,newQty:1,newRub:13600},
+    {name:'Аня К',  abon:76300, tovar:25165,shifts:3,shifts_morn:1,shifts_eve:2,shifts_p:1,newQty:2,newRub:15200},
     {name:'Настя',  abon:71980, tovar:4037, shifts:2,shifts_morn:1,shifts_eve:1,shifts_p:2,newQty:0,newRub:0},
-    {name:'Лера З', abon:79380, tovar:6917, shifts:2,shifts_morn:2,shifts_eve:0,shifts_p:1,newQty:1,newRub:10880},
-    {name:'Лера',   abon:24400, tovar:4606, shifts:2,shifts_morn:0,shifts_eve:2,shifts_p:2,newQty:1,newRub:24240},
+    {name:'Лера З', abon:79380, tovar:6917, shifts:2,shifts_morn:2,shifts_eve:0,shifts_p:1,newQty:1,newRub:13600},
+    {name:'Лера',   abon:24400, tovar:4606, shifts:2,shifts_morn:0,shifts_eve:2,shifts_p:2,newQty:1,newRub:30300},
     {name:'Вика',   abon:54350, tovar:1874, shifts:1,shifts_morn:1,shifts_eve:0,shifts_p:1,newQty:0,newRub:0},
   ],
   '8–14 июн':[
     {name:'Марина', abon:206760,tovar:22892,shifts:5,shifts_morn:3,shifts_eve:2,shifts_p:0,newQty:0,newRub:0},
-    {name:'Аня К',  abon:92900, tovar:8410, shifts:3,shifts_morn:2,shifts_eve:1,shifts_p:2,newQty:3,newRub:32640},
+    {name:'Аня К',  abon:92900, tovar:8410, shifts:3,shifts_morn:2,shifts_eve:1,shifts_p:2,newQty:3,newRub:40800},
     {name:'Настя',  abon:49060, tovar:2784, shifts:2,shifts_morn:0,shifts_eve:2,shifts_p:0,newQty:0,newRub:0},
-    {name:'Лера З', abon:43760, tovar:4535, shifts:2,shifts_morn:1,shifts_eve:1,shifts_p:2,newQty:1,newRub:10880},
+    {name:'Лера З', abon:43760, tovar:4535, shifts:2,shifts_morn:1,shifts_eve:1,shifts_p:2,newQty:1,newRub:13600},
     {name:'Лера',   abon:12620, tovar:880,  shifts:1,shifts_morn:0,shifts_eve:1,shifts_p:1,newQty:0,newRub:0},
-    {name:'Вика',   abon:28420, tovar:1250, shifts:1,shifts_morn:1,shifts_eve:0,shifts_p:2,newQty:1,newRub:6080},
+    {name:'Вика',   abon:28420, tovar:1250, shifts:1,shifts_morn:1,shifts_eve:0,shifts_p:2,newQty:1,newRub:7600},
   ],
   // Итог мая: услуги из Май услуги.xlsx (оплата с учётом возврата), First из Ферст.xlsx
   'Итог мая':[
@@ -958,6 +962,22 @@ const JUN_ADMIN_WEEKS=['1–7 июн','8–14 июн'];
 
 // TRIAL_PIE / TRIAL_PIE2 агрегируются по всем неделям мая динамически в renderTrialPie()
 const TRIAL_PIE_MAY_WEEKS=['4–10 мая','11–17 мая','18–24 мая','25–31 мая']; // добавлять сюда новые недели мая по мере появления данных
+function buildJunTrialPie(){
+  const nMap={};
+  JUN_ADMIN_WEEKS.forEach(k=>{
+    const nb=NEWBIES_WEEKLY[k];
+    if(!nb)return;
+    nb.labels.forEach((l,i)=>{
+      if(!nMap[l])nMap[l]={conv:0,rev:0,color:nb.colors[i]};
+      nMap[l].conv+=nb.qty[i];
+      nMap[l].rev +=nb.revenue[i];
+    });
+  });
+  const labels=Object.keys(nMap);
+  const palette=['#9b89c4','#aeb49c','#F0803B','#A2B9C9','#5c6937','#e8c87a'];
+  return {labels,conversions:labels.map(l=>nMap[l].conv),revenue:labels.map(l=>nMap[l].rev),
+    colors:labels.map((l,i)=>nMap[l].color||palette[i%palette.length])};
+}
 function buildMayTrialPie(){
   const nMap={};
   TRIAL_PIE_MAY_WEEKS.forEach(k=>{
@@ -1014,9 +1034,9 @@ const NEWBIES_WEEKLY={
     types:[{label:'4 занятия',qty:6},{label:'8 занятий',qty:2},{label:'Безлимит 3 мес',qty:1}]},
   '25–31 мая':{labels:['Аня К','Вика','Лера','Марина','Лера З','Настя'],qty:[5,2,2,1,1,1],revenue:[44000,20600,27200,7600,13600,7600],colors:['#aeb49c','#F0803B','#A2B9C9','#5C6937','#9b89c4','#e8c87a'],
     types:[{label:'4 занятия',qty:7},{label:'8 занятий',qty:4},{label:'10 занятий майсор',qty:1}]},
-  '1–7 июн':{labels:['Аня К','Лера З','Лера','Марина'],qty:[2,1,1,1],revenue:[12160,10880,24240,10880],colors:['#aeb49c','#9b89c4','#A2B9C9','#5C6937'],
+  '1–7 июн':{labels:['Аня К','Лера З','Лера','Марина'],qty:[2,1,1,1],revenue:[15200,13600,30300,13600],colors:['#aeb49c','#9b89c4','#A2B9C9','#5C6937'],
     types:[{label:'4 занятия',qty:2},{label:'8 занятий',qty:2},{label:'20 занятий',qty:1}]},
-  '8–14 июн':{labels:['Аня К','Лера З','Вика'],qty:[3,1,1],revenue:[32640,10880,6080],colors:['#aeb49c','#9b89c4','#F0803B'],
+  '8–14 июн':{labels:['Аня К','Лера З','Вика'],qty:[3,1,1],revenue:[40800,13600,7600],colors:['#aeb49c','#9b89c4','#F0803B'],
     types:[{label:'8 занятий',qty:4},{label:'4 занятия',qty:1}]},
 };
 const NEWBIES=NEWBIES_WEEKLY['25–31 мая'];
@@ -1028,6 +1048,14 @@ const TRIAL_PIE2={
   qty:   [27,         12,          1,                1],
   revenue:[205200,   163200,      54000,            13000],
   colors: ['#5c6937','#A2B9C9',  '#F0803B',        '#9b89c4']
+};
+// Пироги для июня (по администраторам и по типам абонементов)
+const TRIAL_PIE_JUN=buildJunTrialPie();
+const TRIAL_PIE2_JUN={
+  labels:['8 занятий','4 занятия','20 занятий'],
+  qty:   [6,           3,           1],
+  revenue:[81600,      22800,      30300],
+  colors: ['#A2B9C9','#5c6937','#F0803B']
 };
 
 const FIRST_DAY_WEEKLY={
@@ -1120,14 +1148,25 @@ const FIRST_DAY_WEEKLY={
   },
   '1–7 июн':{
     rows:[
-      {name:'Аня К',  trial:9,  soldQty:2, soldRub:12160, conv:22},
-      {name:'Марина', trial:6,  soldQty:1, soldRub:10880, conv:17},
+      {name:'Аня К',  trial:9,  soldQty:2, soldRub:15200, conv:22},
+      {name:'Марина', trial:6,  soldQty:1, soldRub:13600, conv:17},
       {name:'Настя',  trial:4,  soldQty:0, soldRub:0,     conv:0 },
-      {name:'Лера',   trial:3,  soldQty:1, soldRub:24240, conv:33},
-      {name:'Лера З', trial:2,  soldQty:1, soldRub:10880, conv:50},
+      {name:'Лера',   trial:3,  soldQty:1, soldRub:30300, conv:33},
+      {name:'Лера З', trial:2,  soldQty:1, soldRub:13600, conv:50},
       {name:'Вика',   trial:1,  soldQty:0, soldRub:0,     conv:0 },
     ],
-    total:{trial:25, soldQty:5, soldRub:58160, conv:20}
+    total:{trial:25, soldQty:5, soldRub:72700, conv:20}
+  },
+  '8–14 июн':{
+    rows:[
+      {name:'Аня К',  trial:0,  soldQty:3, soldRub:40800, conv:0},
+      {name:'Лера З', trial:0,  soldQty:1, soldRub:13600, conv:0},
+      {name:'Вика',   trial:0,  soldQty:1, soldRub:7600,  conv:0},
+      {name:'Марина', trial:0,  soldQty:0, soldRub:0,     conv:0},
+      {name:'Настя',  trial:0,  soldQty:0, soldRub:0,     conv:0},
+      {name:'Лера',   trial:0,  soldQty:0, soldRub:0,     conv:0},
+    ],
+    total:{trial:0, soldQty:5, soldRub:62000, conv:0}
   },
 };
 const FIRST_DAY=FIRST_DAY_WEEKLY['25–31 мая'];
@@ -1809,17 +1848,17 @@ function renderMonth(prefix){
           y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},title:{display:true,text:'Пробных, шт.'}},
           y1:{position:'right',grid:{display:false},title:{display:true,text:'Конверсия, %'},ticks:{callback:v=>v+'%'}}}}
     });
-    if(!isJun){
+    {const _tp=isJun?TRIAL_PIE_JUN:TRIAL_PIE;
     new Chart(document.getElementById('chart'+P+'TrialPie'),{type:'doughnut',
-      data:{labels:TRIAL_PIE.labels,datasets:[{data:TRIAL_PIE.conversions,backgroundColor:TRIAL_PIE.colors,borderWidth:2}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{datalabels:{color:'white',font:{weight:'700',size:12},formatter:v=>v},legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.raw+' конв., '+fmt(TRIAL_PIE.revenue[ctx.dataIndex])}}}}
+      data:{labels:_tp.labels,datasets:[{data:_tp.conversions,backgroundColor:_tp.colors,borderWidth:2}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{datalabels:{color:'white',font:{weight:'700',size:12},formatter:v=>v},legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.raw+' конв., '+fmt(_tp.revenue[ctx.dataIndex])}}}}
     });
     const leg1=document.getElementById(prefix==='mar'?'mTrialPieLegend':prefix==='may'?'myTrialPieLegend':prefix==='jun'?'juTrialPieLegend':'aTrialPieLegend');
-    if(leg1)TRIAL_PIE.labels.forEach((lbl,i)=>{leg1.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="width:10px;height:10px;border-radius:2px;background:${TRIAL_PIE.colors[i]};flex-shrink:0"></div><span><b>${lbl}</b> — ${TRIAL_PIE.conversions[i]} конв., ${fmt(TRIAL_PIE.revenue[i])}</span></div>`;});
-    } // end if(!isJun)
-    if(!isJun){
+    if(leg1)_tp.labels.forEach((lbl,i)=>{leg1.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="width:10px;height:10px;border-radius:2px;background:${_tp.colors[i]};flex-shrink:0"></div><span><b>${lbl}</b> — ${_tp.conversions[i]} конв., ${fmt(_tp.revenue[i])}</span></div>`;});
+    }
+    {const _tp2=isJun?TRIAL_PIE2_JUN:TRIAL_PIE2;
     new Chart(document.getElementById('chart'+P+'TrialPie2'),{type:'doughnut',
-      data:{labels:TRIAL_PIE2.labels,datasets:[{data:TRIAL_PIE2.qty,backgroundColor:TRIAL_PIE2.colors,borderWidth:2}]},
+      data:{labels:_tp2.labels,datasets:[{data:_tp2.qty,backgroundColor:_tp2.colors,borderWidth:2}]},
       plugins:[{id:'outlabel',afterDraw(chart){
         const {ctx,chartArea,data}=chart;
         const meta=chart.getDatasetMeta(0);
@@ -1845,7 +1884,7 @@ function renderMonth(prefix){
           ctx.font='bold 11px Montserrat,sans-serif';
           ctx.fillText(data.labels[i], lx, ly-8);
           ctx.font='10px Montserrat,sans-serif';
-          const rev=TRIAL_PIE2.revenue?Math.round(TRIAL_PIE2.revenue[i]/1000)+'к ₽':'';
+          const rev=_tp2.revenue?Math.round(_tp2.revenue[i]/1000)+'к ₽':'';
           ctx.fillText(data.datasets[0].data[i]+' шт.'+(rev?' · '+rev:''), lx, ly+7);
           ctx.restore();
         });
@@ -1867,9 +1906,9 @@ function renderMonth(prefix){
       }
     });
     const leg2=document.getElementById(prefix==='mar'?'mTrialPieLegend2':prefix==='may'?'myTrialPieLegend2':prefix==='jun'?'juTrialPieLegend2':'aTrialPieLegend2');
-    const totalQty=TRIAL_PIE2.qty.reduce((s,v)=>s+v,0);
-    if(leg2)TRIAL_PIE2.labels.forEach((lbl,i)=>{const p=Math.round(TRIAL_PIE2.qty[i]/totalQty*100);const rev=TRIAL_PIE2.revenue?TRIAL_PIE2.revenue[i]:0;leg2.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="width:10px;height:10px;border-radius:2px;background:${TRIAL_PIE2.colors[i]};flex-shrink:0"></div><span><b>${lbl}</b> — ${TRIAL_PIE2.qty[i]} шт. (${p}%) · ${rev?Math.round(rev/1000)+'к ₽':''}</span></div>`;});
-    } // end if(!isJun) for pie2
+    const totalQty=_tp2.qty.reduce((s,v)=>s+v,0);
+    if(leg2)_tp2.labels.forEach((lbl,i)=>{const p=Math.round(_tp2.qty[i]/totalQty*100);const rev=_tp2.revenue?_tp2.revenue[i]:0;leg2.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="width:10px;height:10px;border-radius:2px;background:${_tp2.colors[i]};flex-shrink:0"></div><span><b>${lbl}</b> — ${_tp2.qty[i]} шт. (${p}%) · ${rev?Math.round(rev/1000)+'к ₽':''}</span></div>`;});
+    }
   })();
 
   // ── 5. АДМИНИСТРАТОРЫ ──

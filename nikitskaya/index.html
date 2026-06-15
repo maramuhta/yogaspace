@@ -798,8 +798,8 @@ const WEEKS={
   labels:['9–15 мар','16–22 мар','23–29 мар','30 мар–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая','4–10 мая','11–17 мая','18–24 мая','25–31 мая','1–7 июн','8–14 июн'],
   abon:  [479000,505000,578000,616000,456000,664590,476300,565860,409460,559665,773110,704310,421810,489840],
   tovar: [64000, 39000, 62000, 50000, 50000, 53986, 33668,53969, 47197, 48198, 77801,40186, 52726, 22300],
-  visits:[331,310,339,338,350,359,352,297,276,311,318,320,0,0],
-  first: [32, 40, 37, 28, 39, 37, 34, 21, 27, 25, 34,12, 0, 0],
+  visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286],
+  first: [32, 40, 37, 28, 39, 37, 34, 21, 27, 25, 34,12, 25, 0],
   plan:  [587000,587000,587000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000],
   isMarch:[true,true,true,true,false,false,false,false,false,false,false,false,false,false],
   isMay:  [false,false,false,false,false,false,false,false,true,true,true,true,false,false],
@@ -822,21 +822,21 @@ const CATS_MAY_TIME={
 // Продажи по времени суток — июнь (в рублях; null = нет данных из 1С)
 const CATS_JUN_TIME={
   labels:['1–7 июн','8–14 июн'],
-  abon:{morn:[null,158770],eve:[null,190760],wknd:[null,119860]},
+  abon:{morn:[194630,158770],eve:[145860,190760],wknd:[70320,119860]},
   tovar:{morn:[18610,25089],eve:[22367,8196],wknd:[10249,7465]},
 };
 
 const VISITS_TIME={
-  morn: [null,null,null,null,null,114,96,135,85, 103,137,100,null,null],
-  eve:  [null,null,null,null,null,122,148,77, 104,108,85, 121,null,null],
-  wknd: [null,null,null,null,null,123,108,85, 87, 100,96, 99, null,null],
+  morn: [null,null,null,null,null,114,96,135,85, 103,137,100,70,65],
+  eve:  [null,null,null,null,null,122,148,77, 104,108,85, 121,121,106],
+  wknd: [null,null,null,null,null,123,108,85, 87, 100,96, 99, 72,88],
 };
 
 const TRIAL={
   labels:WEEKS.labels,isMarch:WEEKS.isMarch,
-  visits:[331,310,339,338,350,359,352,297,276,311,318,320,0,0],
-  trial: [32, 40, 37, 28, 39, 32, 34, 21, 27, 25, 34,29, 0, 0],
-  conversion:[3,4,4,5,5,8,9,8,8,7,9,12,0,0],
+  visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286],
+  trial: [32, 40, 37, 28, 39, 32, 34, 21, 27, 25, 34,29, 25, 0],
+  conversion:[3,4,4,5,5,8,9,8,8,7,9,12,5,5],
 };
 
 
@@ -914,6 +914,22 @@ const ADMINS_WEEKLY={
     {name:'Лера З',abon:42940, tovar:3840, shifts:2,newQty:1, newRub:13600},
     {name:'Лера',  abon:44800, tovar:3390, shifts:1,newQty:2, newRub:27200},
   ],
+  '1–7 июн':[
+    {name:'Марина', abon:127770,tovar:9087, shifts:4,shifts_morn:2,shifts_eve:2,shifts_p:0,newQty:1,newRub:10880},
+    {name:'Аня К',  abon:76300, tovar:25165,shifts:3,shifts_morn:1,shifts_eve:2,shifts_p:1,newQty:2,newRub:12160},
+    {name:'Настя',  abon:71980, tovar:4037, shifts:2,shifts_morn:1,shifts_eve:1,shifts_p:2,newQty:0,newRub:0},
+    {name:'Лера З', abon:79380, tovar:6917, shifts:2,shifts_morn:2,shifts_eve:0,shifts_p:1,newQty:1,newRub:10880},
+    {name:'Лера',   abon:24400, tovar:4606, shifts:2,shifts_morn:0,shifts_eve:2,shifts_p:2,newQty:1,newRub:24240},
+    {name:'Вика',   abon:54350, tovar:1874, shifts:1,shifts_morn:1,shifts_eve:0,shifts_p:1,newQty:0,newRub:0},
+  ],
+  '8–14 июн':[
+    {name:'Марина', abon:206760,tovar:22892,shifts:5,shifts_morn:3,shifts_eve:2,shifts_p:0,newQty:0,newRub:0},
+    {name:'Аня К',  abon:92900, tovar:8410, shifts:3,shifts_morn:2,shifts_eve:1,shifts_p:2,newQty:3,newRub:32640},
+    {name:'Настя',  abon:49060, tovar:2784, shifts:2,shifts_morn:0,shifts_eve:2,shifts_p:0,newQty:0,newRub:0},
+    {name:'Лера З', abon:43760, tovar:4535, shifts:2,shifts_morn:1,shifts_eve:1,shifts_p:2,newQty:1,newRub:10880},
+    {name:'Лера',   abon:12620, tovar:880,  shifts:1,shifts_morn:0,shifts_eve:1,shifts_p:1,newQty:0,newRub:0},
+    {name:'Вика',   abon:28420, tovar:1250, shifts:1,shifts_morn:1,shifts_eve:0,shifts_p:2,newQty:1,newRub:6080},
+  ],
   // Итог мая: услуги из Май услуги.xlsx (оплата с учётом возврата), First из Ферст.xlsx
   'Итог мая':[
     {name:'Марина',abon:738665,tovar:44927,shifts:13,shifts_morn:7,shifts_eve:6,shifts_p:5,newQty:11,newRub:107600,visitors:26},
@@ -938,7 +954,7 @@ const ADMINS_APR=[
 const ADMINS=prepAdmins(ADMINS_WEEKLY['25–31 мая']);
 const APR_ADMIN_WEEKS=['1–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая'];
 const MAY_ADMIN_WEEKS=['4–10 мая','11–17 мая','18–24 мая','25–31 мая'];
-const JUN_ADMIN_WEEKS=[]; // будет пополняться по мере добавления данных
+const JUN_ADMIN_WEEKS=['1–7 июн','8–14 июн'];
 
 // TRIAL_PIE / TRIAL_PIE2 агрегируются по всем неделям мая динамически в renderTrialPie()
 const TRIAL_PIE_MAY_WEEKS=['4–10 мая','11–17 мая','18–24 мая','25–31 мая']; // добавлять сюда новые недели мая по мере появления данных
@@ -998,6 +1014,10 @@ const NEWBIES_WEEKLY={
     types:[{label:'4 занятия',qty:6},{label:'8 занятий',qty:2},{label:'Безлимит 3 мес',qty:1}]},
   '25–31 мая':{labels:['Аня К','Вика','Лера','Марина','Лера З','Настя'],qty:[5,2,2,1,1,1],revenue:[44000,20600,27200,7600,13600,7600],colors:['#aeb49c','#F0803B','#A2B9C9','#5C6937','#9b89c4','#e8c87a'],
     types:[{label:'4 занятия',qty:7},{label:'8 занятий',qty:4},{label:'10 занятий майсор',qty:1}]},
+  '1–7 июн':{labels:['Аня К','Лера З','Лера','Марина'],qty:[2,1,1,1],revenue:[12160,10880,24240,10880],colors:['#aeb49c','#9b89c4','#A2B9C9','#5C6937'],
+    types:[{label:'4 занятия',qty:2},{label:'8 занятий',qty:2},{label:'20 занятий',qty:1}]},
+  '8–14 июн':{labels:['Аня К','Лера З','Вика'],qty:[3,1,1],revenue:[32640,10880,6080],colors:['#aeb49c','#9b89c4','#F0803B'],
+    types:[{label:'8 занятий',qty:4},{label:'4 занятия',qty:1}]},
 };
 const NEWBIES=NEWBIES_WEEKLY['25–31 мая'];
 // TRIAL_PIE агрегируется по всем неделям мая (определяется здесь, после NEWBIES_WEEKLY)
@@ -1098,6 +1118,17 @@ const FIRST_DAY_WEEKLY={
     ],
     total:{trial:29, soldQty:12, soldRub:120600, conv:41}
   },
+  '1–7 июн':{
+    rows:[
+      {name:'Аня К',  trial:9,  soldQty:2, soldRub:12160, conv:22},
+      {name:'Марина', trial:6,  soldQty:1, soldRub:10880, conv:17},
+      {name:'Настя',  trial:4,  soldQty:0, soldRub:0,     conv:0 },
+      {name:'Лера',   trial:3,  soldQty:1, soldRub:24240, conv:33},
+      {name:'Лера З', trial:2,  soldQty:1, soldRub:10880, conv:50},
+      {name:'Вика',   trial:1,  soldQty:0, soldRub:0,     conv:0 },
+    ],
+    total:{trial:25, soldQty:5, soldRub:58160, conv:20}
+  },
 };
 const FIRST_DAY=FIRST_DAY_WEEKLY['25–31 мая'];
 
@@ -1127,14 +1158,14 @@ const planPill=(p)=>{
   return `<span class="pill ${cls}">${p}%</span>`;
 };
 
-// Данные посещений по дням и часам (неделя 18–24 мая)
+// Данные посещений по дням и часам (неделя 8–14 июн)
 const VISITS_DAYS = {
   labels: ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],
-  visits: [41,54,41,52,33,42,57]
+  visits: [36,34,42,30,29,38,50]
 };
 const VISITS_HOURS = {
   labels: ['6:00','7:00','8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'],
-  visits: [24, 13, 17, 6, 35, 25, 30, 23, 20, 3, 14, 15, 11, 43, 39],
+  visits: [0,0,6,4,27,27,18,24,25,12,7,18,17,42,32],
   // утро = до 16 (включая 15), вечер = с 16
   colors: function(){
     return this.labels.map(h=>{
@@ -1183,21 +1214,21 @@ function switchVisitView(pfx, view, btn){
     legend.innerHTML=`
       <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Будни</div>
       <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Выходные</div>
-      <div class="leg" style="color:var(--muted);font-size:11px">${pfx==='may'?'25–31 мая (посл. неделя)':'18–24 мая'} · итого ${VISITS_DAYS.visits.reduce((s,v)=>s+v,0)}</div>`;
+      <div class="leg" style="color:var(--muted);font-size:11px">${pfx==='may'?'25–31 мая (посл. неделя)':pfx==='jun'?'8–14 июн (посл. неделя)':'18–24 мая'} · итого ${VISITS_DAYS.visits.reduce((s,v)=>s+v,0)}</div>`;
   } else {
     _visitCharts[pfx]=buildVisitHoursChart(canvasId);
     legend.innerHTML=`
-      <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро до 15:30 · 135 чел.</div>
-      <div class="leg"><div class="leg-dot" style="background:#aeb49c"></div>Выходные · 85 чел.</div>
-      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Вечер 15:30+ · 77 чел.</div>`;
+      <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро до 15:30 · 65 чел.</div>
+      <div class="leg"><div class="leg-dot" style="background:#aeb49c"></div>Выходные · 88 чел.</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Вечер 15:30+ · 106 чел.</div>`;
   }
 }
 
 function buildVisitWeeksChart(canvasId,isMar,idxFilter){
   // Утро 6-11, День 12-16, Вечер 17+
-  const _morn = [null,null,null,null,null,106,81,71,85, 103,137,100];
-  const _eve  = [null,null,null,null,null,130,126,141,104,108,85, 121];
-  const _wknd = [null,null,null,null,null,123,94,85,87, 100,96, 99];
+  const _morn = [null,null,null,null,null,106,81,71,85, 103,137,100,70,65];
+  const _eve  = [null,null,null,null,null,130,126,141,104,108,85, 121,121,106];
+  const _wknd = [null,null,null,null,null,123,94,85,87, 100,96, 99,72,88];
   const _total= WEEKS.visits;
   const _first= WEEKS.first;
   // Apply index filter for May comparison view

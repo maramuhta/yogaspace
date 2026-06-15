@@ -1748,10 +1748,10 @@ function renderMonth(prefix){
     const marchIdx2=marchIdx;
     const monthIdxs=isMar?marchIdx2:isMay?mayIdxV:isJun?junIdxV:aprIdx2;
     // Официальные итоги месяца
-    const officialVisits={apr:1472,mar:null,may:null};
-    const officialFirst={apr:135,mar:null,may:null};
-    const ov=isMar?officialVisits.mar:isMay?officialVisits.may:officialVisits.apr;
-    const of=isMar?officialFirst.mar:isMay?officialFirst.may:officialFirst.apr;
+    const officialVisits={apr:1472,mar:null,may:null,jun:null};
+    const officialFirst={apr:135,mar:null,may:null,jun:null};
+    const ov=isMar?officialVisits.mar:isMay?officialVisits.may:isJun?officialVisits.jun:officialVisits.apr;
+    const of=isMar?officialFirst.mar:isMay?officialFirst.may:isJun?officialFirst.jun:officialFirst.apr;
     const totalVisits=ov||monthIdxs.reduce((s,i)=>s+W.visits[i],0);
     const totalFirst=of||monthIdxs.reduce((s,i)=>s+W.first[i],0);
     safeSetV(pfx+'-total', fmtN(totalVisits));
@@ -1783,7 +1783,7 @@ function renderMonth(prefix){
     }
 
     // Построение через общий билдер (поддерживает переключение)
-    const P=prefix==='mar'?'Mar':prefix==='may'?'May':'Apr';
+    const P=prefix==='mar'?'Mar':prefix==='may'?'May':prefix==='jun'?'Jun':'Apr';
     const lastAprIdxV2=aprIdx.length>0?aprIdx[aprIdx.length-1]:null;
     const visIdxFilter=isMay?(lastAprIdxV2!==null?[lastAprIdxV2,...mayIdxV]:mayIdxV):isJun?junIdxV:null;
     _visitCharts[prefix]=buildVisitWeeksChart('chart'+P+'Visits',isMar,visIdxFilter);

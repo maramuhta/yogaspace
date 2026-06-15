@@ -2189,8 +2189,27 @@ function renderMonth(prefix){
 
 // ── INIT ──────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function(){
-  renderMonth('apr');
-  _rendered['apr']=true;
+  // Определяем последний месяц из данных автоматически
+  const n = WEEKS.labels.length - 1;
+  let latestId = 'apr';
+  if(WEEKS.isJune && WEEKS.isJune[n]) latestId = 'jun';
+  else if(WEEKS.isMay && WEEKS.isMay[n]) latestId = 'may';
+  else if(WEEKS.isMarch && WEEKS.isMarch[n]) latestId = 'mar';
+
+  renderMonth(latestId);
+  _rendered[latestId] = true;
+
+  if(latestId !== 'apr') {
+    // Переключаем панели месяцев
+    document.querySelectorAll('.mpane').forEach(p => p.classList.remove('active'));
+    document.getElementById('month-' + latestId).classList.add('active');
+    // Переключаем кнопки месяцев
+    const nameMap = {mar:'Март', apr:'Апрель', may:'Май', jun:'Июнь'};
+    document.querySelectorAll('.mbtn').forEach(b => {
+      b.classList.remove('active');
+      if(b.textContent.trim() === nameMap[latestId]) b.classList.add('active');
+    });
+  }
 });
 </script>
 </body>

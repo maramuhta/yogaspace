@@ -763,9 +763,9 @@ Object.entries(data).forEach(([studio, d]) => {
         <span class="studio-header-name">${studio.toUpperCase()}</span>
       </div>
       <div class="tab-bar">
-        <button class="tab-btn active"    data-tab="q2sum" onclick="switchTab('${sid}','q2sum')">2 КВАРТАЛ</button>
+        <button class="tab-btn tab-disabled" data-tab="q2sum" onclick="switchTab('${sid}','q2sum')" style="display:none">2 КВАРТАЛ</button>
         <button class="tab-btn"           data-tab="apr"   onclick="switchTab('${sid}','apr')">АПРЕЛЬ</button>
-        <button class="tab-btn"           data-tab="may"   onclick="switchTab('${sid}','may')">МАЙ</button>
+        <button class="tab-btn active"    data-tab="may"   onclick="switchTab('${sid}','may')">МАЙ</button>
         <button class="tab-btn tab-disabled" disabled>ИЮНЬ</button>
         <span class="tab-sep"></span>
         <button class="tab-btn"           data-tab="q1"  onclick="switchTab('${sid}','q1')">1 КВАРТАЛ</button>
@@ -773,7 +773,7 @@ Object.entries(data).forEach(([studio, d]) => {
         <button class="tab-btn"           data-tab="feb" onclick="switchTab('${sid}','feb')">ФЕВРАЛЬ</button>
         <button class="tab-btn"           data-tab="mar" onclick="switchTab('${sid}','mar')">МАРТ</button>
       </div>
-      <div class="tab-pane active" data-tab="q2sum">
+      <div class="tab-pane" data-tab="q2sum">
         <div class="table-wrap"><table>
           <thead><tr><th>#</th><th>Имя</th><th>Смены</th><th>Утро</th><th>Вечер</th><th>Пом.</th><th>Продажи услуг</th>
             <th>Продажи товаров</th><th>Услуги/смену</th><th>Товары/смену</th><th>Пробные</th><th>First шт</th><th>First руб</th><th>Балл</th>
@@ -787,7 +787,7 @@ Object.entries(data).forEach(([studio, d]) => {
           <tbody>${monthlyTbody(md.apr, hasFst, true)}</tbody>
         </table></div>
       </div>
-      <div class="tab-pane" data-tab="may">
+      <div class="tab-pane active" data-tab="may">
         <div class="table-wrap"><table>
           <thead><tr>${monthlyThead(hasFst, true)}</tr></thead>
           <tbody>${monthlyTbody(md.may, hasFst, true)}</tbody>

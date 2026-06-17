@@ -592,10 +592,26 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
   dataQ2[studio] = { all: scored, winner: scored[0] };
 });
 
-// Winners grid — апрельские лидеры из dataQ2
+// May winners
+const dataMay = {};
+Object.entries(monthlyData).forEach(([studio, md]) => {
+  if (!md.may) return;
+  const rows = md.may;
+  const maxPs    = Math.max(...rows.map(r => r.ps||0)) || 1;
+  const maxFsh   = Math.max(...rows.map(r => r.fsh||0)) || 1;
+  const maxTovSm = Math.max(...rows.map(r => r.смены > 0 ? r.tov/r.смены : 0)) || 1;
+  const scored = rows.map(r => {
+    const tovSm = r.смены > 0 ? r.tov/r.смены : 0;
+    return { ...r, tovSm, score: Math.round(((r.ps||0)/maxPs*0.60 + (r.fsh||0)/maxFsh*0.30 + tovSm/maxTovSm*0.10)*100) };
+  });
+  scored.sort((a,b) => b.score - a.score);
+  dataMay[studio] = { winner: scored[0] };
+});
+
+// Winners grid — лидеры мая
 (function(){
   const wg = document.getElementById('winners-grid');
-  Object.entries(dataQ2).forEach(([studio, d2]) => {
+  Object.entries(dataMay).forEach(([studio, d2]) => {
     const w = d2.winner;
     const st = studioHearts[studio] || {heart:'🏆'};
     wg.innerHTML += `
@@ -763,9 +779,9 @@ Object.entries(data).forEach(([studio, d]) => {
         <span class="studio-header-name">${studio.toUpperCase()}</span>
       </div>
       <div class="tab-bar">
-        <button class="tab-btn tab-disabled" data-tab="q2sum" onclick="switchTab('${sid}','q2sum')" style="display:none">2 КВАРТАЛ</button>
-        <button class="tab-btn"           data-tab="apr"   onclick="switchTab('${sid}','apr')">АПРЕЛЬ</button>
         <button class="tab-btn active"    data-tab="may"   onclick="switchTab('${sid}','may')">МАЙ</button>
+        <button class="tab-btn"           data-tab="apr"   onclick="switchTab('${sid}','apr')">АПРЕЛЬ</button>
+        <button class="tab-btn"           data-tab="q2sum" onclick="switchTab('${sid}','q2sum')">2 КВАРТАЛ</button>
         <button class="tab-btn tab-disabled" disabled>ИЮНЬ</button>
         <span class="tab-sep"></span>
         <button class="tab-btn"           data-tab="q1"  onclick="switchTab('${sid}','q1')">1 КВАРТАЛ</button>

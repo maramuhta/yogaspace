@@ -375,14 +375,23 @@ const monthlyData = {
       {name:'Лиза',                смены:1,  usl:50415,   tov:4813,   ps:55228, fsh:0,  fr:0},
     ],
     apr: [
-      {name:'Кузнецова Варя',      смены:7,  usl:543650,  tov:50947,  ps:84942, fsh:2,  fr:12000},
-      {name:'Андриянова Аня',      смены:10, usl:719695,  tov:95545,  ps:81524, fsh:11, fr:82320},
-      {name:'Антропова Вероника',  смены:12, usl:847036,  tov:44361,  ps:74283, fsh:12, fr:98560},
-      {name:'Гасимова Карина',     смены:11, usl:947465,  tov:65766,  ps:92112, fsh:11, fr:106480},
-      {name:'Корниенко Екатерина', смены:7,  usl:466150,  tov:35589,  ps:71677, fsh:7,  fr:66640},
-      {name:'Коклева Лада',        смены:8,  usl:577115,  tov:79289,  ps:82051, fsh:7,  fr:57360},
-      {name:'Соболева Ирина',      смены:2,  usl:56920,   tov:16090,  ps:36505, fsh:0,  fr:0},
-      {name:'Крупнова Яна',        смены:2,  usl:133130,  tov:10108,  ps:71619, fsh:2,  fr:12000},
+      {name:'Кузнецова Варя',      смены:7,  утро:1,  вечер:6, пом:2, usl:543650,  tov:50947,  ps:84942, fsh:2,  fr:12000,  пробные:20},
+      {name:'Андриянова Аня',      смены:10, утро:1,  вечер:9, пом:7, usl:719695,  tov:95545,  ps:81524, fsh:11, fr:82320,  пробные:39},
+      {name:'Антропова Вероника',  смены:12, утро:11, вечер:1, пом:3, usl:847036,  tov:44361,  ps:74283, fsh:12, fr:98560,  пробные:29},
+      {name:'Гасимова Карина',     смены:11, утро:7,  вечер:4, пом:7, usl:947465,  tov:65766,  ps:92112, fsh:11, fr:106480, пробные:47},
+      {name:'Корниенко Екатерина', смены:7,  утро:7,  вечер:0, пом:5, usl:466150,  tov:35589,  ps:71677, fsh:7,  fr:66640,  пробные:23},
+      {name:'Коклева Лада',        смены:8,  утро:1,  вечер:7, пом:8, usl:577115,  tov:79289,  ps:82051, fsh:7,  fr:57360,  пробные:47},
+      {name:'Соболева Ирина',      смены:2,  утро:1,  вечер:1, пом:1, usl:56920,   tov:16090,  ps:36505, fsh:0,  fr:0,      пробные:4},
+      {name:'Крупнова Яна',        смены:2,  утро:0,  вечер:2, пом:3, usl:133130,  tov:10108,  ps:71619, fsh:2,  fr:12000,  пробные:13},
+    ],
+    may: [
+      {name:'Кузнецова Варя',      смены:9,  утро:2, вечер:7, пом:2, usl:738734,  tov:87874,  ps:91845, fsh:16, fr:120160},
+      {name:'Андриянова Аня',      смены:10, утро:2, вечер:8, пом:8, usl:828043,  tov:142041, ps:97008, fsh:14, fr:141280},
+      {name:'Антропова Вероника',  смены:7,  утро:6, вечер:1, пом:2, usl:522991,  tov:58370,  ps:83052, fsh:6,  fr:66020},
+      {name:'Гасимова Карина',     смены:12, утро:8, вечер:4, пом:7, usl:981465,  tov:92414,  ps:89490, fsh:9,  fr:98560},
+      {name:'Корниенко Екатерина', смены:9,  утро:8, вечер:1, пом:4, usl:404240,  tov:86083,  ps:54480, fsh:4,  fr:48160},
+      {name:'Коклева Лада',        смены:8,  утро:1, вечер:7, пом:9, usl:463058,  tov:44248,  ps:63413, fsh:10, fr:79040},
+      {name:'Соболева Ирина',      смены:6,  утро:4, вечер:2, пом:6, usl:379495,  tov:71637,  ps:75189, fsh:5,  fr:41200},
     ],
   },
   'Мясницкая': {
@@ -415,12 +424,20 @@ const monthlyData = {
       {name:'Павлова Виктория',   смены:13, usl:506590, tov:107211, ps:47215, fsh:21, fr:155760},
     ],
     apr: [
-      {name:'Дайнеко Анна',       смены:6,  usl:279140, tov:18509,  ps:49608, fsh:3,  fr:23120},
-      {name:'Григорова Дарья',    смены:5,  usl:128365, tov:34643,  ps:32602, fsh:2,  fr:17120},
-      {name:'Смокот Полина',      смены:15, usl:758400, tov:143542, ps:60129, fsh:17, fr:117360},
-      {name:'Воробьева Ольга',    смены:16, usl:766730, tov:135114, ps:56365, fsh:31, fr:258640},
-      {name:'Корнеева Ольга',     смены:10, usl:505855, tov:75077,  ps:58093, fsh:13, fr:103984},
-      {name:'Павлова Виктория',   смены:8,  usl:408930, tov:57497,  ps:58303, fsh:6,  fr:51840},
+      {name:'Дайнеко Анна',       смены:6,  утро:4, вечер:2,  пом:2, usl:279140, tov:18509,  ps:49608, fsh:3,  fr:23120,  пробные:30},
+      {name:'Григорова Дарья',    смены:5,  утро:5, вечер:0,  пом:2, usl:128365, tov:34643,  ps:32602, fsh:2,  fr:17120,  пробные:23},
+      {name:'Смокот Полина',      смены:15, утро:7, вечер:8,  пом:2, usl:758400, tov:143542, ps:60129, fsh:17, fr:117360, пробные:79},
+      {name:'Воробьева Ольга',    смены:16, утро:6, вечер:10, пом:5, usl:766730, tov:135114, ps:56365, fsh:31, fr:258640, пробные:49},
+      {name:'Корнеева Ольга',     смены:10, утро:4, вечер:6,  пом:5, usl:505855, tov:75077,  ps:58093, fsh:13, fr:103984, пробные:53},
+      {name:'Павлова Виктория',   смены:8,  утро:4, вечер:4,  пом:8, usl:408930, tov:57497,  ps:58303, fsh:6,  fr:51840,  пробные:26},
+    ],
+    may: [
+      {name:'Григорова Дарья',    смены:11, утро:7, вечер:4,  пом:5, usl:582462,  tov:55855,  ps:58029, fsh:15, fr:129520},
+      {name:'Зубкова Алена',      смены:7,  утро:7, вечер:0,  пом:8, usl:304950,  tov:28997,  ps:47707, fsh:6,  fr:46240},
+      {name:'Корнеева Ольга',     смены:9,  утро:3, вечер:6,  пом:2, usl:410034,  tov:53206,  ps:51471, fsh:6,  fr:41600},
+      {name:'Павлова Виктория',   смены:9,  утро:4, вечер:5,  пом:2, usl:350925,  tov:78152,  ps:47675, fsh:7,  fr:53440},
+      {name:'Смокот Полина',      смены:13, утро:3, вечер:10, пом:7, usl:856945,  tov:95865,  ps:73293, fsh:21, fr:157680},
+      {name:'Воробьева Ольга',    смены:13, утро:8, вечер:5,  пом:8, usl:1039555, tov:103585, ps:87934, fsh:23, fr:214320},
     ],
   },
   'Никитская': {
@@ -450,12 +467,20 @@ const monthlyData = {
       {name:'Умрихина Анна',       смены:11, usl:144308, tov:23188, ps:15227, fsh:4,  fr:18240},
     ],
     apr: [
-      {name:'Умрихина Анна',       смены:4,  usl:80900,  tov:10735, ps:22909, fsh:1,  fr:10880},
-      {name:'Сидякина Виктория',   смены:8,  usl:274740, tov:28125, ps:37858, fsh:7,  fr:48520},
-      {name:'Мохова Валерия',      смены:7,  usl:215710, tov:26670, ps:34626, fsh:2,  fr:10880},
-      {name:'Барышникова Марина',  смены:17, usl:623070, tov:57978, ps:40062, fsh:9,  fr:99420},
-      {name:'Кормилицина Анна',    смены:12, usl:484870, tov:37713, ps:43549, fsh:3,  fr:77760},
-      {name:'Солодовникова Настя', смены:12, usl:331160, tov:31897, ps:30255, fsh:8,  fr:45780},
+      {name:'Умрихина Анна',       смены:4,  утро:1,  вечер:3, пом:3, usl:80900,  tov:10735, ps:22909, fsh:1,  fr:10880,  пробные:3},
+      {name:'Сидякина Виктория',   смены:8,  утро:5,  вечер:3, пом:6, usl:274740, tov:28125, ps:37858, fsh:7,  fr:48520,  пробные:10},
+      {name:'Мохова Валерия',      смены:7,  утро:1,  вечер:6, пом:4, usl:215710, tov:26670, ps:34626, fsh:2,  fr:10880,  пробные:7},
+      {name:'Барышникова Марина',  смены:17, утро:10, вечер:7, пом:3, usl:623070, tov:57978, ps:40062, fsh:9,  fr:99420,  пробные:39},
+      {name:'Кормилицина Анна',    смены:12, утро:8,  вечер:4, пом:3, usl:484870, tov:37713, ps:43549, fsh:3,  fr:77760,  пробные:33},
+      {name:'Солодовникова Настя', смены:12, утро:5,  вечер:7, пом:5, usl:331160, tov:31897, ps:30255, fsh:8,  fr:45780,  пробные:43},
+    ],
+    may: [
+      {name:'Барышникова Марина',  смены:13, утро:9, вечер:4, пом:5, usl:738665, tov:44927, ps:60276, fsh:11, fr:86080,  пробные:26},
+      {name:'Зинченко Лера',       смены:11, утро:5, вечер:6, пом:5, usl:215930, tov:34033, ps:22724, fsh:7,  fr:52160,  пробные:27},
+      {name:'Кормилицина Анна',    смены:13, утро:7, вечер:6, пом:4, usl:496460, tov:49385, ps:41988, fsh:6,  fr:46080,  пробные:19},
+      {name:'Мохова Валерия',      смены:8,  утро:4, вечер:4, пом:6, usl:331340, tov:37424, ps:46096, fsh:6,  fr:83200,  пробные:22},
+      {name:'Сидякина Виктория',   смены:8,  утро:4, вечер:4, пом:3, usl:195080, tov:36043, ps:28890, fsh:7,  fr:51680,  пробные:20},
+      {name:'Солодовникова Настя', смены:8,  утро:5, вечер:3, пом:4, usl:330480, tov:45796, ps:47035, fsh:2,  fr:16960,  пробные:12},
     ],
   },
   'Чернышевская': {
@@ -486,35 +511,67 @@ const monthlyData = {
       {name:'Гагара Виктория',     смены:0,  usl:19825,  tov:2057,   ps:0,     fsh:2,  fr:14200},
     ],
     apr: [
-      {name:'Фахретдинова Анна',   смены:6,  usl:101250, tov:13066,  ps:19053, fsh:6,  fr:35200},
-      {name:'Нестерова Анастасия', смены:16, usl:722475, tov:123766, ps:52890, fsh:38, fr:323120},
-      {name:'Дятлова Яна',         смены:15, usl:596245, tov:84001,  ps:45350, fsh:27, fr:199680},
-      {name:'Бельтюкова Ксения',   смены:4,  usl:145565, tov:55530,  ps:50274, fsh:9,  fr:76840},
-      {name:'Гагара Виктория',     смены:5,  usl:191305, tov:41806,  ps:46622, fsh:12, fr:81000},
-      {name:'Болдина Виктория',    смены:5,  usl:118871, tov:47634,  ps:33301, fsh:10, fr:62600},
-      {name:'Фаррахова Алина',     смены:4,  usl:73450,  tov:10752,  ps:21051, fsh:3,  fr:23400},
-      {name:'Часовская Яна',       смены:4,  usl:69645,  tov:21419,  ps:22766, fsh:4,  fr:35920},
+      {name:'Фахретдинова Анна',   смены:6,  утро:5, вечер:1,  пом:5,  usl:101250, tov:13066,  ps:19053, fsh:6,  fr:35200,  пробные:26},
+      {name:'Нестерова Анастасия', смены:16, утро:6, вечер:10, пом:2,  usl:722475, tov:123766, ps:52890, fsh:38, fr:323120, пробные:103},
+      {name:'Дятлова Яна',         смены:15, утро:5, вечер:10, пом:6,  usl:596245, tov:84001,  ps:45350, fsh:27, fr:199680, пробные:71},
+      {name:'Бельтюкова Ксения',   смены:4,  утро:4, вечер:0,  пом:1,  usl:145565, tov:55530,  ps:50274, fsh:9,  fr:76840,  пробные:25},
+      {name:'Гагара Виктория',     смены:5,  утро:3, вечер:2,  пом:10, usl:191305, tov:41806,  ps:46622, fsh:12, fr:81000,  пробные:24},
+      {name:'Болдина Виктория',    смены:5,  утро:0, вечер:5,  пом:4,  usl:118871, tov:47634,  ps:33301, fsh:10, fr:62600,  пробные:15},
+      {name:'Фаррахова Алина',     смены:4,  утро:3, вечер:1,  пом:6,  usl:73450,  tov:10752,  ps:21051, fsh:3,  fr:23400,  пробные:12},
+      {name:'Часовская Яна',       смены:4,  утро:3, вечер:1,  пом:5,  usl:69645,  tov:21419,  ps:22766, fsh:4,  fr:35920,  пробные:15},
+    ],
+    may: [
+      {name:'Болдина Виктория',    смены:4,  утро:0, вечер:4, пом:2,  usl:159040, tov:16327,  ps:43842, fsh:7,  fr:62640},
+      {name:'Бельтюкова Ксения',   смены:3,  утро:3, вечер:0, пом:1,  usl:74110,  tov:15592,  ps:29901, fsh:6,  fr:38400},
+      {name:'Гагара Виктория',     смены:6,  утро:6, вечер:0, пом:8,  usl:93285,  tov:9584,   ps:17145, fsh:2,  fr:18520},
+      {name:'Дятлова Яна',         смены:4,  утро:2, вечер:2, пом:4,  usl:137295, tov:21885,  ps:39795, fsh:7,  fr:47720},
+      {name:'Нестерова Анастасия', смены:12, утро:4, вечер:8, пом:2,  usl:387678, tov:80931,  ps:39051, fsh:20, fr:138040},
+      {name:'Фаррахова Алина',     смены:10, утро:5, вечер:5, пом:7,  usl:401892, tov:61818,  ps:46371, fsh:25, fr:157720},
+      {name:'Фахретдинова Анна',   смены:12, утро:8, вечер:4, пом:11, usl:322938, tov:52156,  ps:31258, fsh:10, fr:75440},
+      {name:'Часовская Яна',       смены:10, утро:3, вечер:7, пом:7,  usl:243600, tov:69923,  ps:31352, fsh:10, fr:54200},
     ],
   },
 };
 
 // Sort monthly alphabetically, assign places
 Object.values(monthlyData).forEach(d => {
-  ['jan','feb','mar','apr'].forEach(m => {
+  ['jan','feb','mar','apr','may'].forEach(m => {
     if (!d[m]) return;
     d[m].sort((a,b) => a.name.localeCompare(b.name, 'ru'));
     d[m].forEach((r,i) => r.place = i+1);
   });
 });
 
-// Q2 aggregate data (April only so far)
+// Q2 aggregate data (April + May)
 const dataQ2 = {};
 Object.entries(monthlyData).forEach(([studio, md]) => {
-  const apr = md.apr;
-  const maxPs    = Math.max(...apr.map(r => r.ps))  || 1;
-  const maxFsh   = Math.max(...apr.map(r => r.fsh||0)) || 1;
-  const maxTovSm = Math.max(...apr.map(r => r.смены > 0 ? r.tov/r.смены : 0)) || 1;
-  const scored = apr.map(r => {
+  const months = ['apr','may'].map(k => md[k]).filter(Boolean);
+  const adminMap = {};
+  months.forEach(monthData => {
+    monthData.forEach(r => {
+      if (!adminMap[r.name]) {
+        adminMap[r.name] = {name:r.name, смены:0, утро:0, вечер:0, пом:0, usl:0, tov:0, fsh:0, fr:0, пробные:null};
+      }
+      const a = adminMap[r.name];
+      a.смены += r.смены||0;
+      a.утро  += r.утро||0;
+      a.вечер += r.вечер||0;
+      a.пом   += r.пом||0;
+      a.usl   += r.usl||0;
+      a.tov   += r.tov||0;
+      a.fsh   += r.fsh||0;
+      a.fr    += r.fr||0;
+      if (r.пробные != null) a.пробные = (a.пробные||0) + r.пробные;
+    });
+  });
+  const combined = Object.values(adminMap).map(a => ({
+    ...a,
+    ps: a.смены > 0 ? Math.round((a.usl+a.tov)/a.смены) : 0
+  }));
+  const maxPs    = Math.max(...combined.map(r => r.ps)) || 1;
+  const maxFsh   = Math.max(...combined.map(r => r.fsh||0)) || 1;
+  const maxTovSm = Math.max(...combined.map(r => r.смены > 0 ? r.tov/r.смены : 0)) || 1;
+  const scored = combined.map(r => {
     const tovSm = r.смены > 0 ? r.tov / r.смены : 0;
     return {
       ...r,
@@ -569,7 +626,7 @@ function switchTab(sid, tab) {
 function monthlyThead(hasFst, perShift) {
   if (perShift) {
     const fstCols = hasFst ? '<th>First шт</th><th>First руб</th>' : '';
-    return `<th>#</th><th>Имя</th><th>Смены</th><th>Продажи услуг</th><th>Продажи товаров</th>${fstCols}<th>Услуги/смену</th><th>Товары/смену</th>`;
+    return `<th>#</th><th>Имя</th><th>Смены</th><th>Утро</th><th>Вечер</th><th>Пом.</th><th>Продажи услуг</th><th>Продажи товаров</th><th>Услуги/смену</th><th>Товары/смену</th>${fstCols}<th>Балл</th>`;
   }
   return `<th>#</th><th>Имя</th><th>Смены</th><th>Продажи услуг</th><th>Прод. в смену</th>${hasFst ? '<th>First шт</th><th>First руб</th>' : ''}<th>Товары</th>`;
 }
@@ -593,10 +650,19 @@ function monthlyTbody(rows, hasFst, perShift) {
     const iconsHtml = icons.length ? `<span style="margin-left:5px">${icons.join('')}</span>` : '';
     if (perShift) {
       const fstCells = hasFst ? `<td>${r.fsh||'—'}</td><td>${r.fr ? fmt(r.fr) : '—'}</td>` : '';
+      const score = Math.round(((r.ps||0)/(maxPs||1)*0.60 + (r.fsh||0)/(maxFsh||1)*0.30 + tovSm/(maxTovSm||1)*0.10)*100);
+      const breakdown = JSON.stringify({
+        name: r.name,
+        ps:  {val:r.ps||0,         max:maxPs,              w:60, pts:+((r.ps||0)/(maxPs||1)*60).toFixed(1)},
+        fsh: {val:r.fsh||0,        max:maxFsh,             w:30, pts:+((r.fsh||0)/(maxFsh||1)*30).toFixed(1)},
+        tov: {val:Math.round(tovSm),max:Math.round(maxTovSm),w:10,pts:+(tovSm/(maxTovSm||1)*10).toFixed(1)},
+        total: score
+      });
       return `<tr>
         <td>${re}</td>
         <td style="white-space:nowrap">${r.name}${iconsHtml}</td>
-        <td>${r.смены}</td><td>${fmt(r.usl)}</td><td>${fmt(r.tov)}</td>${fstCells}<td>${fmt(r.ps)}</td><td>${tovSm > 0 ? fmt(Math.round(tovSm)) : '—'}</td>
+        <td>${r.смены}</td><td>${r.утро??'—'}</td><td>${r.вечер??'—'}</td><td>${r.пом??'—'}</td><td>${fmt(r.usl)}</td><td>${fmt(r.tov)}</td><td>${fmt(r.ps)}</td><td>${tovSm > 0 ? fmt(Math.round(tovSm)) : '—'}</td>${fstCells}
+        <td class="score-cell ${scoreClass(score)}" data-breakdown='${breakdown.replace(/'/g,"&#39;")}'>${score}</td>
       </tr>`;
     }
     const fst = hasFst ? `<td>${r.fsh||'—'}</td><td>${r.fr ? fmt(r.fr) : '—'}</td>` : '';
@@ -663,11 +729,12 @@ function buildQ2Rows(d2) {
       tov: {val:Math.round(r.tovSm||0), max:Math.round(maxTovSm), w:10, pts:+((r.tovSm||0)/maxTovSm*10).toFixed(1)},
       total: Math.round(r.score)
     });
+    const конвQ2 = (r.fsh && r.пробные) ? Math.round(r.fsh / r.пробные * 100) + '%' : '—';
     rows += `<tr class="${isW?'winner-row':''}">
       <td>${rankEl}</td>
       <td class="${isW?'winner-name-cell':''}" style="white-space:nowrap">${r.name}${iconsHtml}</td>
-      <td>${r.смены}</td><td>${r.usl?fmt(r.usl):'—'}</td><td>${fmt(r.tov)}</td>
-      <td>${r.fsh||'—'}</td><td>${r.fr?fmt(r.fr):'—'}</td><td>${r.ps?fmt(r.ps):'—'}</td><td>${r.tovSm > 0 ? fmt(Math.round(r.tovSm)) : '—'}</td>
+      <td>${r.смены}</td><td>${r.утро??'—'}</td><td>${r.вечер??'—'}</td><td>${r.пом??'—'}</td><td>${r.usl?fmt(r.usl):'—'}</td><td>${fmt(r.tov)}</td>
+      <td>${r.ps?fmt(r.ps):'—'}</td><td>${r.tovSm > 0 ? fmt(Math.round(r.tovSm)) : '—'}</td><td>${r.пробные??'—'}</td><td>${r.fsh||'—'}</td><td>${конвQ2}</td><td>${r.fr?fmt(r.fr):'—'}</td>
       <td class="score-cell ${scoreClass(r.score)}" data-breakdown='${breakdown.replace(/'/g,"&#39;")}'>${Math.round(r.score)}</td>
     </tr>`;
   });
@@ -691,7 +758,7 @@ Object.entries(data).forEach(([studio, d]) => {
       <div class="tab-bar">
         <button class="tab-btn active"    data-tab="q2sum" onclick="switchTab('${sid}','q2sum')">2 КВАРТАЛ</button>
         <button class="tab-btn"           data-tab="apr"   onclick="switchTab('${sid}','apr')">АПРЕЛЬ</button>
-        <button class="tab-btn tab-disabled" disabled>МАЙ</button>
+        <button class="tab-btn"           data-tab="may"   onclick="switchTab('${sid}','may')">МАЙ</button>
         <button class="tab-btn tab-disabled" disabled>ИЮНЬ</button>
         <span class="tab-sep"></span>
         <button class="tab-btn"           data-tab="q1"  onclick="switchTab('${sid}','q1')">1 КВАРТАЛ</button>
@@ -701,8 +768,8 @@ Object.entries(data).forEach(([studio, d]) => {
       </div>
       <div class="tab-pane active" data-tab="q2sum">
         <div class="table-wrap"><table>
-          <thead><tr><th>#</th><th>Имя</th><th>Смены</th><th>Продажи услуг</th>
-            <th>Продажи товаров</th><th>First шт</th><th>First руб</th><th>Услуги/смену</th><th>Товары/смену</th><th>Балл</th>
+          <thead><tr><th>#</th><th>Имя</th><th>Смены</th><th>Утро</th><th>Вечер</th><th>Пом.</th><th>Продажи услуг</th>
+            <th>Продажи товаров</th><th>Услуги/смену</th><th>Товары/смену</th><th>Пробные</th><th>First шт</th><th>Конверсия</th><th>First руб</th><th>Балл</th>
           </tr></thead>
           <tbody>${buildQ2Rows(d2)}</tbody>
         </table></div>
@@ -711,6 +778,12 @@ Object.entries(data).forEach(([studio, d]) => {
         <div class="table-wrap"><table>
           <thead><tr>${monthlyThead(hasFst, true)}</tr></thead>
           <tbody>${monthlyTbody(md.apr, hasFst, true)}</tbody>
+        </table></div>
+      </div>
+      <div class="tab-pane" data-tab="may">
+        <div class="table-wrap"><table>
+          <thead><tr>${monthlyThead(hasFst, true)}</tr></thead>
+          <tbody>${monthlyTbody(md.may, hasFst, true)}</tbody>
         </table></div>
       </div>
       <div class="tab-pane" data-tab="q1">

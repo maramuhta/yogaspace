@@ -533,12 +533,20 @@ const monthlyData = {
   },
 };
 
-// Sort monthly alphabetically, assign places
+// Sort monthly by score descending, assign places
 Object.values(monthlyData).forEach(d => {
   ['jan','feb','mar','apr','may'].forEach(m => {
     if (!d[m]) return;
-    d[m].sort((a,b) => a.name.localeCompare(b.name, 'ru'));
-    d[m].forEach((r,i) => r.place = i+1);
+    const rows = d[m];
+    const maxPs    = Math.max(...rows.map(r => r.ps||0)) || 1;
+    const maxFsh   = Math.max(...rows.map(r => r.fsh||0)) || 1;
+    const maxTovSm = Math.max(...rows.map(r => r.смены > 0 ? r.tov/r.смены : 0)) || 1;
+    rows.forEach(r => {
+      const tovSm = r.смены > 0 ? r.tov/r.смены : 0;
+      r._score = ((r.ps||0)/maxPs*0.60 + (r.fsh||0)/maxFsh*0.30 + tovSm/maxTovSm*0.10)*100;
+    });
+    rows.sort((a,b) => b._score - a._score);
+    rows.forEach((r,i) => r.place = i+1);
   });
 });
 
@@ -729,12 +737,11 @@ function buildQ2Rows(d2) {
       tov: {val:Math.round(r.tovSm||0), max:Math.round(maxTovSm), w:10, pts:+((r.tovSm||0)/maxTovSm*10).toFixed(1)},
       total: Math.round(r.score)
     });
-    const конвQ2 = (r.fsh && r.пробные) ? Math.round(r.fsh / r.пробные * 100) + '%' : '—';
     rows += `<tr class="${isW?'winner-row':''}">
       <td>${rankEl}</td>
       <td class="${isW?'winner-name-cell':''}" style="white-space:nowrap">${r.name}${iconsHtml}</td>
       <td>${r.смены}</td><td>${r.утро??'—'}</td><td>${r.вечер??'—'}</td><td>${r.пом??'—'}</td><td>${r.usl?fmt(r.usl):'—'}</td><td>${fmt(r.tov)}</td>
-      <td>${r.ps?fmt(r.ps):'—'}</td><td>${r.tovSm > 0 ? fmt(Math.round(r.tovSm)) : '—'}</td><td>${r.пробные??'—'}</td><td>${r.fsh||'—'}</td><td>${конвQ2}</td><td>${r.fr?fmt(r.fr):'—'}</td>
+      <td>${r.ps?fmt(r.ps):'—'}</td><td>${r.tovSm > 0 ? fmt(Math.round(r.tovSm)) : '—'}</td><td>${r.пробные??'—'}</td><td>${r.fsh||'—'}</td><td>${r.fr?fmt(r.fr):'—'}</td>
       <td class="score-cell ${scoreClass(r.score)}" data-breakdown='${breakdown.replace(/'/g,"&#39;")}'>${Math.round(r.score)}</td>
     </tr>`;
   });
@@ -769,7 +776,7 @@ Object.entries(data).forEach(([studio, d]) => {
       <div class="tab-pane active" data-tab="q2sum">
         <div class="table-wrap"><table>
           <thead><tr><th>#</th><th>Имя</th><th>Смены</th><th>Утро</th><th>Вечер</th><th>Пом.</th><th>Продажи услуг</th>
-            <th>Продажи товаров</th><th>Услуги/смену</th><th>Товары/смену</th><th>Пробные</th><th>First шт</th><th>Конверсия</th><th>First руб</th><th>Балл</th>
+            <th>Продажи товаров</th><th>Услуги/смену</th><th>Товары/смену</th><th>Пробные</th><th>First шт</th><th>First руб</th><th>Балл</th>
           </tr></thead>
           <tbody>${buildQ2Rows(d2)}</tbody>
         </table></div>

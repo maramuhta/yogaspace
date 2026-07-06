@@ -1122,12 +1122,12 @@ const ADMINS_WEEKLY={
     {name:'Вика',   abon:30540, tovar:5015, shifts:1,shifts_morn:1,shifts_eve:0,shifts_p:1,newQty:0,newRub:0},
   ],
   '29 июн–5 июл':[
-    {name:'Аня К',  abon:134420,tovar:2351, shifts:0,shifts_morn:0,shifts_eve:0,shifts_p:0,newQty:5,newRub:56000},
-    {name:'Марина', abon:122980,tovar:8265, shifts:0,shifts_morn:0,shifts_eve:0,shifts_p:0,newQty:3,newRub:28800},
-    {name:'Лера З', abon:69920, tovar:9826, shifts:0,shifts_morn:0,shifts_eve:0,shifts_p:0,newQty:1,newRub:13600},
-    {name:'Лера',   abon:56910, tovar:1613, shifts:0,shifts_morn:0,shifts_eve:0,shifts_p:0,newQty:0,newRub:0},
-    {name:'Вика',   abon:41137, tovar:12965,shifts:0,shifts_morn:0,shifts_eve:0,shifts_p:0,newQty:0,newRub:0},
-    {name:'Настя',  abon:26700, tovar:2941, shifts:0,shifts_morn:0,shifts_eve:0,shifts_p:0,newQty:1,newRub:13600},
+    {name:'Аня К',  abon:134420,tovar:2351, shifts:2,shifts_morn:1,shifts_eve:1,shifts_p:2,newQty:5,newRub:56000},
+    {name:'Марина', abon:122980,tovar:8265, shifts:3,shifts_morn:1,shifts_eve:2,shifts_p:0,newQty:3,newRub:28800},
+    {name:'Лера З', abon:69920, tovar:9826, shifts:3,shifts_morn:1,shifts_eve:2,shifts_p:1,newQty:1,newRub:13600},
+    {name:'Лера',   abon:56910, tovar:1613, shifts:2,shifts_morn:1,shifts_eve:1,shifts_p:1,newQty:0,newRub:0},
+    {name:'Вика',   abon:41137, tovar:12965,shifts:2,shifts_morn:1,shifts_eve:1,shifts_p:2,newQty:0,newRub:0},
+    {name:'Настя',  abon:26700, tovar:2941, shifts:2,shifts_morn:2,shifts_eve:0,shifts_p:0,newQty:1,newRub:13600},
   ],
   // Итог мая: услуги из Май услуги.xlsx (оплата с учётом возврата), First из Ферст.xlsx
   'Итог мая':[
@@ -1397,6 +1397,17 @@ const FIRST_DAY_WEEKLY={
       {name:'Вика',   trial:2,  soldQty:0, soldRub:0,    conv:0},
     ],
     total:{trial:18, soldQty:2, soldRub:15200, conv:11}
+  },
+  '29 июн–5 июл':{
+    rows:[
+      {name:'Аня К',  trial:25, soldQty:7, soldRub:56960, conv:28},
+      {name:'Марина', trial:37, soldQty:5, soldRub:42320, conv:14},
+      {name:'Лера З', trial:16, soldQty:5, soldRub:46820, conv:31},
+      {name:'Лера',   trial:16, soldQty:5, soldRub:58160, conv:31},
+      {name:'Вика',   trial:8,  soldQty:2, soldRub:16960, conv:25},
+      {name:'Настя',  trial:11, soldQty:2, soldRub:16960, conv:18},
+    ],
+    total:{trial:113, soldQty:26, soldRub:238180, conv:23}
   },
 };
 const FIRST_DAY=FIRST_DAY_WEEKLY['25–31 мая'];

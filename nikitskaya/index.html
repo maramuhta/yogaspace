@@ -996,9 +996,9 @@ const CATS_JUN_TIME={
 
 // Продажи по времени суток — июль (в рублях)
 const CATS_JUL_TIME={
-  labels:['29 июн–5 июл'],
-  abon:{morn:[138400],eve:[205800],wknd:[88480]},
-  tovar:{morn:[10968],eve:[14930],wknd:[12062]},
+  labels:['22–28 июн','29 июн–5 июл'],
+  abon:{morn:[172740,138400],eve:[227648,205800],wknd:[112140,88480]},
+  tovar:{morn:[31587,10968],eve:[22972,14930],wknd:[23191,12062]},
 };
 
 const VISITS_TIME={
@@ -1154,7 +1154,8 @@ const ADMINS=prepAdmins(ADMINS_WEEKLY['25–31 мая']);
 const APR_ADMIN_WEEKS=['1–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая'];
 const MAY_ADMIN_WEEKS=['4–10 мая','11–17 мая','18–24 мая','25–31 мая'];
 const JUN_ADMIN_WEEKS=['1–7 июн','8–14 июн','15–21 июн','22–28 июн'];
-const JUL_ADMIN_WEEKS=['29 июн–5 июл'];
+const JUL_ADMIN_WEEKS=['22–28 июн','29 июн–5 июл'];
+const JUL_WEEKS_ACTUAL=['29 июн–5 июл'];
 
 // TRIAL_PIE / TRIAL_PIE2 агрегируются по всем неделям мая динамически в renderTrialPie()
 const TRIAL_PIE_MAY_WEEKS=['4–10 мая','11–17 мая','18–24 мая','25–31 мая']; // добавлять сюда новые недели мая по мере появления данных
@@ -1801,6 +1802,7 @@ function renderMonth(prefix){
     const junIdx0=WEEKS.isJune?WEEKS.isJune.map((m,i)=>m?i:-1).filter(i=>i>=0):[];
     const julIdx0=WEEKS.isJuly?WEEKS.isJuly.map((m,i)=>m?i:-1).filter(i=>i>=0):[];
     const lastAprI=aprIdx0.length>0?aprIdx0[aprIdx0.length-1]:null;
+    const lastJunI=junIdx0.length>0?junIdx0[junIdx0.length-1]:null;
     const curMonthIdx=isMar?marchIdx:isMay?mayIdx0:isJun?junIdx0:isJul?julIdx0:aprIdx0;
     const official=isMar?null:isMay?(MONTHLY.may||null):isJun?(MONTHLY.jun||null):isJul?(MONTHLY.jul||null):(MONTHLY.apr||null);
     const totalAll=official?official.total:curMonthIdx.reduce((s,i)=>s+W.total[i],0);
@@ -1835,18 +1837,19 @@ function renderMonth(prefix){
 
     // Таблица: % плана и накопление — для всех недель где есть план
     const tb=document.getElementById(prefix==='mar'?'mWeekTable':prefix==='may'?'myWeekTable':prefix==='jun'?'juWeekTable':prefix==='jul'?'julWeekTable':'aWeekTable');
-    const tableRows=isMar?marchIdx:isMay?(lastAprI!==null?[lastAprI,...mayIdx0]:mayIdx0):isJun?junIdx0:isJul?julIdx0:aprIdx0;
+    const tableRows=isMar?marchIdx:isMay?(lastAprI!==null?[lastAprI,...mayIdx0]:mayIdx0):isJun?junIdx0:isJul?(lastJunI!==null?[lastJunI,...julIdx0]:julIdx0):aprIdx0;
     const rows=tableRows;
     let cumul=0; let cumulPlanSum=0;
     rows.forEach((i,li)=>{
       const tr=document.createElement('tr');
       const isAprilCompare=isMay&&li===0&&lastAprI!==null&&i===lastAprI;
-      if(isAprilCompare)tr.style.cssText='color:var(--muted);font-size:12px';
+      const isJunCompare=isJul&&li===0&&lastJunI!==null&&i===lastJunI;
+      if(isAprilCompare||isJunCompare)tr.style.cssText='color:var(--muted);font-size:12px';
       else if(!W.isMarch[i])tr.style.cssText='font-weight:600;background:#fdf6f0';
       const trendStr=li>0?trend(W.total[i],W.total[rows[li-1]]):'';
       const wPlan=W.plan[i];
       const planPct=wPlan>0?Math.round(W.total[i]/wPlan*100):null;
-      if(wPlan>0){cumul+=W.total[i];cumulPlanSum+=wPlan;}
+      if(wPlan>0&&!isAprilCompare&&!isJunCompare){cumul+=W.total[i];cumulPlanSum+=wPlan;}
       const cumulPct=cumulPlanSum>0?Math.round(cumul/cumulPlanSum*100):null;
       const planCell=planPct!==null?planPill(planPct):'—';
       const cumulCell=cumulPct!==null?planPill(cumulPct):'—';
@@ -1869,13 +1872,13 @@ function renderMonth(prefix){
     // [FIX 3] График с линией плана
     const P=prefix==='mar'?'Mar':prefix==='may'?'May':prefix==='jun'?'Jun':prefix==='jul'?'Jul':'Apr';
     // Для мая показываем последнюю неделю апреля + все недели мая; для июня — только июнь
-    const chIdxs=isMay?(lastAprI!==null?[lastAprI,...mayIdx0]:mayIdx0):isJun?junIdx0:isJul?julIdx0:null;
+    const chIdxs=isMay?(lastAprI!==null?[lastAprI,...mayIdx0]:mayIdx0):isJun?junIdx0:isJul?(lastJunI!==null?[lastJunI,...julIdx0]:julIdx0):null;
     const chLabels=chIdxs?chIdxs.map(i=>W.labels[i]):W.labels;
     const chAbon  =chIdxs?chIdxs.map(i=>W.abon[i]):W.abon;
     const chTovar =chIdxs?chIdxs.map(i=>W.tovar[i]):W.tovar;
     const chTotal =chIdxs?chIdxs.map(i=>W.total[i]):W.total;
     const chPlan  =chIdxs?chIdxs.map(i=>W.plan[i]):W.plan;
-    const isLastApr=chIdxs?chIdxs.map((_,li)=>isMay&&li===0&&lastAprI!==null):chLabels.map(()=>false);
+    const isLastApr=chIdxs?chIdxs.map((_,li)=>(isMay&&li===0&&lastAprI!==null)||(isJul&&li===0&&lastJunI!==null)):chLabels.map(()=>false);
 
     new Chart(document.getElementById('chart'+P+'Weekly'),{type:'bar',
       data:{labels:chLabels,datasets:[
@@ -2050,18 +2053,20 @@ function renderMonth(prefix){
     // Построение через общий билдер (поддерживает переключение)
     const P=prefix==='mar'?'Mar':prefix==='may'?'May':prefix==='jun'?'Jun':prefix==='jul'?'Jul':'Apr';
     const lastAprIdxV2=aprIdx.length>0?aprIdx[aprIdx.length-1]:null;
-    const visIdxFilter=isMay?(lastAprIdxV2!==null?[lastAprIdxV2,...mayIdxV]:mayIdxV):isJun?junIdxV:isJul?julIdxV:null;
+    const lastJunIdxV=junIdxV.length>0?junIdxV[junIdxV.length-1]:null;
+    const visIdxFilter=isMay?(lastAprIdxV2!==null?[lastAprIdxV2,...mayIdxV]:mayIdxV):isJun?junIdxV:isJul?(lastJunIdxV!==null?[lastJunIdxV,...julIdxV]:julIdxV):null;
     _visitCharts[prefix]=buildVisitWeeksChart('chart'+P+'Visits',isMar,visIdxFilter);
 
     // Таблица посещений
     const tb=document.getElementById(prefix==='mar'?'mVisitTable':prefix==='may'?'myVisitTable':prefix==='jun'?'juVisitTable':prefix==='jul'?'julVisitTable':'aVisitTable');
     const lastAprIdxV=aprIdx.length>0?aprIdx[aprIdx.length-1]:null;
-    const visRows=isMar?marchIdx:isMay?(lastAprIdxV!==null?[lastAprIdxV,...mayIdxV]:mayIdxV):isJun?junIdxV:isJul?julIdxV:aprIdx;
+    const visRows=isMar?marchIdx:isMay?(lastAprIdxV!==null?[lastAprIdxV,...mayIdxV]:mayIdxV):isJun?junIdxV:isJul?(lastJunIdxV!==null?[lastJunIdxV,...julIdxV]:julIdxV):aprIdx;
     const rows=visRows;
     rows.forEach((i,li)=>{
       const tr=document.createElement('tr');
       const isAprComp=isMay&&li===0&&i===lastAprIdxV;
-      if(isAprComp)tr.style.cssText='color:var(--muted);font-size:12px';
+      const isJunComp=isJul&&li===0&&lastJunIdxV!==null&&i===lastJunIdxV;
+      if(isAprComp||isJunComp)tr.style.cssText='color:var(--muted);font-size:12px';
       else if(!W.isMarch[i])tr.style.fontWeight='600';
       const prev=li>0?rows[li-1]:null;
       const trendStr=prev!==null?trend(W.visits[i],W.visits[prev]):'';
@@ -2267,9 +2272,9 @@ function renderMonth(prefix){
       fdTotJ.conv=fdTotJ.trial>0?Math.round(fdTotJ.soldQty/fdTotJ.trial*100):0;
       firstDay={rows:fdRowsJ,total:fdTotJ};
     } else if(weekKey==='Итог июля'){
-      // Агрегируем все недели июля по имени администратора
+      // Агрегируем только фактические недели июля (без июньской сравнительной)
       const julAdmMap={};
-      JUL_ADMIN_WEEKS.forEach(k=>{(ADMINS_WEEKLY[k]||[]).forEach(a=>{
+      JUL_WEEKS_ACTUAL.forEach(k=>{(ADMINS_WEEKLY[k]||[]).forEach(a=>{
         if(!julAdmMap[a.name])julAdmMap[a.name]={name:a.name,abon:0,tovar:0,shifts:0,shifts_morn:0,shifts_eve:0,shifts_p:0,newQty:0,newRub:0};
         const m=julAdmMap[a.name];
         m.abon+=a.abon;m.tovar+=a.tovar;m.shifts+=a.shifts||0;
@@ -2277,14 +2282,14 @@ function renderMonth(prefix){
         m.newQty+=a.newQty||0;m.newRub+=a.newRub||0;
       });});
       admins=prepAdmins(Object.values(julAdmMap));
-      // NEWBIES агрегат
+      // NEWBIES агрегат (только фактический июль)
       const nMapJul={};
-      JUL_ADMIN_WEEKS.forEach(k=>{const nb=NEWBIES_WEEKLY[k];if(!nb)return;nb.labels.forEach((l,i)=>{if(!nMapJul[l])nMapJul[l]={qty:0,rev:0,color:nb.colors[i]};nMapJul[l].qty+=nb.qty[i];nMapJul[l].rev+=nb.revenue[i];});});
+      JUL_WEEKS_ACTUAL.forEach(k=>{const nb=NEWBIES_WEEKLY[k];if(!nb)return;nb.labels.forEach((l,i)=>{if(!nMapJul[l])nMapJul[l]={qty:0,rev:0,color:nb.colors[i]};nMapJul[l].qty+=nb.qty[i];nMapJul[l].rev+=nb.revenue[i];});});
       const nlJul=Object.keys(nMapJul);
       newbies={labels:nlJul,qty:nlJul.map(l=>nMapJul[l].qty),revenue:nlJul.map(l=>nMapJul[l].rev),colors:nlJul.map(l=>nMapJul[l].color)};
-      // FIRST_DAY агрегат
+      // FIRST_DAY агрегат (только фактический июль)
       const fdMapJul={};
-      JUL_ADMIN_WEEKS.forEach(k=>{const fd=FIRST_DAY_WEEKLY[k];if(!fd||!fd.rows.length)return;fd.rows.forEach(r=>{if(!fdMapJul[r.name])fdMapJul[r.name]={trial:0,soldQty:0,soldRub:0};fdMapJul[r.name].trial+=r.trial;fdMapJul[r.name].soldQty+=r.soldQty;fdMapJul[r.name].soldRub+=r.soldRub;});});
+      JUL_WEEKS_ACTUAL.forEach(k=>{const fd=FIRST_DAY_WEEKLY[k];if(!fd||!fd.rows.length)return;fd.rows.forEach(r=>{if(!fdMapJul[r.name])fdMapJul[r.name]={trial:0,soldQty:0,soldRub:0};fdMapJul[r.name].trial+=r.trial;fdMapJul[r.name].soldQty+=r.soldQty;fdMapJul[r.name].soldRub+=r.soldRub;});});
       const fdNamesJul=Object.keys(fdMapJul);
       const fdRowsJul=fdNamesJul.map(n=>{const d=fdMapJul[n];const conv=d.trial>0?Math.round(d.soldQty/d.trial*100):0;return{name:n,...d,conv};});
       const fdTotJul={trial:fdRowsJul.reduce((s,r)=>s+r.trial,0),soldQty:fdRowsJul.reduce((s,r)=>s+r.soldQty,0),soldRub:fdRowsJul.reduce((s,r)=>s+r.soldRub,0)};

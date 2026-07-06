@@ -1138,6 +1138,15 @@ const ADMINS_WEEKLY={
     {name:'Лера З',abon:215920,tovar:34034,shifts:11,shifts_morn:5,shifts_eve:6,shifts_p:5,newQty:6, newRub:57600, visitors:27},
     {name:'Вика',  abon:195080,tovar:36043,shifts:8, shifts_morn:4,shifts_eve:4,shifts_p:3,newQty:6, newRub:57000, visitors:20},
   ],
+  // Итог июня: услуги и товары из xlsx (оплата с учётом возврата), First из Ферст.xlsx; смены — агрегат из недель
+  'Итог июня':[
+    {name:'Марина', abon:482890,tovar:69036,shifts:15,shifts_morn:9,shifts_eve:6,shifts_p:2, newQty:6,newRub:71200},
+    {name:'Лера З', abon:285900,tovar:46745,shifts:9, shifts_morn:6,shifts_eve:3,shifts_p:5, newQty:5,newRub:63400},
+    {name:'Аня К',  abon:274490,tovar:61206,shifts:11,shifts_morn:6,shifts_eve:5,shifts_p:6, newQty:6,newRub:63600},
+    {name:'Лера',   abon:196850,tovar:22035,shifts:7, shifts_morn:0,shifts_eve:7,shifts_p:5, newQty:7,newRub:93900},
+    {name:'Настя',  abon:193500,tovar:21412,shifts:9, shifts_morn:2,shifts_eve:7,shifts_p:4, newQty:2,newRub:21200},
+    {name:'Вика',   abon:149200,tovar:11000,shifts:5, shifts_morn:5,shifts_eve:0,shifts_p:5, newQty:2,newRub:21200},
+  ],
 };
 function prepAdmins(arr){return arr.map(d=>({...d,total:d.abon+d.tovar,perShift:d.shifts>0?Math.round((d.abon+d.tovar)/d.shifts):0})).sort((a,b)=>b.total-a.total);}
 // Итог апреля — данные из официальных отчётов (услуги и товары paid, First из xlsx)
@@ -2248,24 +2257,15 @@ function renderMonth(prefix){
       fdTot.conv=fdTot.trial>0?Math.round(fdTot.soldQty/fdTot.trial*100):0;
       firstDay={rows:fdRows,total:fdTot};
     } else if(weekKey==='Итог июня'){
-      // Агрегируем все недели июня по имени администратора
-      const junAdmMap={};
-      JUN_ADMIN_WEEKS.forEach(k=>{(ADMINS_WEEKLY[k]||[]).forEach(a=>{
-        if(!junAdmMap[a.name])junAdmMap[a.name]={name:a.name,abon:0,tovar:0,shifts:0,shifts_morn:0,shifts_eve:0,shifts_p:0,newQty:0,newRub:0};
-        const m=junAdmMap[a.name];
-        m.abon+=a.abon;m.tovar+=a.tovar;m.shifts+=a.shifts||0;
-        m.shifts_morn+=(a.shifts_morn||0);m.shifts_eve+=(a.shifts_eve||0);m.shifts_p+=(a.shifts_p||0);
-        m.newQty+=a.newQty||0;m.newRub+=a.newRub||0;
-      });});
-      admins=prepAdmins(Object.values(junAdmMap));
+      admins=prepAdmins(ADMINS_WEEKLY['Итог июня']||[]);
       // NEWBIES агрегат
       const nMapJ={};
-      ITER_WEEKS.forEach(k=>{const nb=NEWBIES_WEEKLY[k];if(!nb)return;nb.labels.forEach((l,i)=>{if(!nMapJ[l])nMapJ[l]={qty:0,rev:0,color:nb.colors[i]};nMapJ[l].qty+=nb.qty[i];nMapJ[l].rev+=nb.revenue[i];});});
+      JUN_ADMIN_WEEKS.forEach(k=>{const nb=NEWBIES_WEEKLY[k];if(!nb)return;nb.labels.forEach((l,i)=>{if(!nMapJ[l])nMapJ[l]={qty:0,rev:0,color:nb.colors[i]};nMapJ[l].qty+=nb.qty[i];nMapJ[l].rev+=nb.revenue[i];});});
       const nlJ=Object.keys(nMapJ);
       newbies={labels:nlJ,qty:nlJ.map(l=>nMapJ[l].qty),revenue:nlJ.map(l=>nMapJ[l].rev),colors:nlJ.map(l=>nMapJ[l].color)};
       // FIRST_DAY агрегат
       const fdMapJ={};
-      ITER_WEEKS.forEach(k=>{const fd=FIRST_DAY_WEEKLY[k];if(!fd||!fd.rows.length)return;fd.rows.forEach(r=>{if(!fdMapJ[r.name])fdMapJ[r.name]={trial:0,soldQty:0,soldRub:0};fdMapJ[r.name].trial+=r.trial;fdMapJ[r.name].soldQty+=r.soldQty;fdMapJ[r.name].soldRub+=r.soldRub;});});
+      JUN_ADMIN_WEEKS.forEach(k=>{const fd=FIRST_DAY_WEEKLY[k];if(!fd||!fd.rows.length)return;fd.rows.forEach(r=>{if(!fdMapJ[r.name])fdMapJ[r.name]={trial:0,soldQty:0,soldRub:0};fdMapJ[r.name].trial+=r.trial;fdMapJ[r.name].soldQty+=r.soldQty;fdMapJ[r.name].soldRub+=r.soldRub;});});
       const fdNamesJ=Object.keys(fdMapJ);
       const fdRowsJ=fdNamesJ.map(n=>{const d=fdMapJ[n];const conv=d.trial>0?Math.round(d.soldQty/d.trial*100):0;return{name:n,...d,conv};});
       const fdTotJ={trial:fdRowsJ.reduce((s,r)=>s+r.trial,0),soldQty:fdRowsJ.reduce((s,r)=>s+r.soldQty,0),soldRub:fdRowsJ.reduce((s,r)=>s+r.soldRub,0)};

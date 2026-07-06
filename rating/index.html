@@ -182,7 +182,14 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
 <!-- WINNERS + METHODOLOGY -->
 <div class="winners-method-row">
   <div class="winners-section">
-    <div class="section-label">ЛИДЕРЫ 2 КВАРТАЛА ПО СТУДИЯМ</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;flex-wrap:wrap">
+      <div id="winners-label" style="font-family:'Unbounded',sans-serif;font-size:11px;letter-spacing:.1em;color:#5C6937;white-space:nowrap">ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ</div>
+      <div style="display:flex;gap:6px;margin-left:4px">
+        <button id="wbtn-jun" onclick="renderWinners('jun')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid #5C6937;background:#5C6937;color:#FDF6F0;cursor:pointer">ИЮНЬ</button>
+        <button id="wbtn-q2"  onclick="renderWinners('q2')"  style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">2 КВАРТАЛ</button>
+      </div>
+      <div style="flex:1;height:1px;background:rgba(92,105,55,.2);min-width:20px"></div>
+    </div>
     <div class="winners-grid" id="winners-grid"></div>
   </div>
 
@@ -657,10 +664,21 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
   dataMay[studio] = { winner: scored[0] };
 });
 
-// Winners grid — лидеры мая
-(function(){
+function renderWinners(mode) {
+  const data  = mode === 'q2' ? dataQ2 : dataJun;
+  const label = mode === 'q2' ? 'ЛИДЕРЫ 2 КВАРТАЛА ПО СТУДИЯМ' : 'ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ';
+  document.getElementById('winners-label').textContent = label;
+  const btnJun = document.getElementById('wbtn-jun');
+  const btnQ2  = document.getElementById('wbtn-q2');
+  btnJun.style.background    = mode === 'jun' ? '#5C6937' : 'transparent';
+  btnJun.style.color         = mode === 'jun' ? '#FDF6F0' : '#5C6937';
+  btnJun.style.borderColor   = mode === 'jun' ? '#5C6937' : 'rgba(92,105,55,.3)';
+  btnQ2.style.background     = mode === 'q2'  ? '#5C6937' : 'transparent';
+  btnQ2.style.color          = mode === 'q2'  ? '#FDF6F0' : '#5C6937';
+  btnQ2.style.borderColor    = mode === 'q2'  ? '#5C6937' : 'rgba(92,105,55,.3)';
   const wg = document.getElementById('winners-grid');
-  Object.entries(dataQ2).forEach(([studio, d2]) => {
+  wg.innerHTML = '';
+  Object.entries(data).forEach(([studio, d2]) => {
     const w = d2.winner;
     const st = studioHearts[studio] || {heart:'🏆'};
     wg.innerHTML += `
@@ -689,11 +707,17 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
         </div>
       </div>`;
   });
-})();
+}
+renderWinners('jun');
 
 function switchTab(sid, tab) {
   document.querySelectorAll(`#studio-${sid} .tab-btn:not(.tab-disabled)`).forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll(`#studio-${sid} .tab-pane`).forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
+  if (tab === 'q2sum') {
+    renderWinners('q2');
+  } else {
+    renderWinners('jun');
+  }
 }
 
 function monthlyThead(hasFst, perShift) {

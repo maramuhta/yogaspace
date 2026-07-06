@@ -182,7 +182,7 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
 <!-- WINNERS + METHODOLOGY -->
 <div class="winners-method-row">
   <div class="winners-section">
-    <div class="section-label">ПОБЕДИТЕЛИ ИЮНЯ ПО СТУДИЯМ</div>
+    <div class="section-label">ЛИДЕРЫ 2 КВАРТАЛА ПО СТУДИЯМ</div>
     <div class="winners-grid" id="winners-grid"></div>
   </div>
 
@@ -660,7 +660,7 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
 // Winners grid — лидеры мая
 (function(){
   const wg = document.getElementById('winners-grid');
-  Object.entries(dataJun).forEach(([studio, d2]) => {
+  Object.entries(dataQ2).forEach(([studio, d2]) => {
     const w = d2.winner;
     const st = studioHearts[studio] || {heart:'🏆'};
     wg.innerHTML += `

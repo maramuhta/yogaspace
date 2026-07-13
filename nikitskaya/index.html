@@ -2350,11 +2350,12 @@ function renderMonth(prefix){
     const maxTovar=Math.max(...admins.map(a=>a.tovar),1);
     const maxAbon=Math.max(...admins.map(a=>a.abon),1);
     const maxNewQty=Math.max(...admins.map(a=>a.newQty),1);
+    const maxAbonPS=Math.max(...admins.filter(a=>a.shifts>0).map(a=>a.abon/a.shifts),0);
     admins.forEach((adm,rank)=>{
       const tr=document.createElement('tr');
       const bc=rank===0?'b1':rank===1?'b2':rank===2?'b3':'bn';
       const pb=Math.round(adm.total/maxTotal*100);
-      const badges=(adm.abon===Math.max(...admins.map(a=>a.abon))?'<span title="Лидер по продажам услуг" style="font-size:13px;margin-left:4px">💰</span>':'')
+      const badges=(maxAbonPS>0&&adm.shifts>0&&Math.round(adm.abon/adm.shifts)===Math.round(maxAbonPS)?'<span title="Лидер по услугам в смену" style="font-size:13px;margin-left:4px">💰</span>':'')
         +(adm.tovar===Math.max(...admins.map(a=>a.tovar))?'<span title="Лидер по продажам товаров" style="font-size:13px;margin-left:4px">🛍️</span>':'')
         +(maxNewQty>0&&adm.newQty===Math.max(...admins.map(a=>a.newQty))?'<span title="Лидер по кол-ву новичков" style="font-size:13px;margin-left:4px">👥</span>':'');
       tr.innerHTML=`<td><span class="bx ${bc}">${rank+1}</span></td><td style="font-weight:500">${adm.name}${badges}</td>

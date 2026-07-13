@@ -1538,9 +1538,9 @@ function switchVisitView(pfx, view, btn){
 
 function buildVisitWeeksChart(canvasId,isMar,idxFilter){
   // Утро 6-11, День 12-16, Вечер 17+
-  const _morn = [null,null,null,null,null,106,81,71,85, 103,137,100,70,65, 115,130,116];
-  const _eve  = [null,null,null,null,null,130,126,141,104,108,85, 121,121,106,94, 107,120];
-  const _wknd = [null,null,null,null,null,123,94,85,87, 100,96, 99,72,88, 115,85, 85];
+  const _morn = [null,null,null,null,null,106,81,71,85, 103,137,100,70,65, 115,130,116,110];
+  const _eve  = [null,null,null,null,null,130,126,141,104,108,85, 121,121,106,94, 107,120,101];
+  const _wknd = [null,null,null,null,null,123,94,85,87, 100,96, 99,72,88, 115,85, 85, 83];
   const _total= WEEKS.visits;
   const _first= WEEKS.first;
   // Apply index filter for May comparison view

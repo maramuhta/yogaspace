@@ -845,6 +845,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
         <th class="r">29 июн–5 июл</th>
         <th class="r">6–12 июл</th>
         <th class="r">13–19 июл</th>
+        <th class="r">20–26 июл</th>
         <th class="r" style="background:#4a5429">Итого июль</th>
       </tr></thead>
       <tbody id="julCatsTableBody"></tbody>
@@ -963,16 +964,16 @@ Chart.register(ChartDataLabels);
 
 // ── ДАННЫЕ ────────────────────────────────────
 const WEEKS={
-  labels:['9–15 мар','16–22 мар','23–29 мар','30 мар–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая','4–10 мая','11–17 мая','18–24 мая','25–31 мая','1–7 июн','8–14 июн','15–21 июн','22–28 июн','29 июн–5 июл','6–12 июл','13–19 июл'],
-  abon:  [479000,505000,578000,616000,456000,664590,476300,565860,409460,559665,773110,704310,421810,489840,475821,536528,453430,448457,412380],
-  tovar: [64000, 39000, 62000, 50000, 50000, 53986, 33668,53969, 47197, 48198, 77801,40186, 52726, 22300, 54179, 77750,37960, 59435, 55118],
-  visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286,324,322,321,294,317],
-  first: [32, 40, 37, 28, 39, 37, 34, 21, 27, 25, 34,12, 25,27, 22, 20,34, 36, 30],
-  plan:  [587000,587000,587000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,587000,587000,587000],
-  isMarch:[true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],
-  isMay:  [false,false,false,false,false,false,false,false,true,true,true,true,false,false,false,false,false,false,false],
-  isJune: [false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,false,false,false],
-  isJuly: [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true],
+  labels:['9–15 мар','16–22 мар','23–29 мар','30 мар–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая','4–10 мая','11–17 мая','18–24 мая','25–31 мая','1–7 июн','8–14 июн','15–21 июн','22–28 июн','29 июн–5 июл','6–12 июл','13–19 июл','20–26 июл'],
+  abon:  [479000,505000,578000,616000,456000,664590,476300,565860,409460,559665,773110,704310,421810,489840,475821,536528,453430,448457,412380,480211],
+  tovar: [64000, 39000, 62000, 50000, 50000, 53986, 33668,53969, 47197, 48198, 77801,40186, 52726, 22300, 54179, 77750,37960, 59435, 55118, 66528],
+  visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286,324,322,321,294,317,317],
+  first: [32, 40, 37, 28, 39, 37, 34, 21, 27, 25, 34,12, 25,27, 22, 20,34, 36, 30, 30],
+  plan:  [587000,587000,587000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,587000,587000,587000,587000],
+  isMarch:[true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],
+  isMay:  [false,false,false,false,false,false,false,false,true,true,true,true,false,false,false,false,false,false,false,false],
+  isJune: [false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,false,false,false,false],
+  isJuly: [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true],
 };
 WEEKS.total=WEEKS.abon.map((a,i)=>a+WEEKS.tovar[i]);
 
@@ -998,22 +999,22 @@ const CATS_JUN_TIME={
 
 // Продажи по времени суток — июль (в рублях)
 const CATS_JUL_TIME={
-  labels:['22–28 июн','29 июн–5 июл','6–12 июл','13–19 июл'],
-  abon:{morn:[172740,138400,188780,151174],eve:[227648,205800,137060,193427],wknd:[112140,88480,122617,67779]},
-  tovar:{morn:[31587,10968,23815,23678],eve:[22972,14930,19530,19001],wknd:[23191,12062,16090,12439]},
+  labels:['22–28 июн','29 июн–5 июл','6–12 июл','13–19 июл','20–26 июл'],
+  abon:{morn:[172740,138400,188780,151174,173920],eve:[227648,205800,137060,193427,100941],wknd:[112140,88480,122617,67779,207550]},
+  tovar:{morn:[31587,10968,23815,23678,28635],eve:[22972,14930,19530,19001,21300],wknd:[23191,12062,16090,12439,15093]},
 };
 
 const VISITS_TIME={
-  morn: [null,null,null,null,null,114,96,135,85, 103,137,100,70,65, 115,130,116,110,67],
-  eve:  [null,null,null,null,null,122,148,77, 104,108,85, 121,121,106,94, 107,120,101,148],
-  wknd: [null,null,null,null,null,123,108,85, 87, 100,96, 99, 72,88, 115,85, 85, 83, 102],
+  morn: [null,null,null,null,null,114,96,135,85, 103,137,100,70,65, 115,130,116,110,67, 95],
+  eve:  [null,null,null,null,null,122,148,77, 104,108,85, 121,121,106,94, 107,120,101,148,103],
+  wknd: [null,null,null,null,null,123,108,85, 87, 100,96, 99, 72,88, 115,85, 85, 83, 102,119],
 };
 
 const TRIAL={
   labels:WEEKS.labels,isMarch:WEEKS.isMarch,
-  visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286,324,322,321,294,317],
-  trial: [32, 40, 37, 28, 39, 32, 34, 21, 27, 25, 34,29, 25,27, 22, 20,34, 36, 30],
-  conversion:[3,4,4,5,5,8,9,8,8,7,9,12,5,5,13,5,10,14,8],
+  visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286,324,322,321,294,317,317],
+  trial: [32, 40, 37, 28, 39, 32, 34, 21, 27, 25, 34,29, 25,27, 22, 20,34, 36, 30, 30],
+  conversion:[3,4,4,5,5,8,9,8,8,7,9,12,5,5,13,5,10,14,8,11],
 };
 
 
@@ -1147,6 +1148,14 @@ const ADMINS_WEEKLY={
     {name:'Вика',   abon:46600, tovar:10599,shifts:2,shifts_morn:2,shifts_eve:0,shifts_p:1,newQty:1,newRub:7600},
     {name:'Лера З', abon:0,     tovar:0,    shifts:0,shifts_morn:0,shifts_eve:0,shifts_p:0,newQty:0,newRub:0},
   ],
+  '20–26 июл':[
+    {name:'Настя',  abon:199446,tovar:17419,shifts:3,shifts_morn:2,shifts_eve:1,shifts_p:0,newQty:3,newRub:22800},
+    {name:'Марина', abon:161860,tovar:22121,shifts:3,shifts_morn:2,shifts_eve:1,shifts_p:2,newQty:1,newRub:13600},
+    {name:'Лера',   abon:129910,tovar:8630, shifts:3,shifts_morn:1,shifts_eve:2,shifts_p:0,newQty:5,newRub:50000},
+    {name:'Лера З', abon:55020, tovar:2231, shifts:1,shifts_morn:1,shifts_eve:0,shifts_p:1,newQty:0,newRub:0},
+    {name:'Вика',   abon:37180, tovar:12912,shifts:2,shifts_morn:1,shifts_eve:1,shifts_p:1,newQty:0,newRub:0},
+    {name:'Аня К',  abon:17140, tovar:6275, shifts:2,shifts_morn:0,shifts_eve:2,shifts_p:2,newQty:2,newRub:15200},
+  ],
   // Итог мая: услуги из Май услуги.xlsx (оплата с учётом возврата), First из Ферст.xlsx
   'Итог мая':[
     {name:'Марина',abon:738665,tovar:44927,shifts:13,shifts_morn:7,shifts_eve:6,shifts_p:5,newQty:11,newRub:107600,visitors:26},
@@ -1181,8 +1190,8 @@ const ADMINS=prepAdmins(ADMINS_WEEKLY['25–31 мая']);
 const APR_ADMIN_WEEKS=['1–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая'];
 const MAY_ADMIN_WEEKS=['4–10 мая','11–17 мая','18–24 мая','25–31 мая'];
 const JUN_ADMIN_WEEKS=['1–7 июн','8–14 июн','15–21 июн','22–28 июн'];
-const JUL_ADMIN_WEEKS=['22–28 июн','29 июн–5 июл','6–12 июл','13–19 июл'];
-const JUL_WEEKS_ACTUAL=['29 июн–5 июл','6–12 июл','13–19 июл'];
+const JUL_ADMIN_WEEKS=['22–28 июн','29 июн–5 июл','6–12 июл','13–19 июл','20–26 июл'];
+const JUL_WEEKS_ACTUAL=['29 июн–5 июл','6–12 июл','13–19 июл','20–26 июл'];
 
 // TRIAL_PIE / TRIAL_PIE2 агрегируются по всем неделям мая динамически в renderTrialPie()
 const TRIAL_PIE_MAY_WEEKS=['4–10 мая','11–17 мая','18–24 мая','25–31 мая']; // добавлять сюда новые недели мая по мере появления данных
@@ -1272,6 +1281,8 @@ const NEWBIES_WEEKLY={
     types:[{label:'4 занятия',qty:8},{label:'8 занятий',qty:4},{label:'10 майсор',qty:1},{label:'20 занятий',qty:1}]},
   '13–19 июл':{labels:['Лера','Настя','Марина','Вика','Аня К'],qty:[3,2,1,1,1],revenue:[22800,20600,13600,7600,7600],colors:['#A2B9C9','#e8c87a','#5C6937','#F0803B','#aeb49c'],
     types:[{label:'4 занятия',qty:6},{label:'8 занятий',qty:1},{label:'10 майсор',qty:1}]},
+  '20–26 июл':{labels:['Лера','Настя','Аня К','Марина'],qty:[5,3,2,1],revenue:[50000,22800,15200,13600],colors:['#A2B9C9','#e8c87a','#aeb49c','#5C6937'],
+    types:[{label:'4 занятия',qty:8},{label:'8 занятий',qty:3}]},
 };
 const NEWBIES=NEWBIES_WEEKLY['25–31 мая'];
 // TRIAL_PIE агрегируется по всем неделям мая (определяется здесь, после NEWBIES_WEEKLY)
@@ -1293,8 +1304,8 @@ const TRIAL_PIE2_JUN={
 };
 const TRIAL_PIE2_JUL={
   labels:['4 занятия','8 занятий','20 занятий','10 майсор'],
-  qty:   [18,          11,          1,            2],
-  revenue:[136800,     149600,      30300,        26000],
+  qty:   [26,          14,          1,            2],
+  revenue:[197600,     190400,      30300,        26000],
   colors: ['#5c6937','#A2B9C9','#F0803B','#9b89c4']
 };
 
@@ -1463,6 +1474,17 @@ const FIRST_DAY_WEEKLY={
     ],
     total:{trial:32, soldQty:8, soldRub:72200, conv:25}
   },
+  '20–26 июл':{
+    rows:[
+      {name:'Лера',   trial:11, soldQty:5, soldRub:50000, conv:45},
+      {name:'Аня К',  trial:7,  soldQty:2, soldRub:15200, conv:29},
+      {name:'Настя',  trial:6,  soldQty:3, soldRub:22800, conv:50},
+      {name:'Лера З', trial:6,  soldQty:0, soldRub:0,     conv:0},
+      {name:'Марина', trial:5,  soldQty:1, soldRub:13600, conv:20},
+      {name:'Вика',   trial:0,  soldQty:0, soldRub:0,     conv:0},
+    ],
+    total:{trial:35, soldQty:11, soldRub:101600, conv:31}
+  },
 };
 const FIRST_DAY=FIRST_DAY_WEEKLY['25–31 мая'];
 
@@ -1560,9 +1582,9 @@ function switchVisitView(pfx, view, btn){
 
 function buildVisitWeeksChart(canvasId,isMar,idxFilter){
   // Утро 6-11, День 12-16, Вечер 17+
-  const _morn = [null,null,null,null,null,106,81,71,85, 103,137,100,70,65, 115,130,116,110,67];
-  const _eve  = [null,null,null,null,null,130,126,141,104,108,85, 121,121,106,94, 107,120,101,148];
-  const _wknd = [null,null,null,null,null,123,94,85,87, 100,96, 99,72,88, 115,85, 85, 83, 102];
+  const _morn = [null,null,null,null,null,106,81,71,85, 103,137,100,70,65, 115,130,116,110,67, 95];
+  const _eve  = [null,null,null,null,null,130,126,141,104,108,85, 121,121,106,94, 107,120,101,148,103];
+  const _wknd = [null,null,null,null,null,123,94,85,87, 100,96, 99,72,88, 115,85, 85, 83, 102,119];
   const _total= WEEKS.visits;
   const _first= WEEKS.first;
   // Apply index filter for May comparison view
@@ -1755,18 +1777,18 @@ const CATS_WEEKLY = {
     ],
   },
   jul: {
-    cols: ['29 июн–5 июл','6–12 июл','13–19 июл','Итого июль'],
+    cols: ['29 июн–5 июл','6–12 июл','13–19 июл','20–26 июл','Итого июль'],
     rows: [
-      {name:'Абонементы на групповые занятия', vals:[254880,260740,160080,675700]},
-      {name:'Разовые',                          vals:[98200, 88217, 86200, 272617]},
-      {name:'Абонементы индивидуальные',        vals:[41500, 47500, 78500, 167500]},
-      {name:'Абонементы майсор и разовые',      vals:[22400, 33800, 27100, 83300]},
-      {name:'Аренда',                            vals:[21500, 21000, 60500, 103000]},
-      {name:'Мероприятия',                       vals:[-5800,-2800,  0,    -8600]},
-      {name:'Товары',                            vals:[35960, 44935, 45538, 126433]},
-      {name:'Подарочный сертификат',             vals:[2000,  14500, 9580,  26080]},
-      {name:'ОНЛАЙН',                            vals:[14000, 6000,  9000,  29000]},
-      {name:'Прочее (др. студии)',               vals:[6750,  0,     0,     6750]},
+      {name:'Абонементы на групповые занятия', vals:[254880,260740,160080,297828,973528]},
+      {name:'Разовые',                          vals:[98200, 88217, 86200, 97183, 369800]},
+      {name:'Абонементы индивидуальные',        vals:[41500, 47500, 78500, 11500, 179000]},
+      {name:'Абонементы майсор и разовые',      vals:[22400, 33800, 27100, 32200, 115500]},
+      {name:'Аренда',                            vals:[21500, 21000, 60500, 41500, 144500]},
+      {name:'Мероприятия',                       vals:[-5800,-2800,  0,    0,     -8600]},
+      {name:'Товары',                            vals:[35960, 44935, 45538, 55528, 181961]},
+      {name:'Подарочный сертификат',             vals:[2000,  14500, 9580,  11000, 37080]},
+      {name:'ОНЛАЙН',                            vals:[14000, 6000,  9000,  6966,  35966]},
+      {name:'Прочее (др. студии)',               vals:[6750,  0,     0,     0,     6750]},
     ],
   },
 };

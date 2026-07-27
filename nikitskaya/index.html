@@ -2443,8 +2443,9 @@ function renderMonth(prefix){
 
     // График NEWBIES
     if(_newbiesChart){_newbiesChart.destroy();_newbiesChart=null;}
-    if(newbies.labels.length){
-      _newbiesChart=new Chart(document.getElementById(prefix==='may'?'chartMayNewbies':prefix==='jun'?'chartJunNewbies':prefix==='jul'?'chartJulNewbies':'chartAprNewbies'),{type:'bar',
+    const _newbiesCanvas=document.getElementById(prefix==='may'?'chartMayNewbies':prefix==='jun'?'chartJunNewbies':prefix==='jul'?'chartJulNewbies':'chartAprNewbies');
+    if(newbies.labels.length&&_newbiesCanvas){
+      _newbiesChart=new Chart(_newbiesCanvas,{type:'bar',
         data:{labels:newbies.labels,datasets:[{label:'Продажи новичкам',data:newbies.revenue,backgroundColor:newbies.colors,borderRadius:6,
           datalabels:{anchor:'end',align:'end',font:{size:10,weight:'600'},color:G,formatter:v=>Math.round(v/1000)+'к'}}]},
         options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,

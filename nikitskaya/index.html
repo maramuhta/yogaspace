@@ -97,6 +97,25 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
 /* Decorative */
 .deco{position:fixed;border-radius:50%;border:1px solid rgba(92,105,55,.07);pointer-events:none;z-index:0}
 .d1{width:700px;height:700px;top:-300px;right:-200px}.d2{width:500px;height:220px;bottom:100px;left:-150px;transform:rotate(-15deg)}
+/* Товары · категории accordion */
+.tc-admin{border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden}
+.tc-admin-hd{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);cursor:pointer;user-select:none}
+.tc-admin-name{font-weight:600;font-size:13px;color:var(--g);flex:1}
+.tc-admin-tot{font-size:13px;color:var(--o);font-variant-numeric:tabular-nums}
+.tc-admin-arr{font-size:10px;color:var(--muted);transition:transform .18s;display:inline-block}
+.tc-cats{display:none;padding:4px 14px 10px}
+.tc-cats.open{display:block}
+.tc-cat-row{margin-top:5px}
+.tc-cat-hd{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--light);border-radius:7px;cursor:pointer;font-size:12px;user-select:none}
+.tc-cat-name{flex:1;color:var(--g);font-weight:500}
+.tc-cat-amt{color:var(--g);font-variant-numeric:tabular-nums;white-space:nowrap;opacity:.7}
+.tc-cat-arr{font-size:9px;color:var(--muted);transition:transform .15s;display:inline-block}
+.tc-items{display:none;padding:2px 0 0}
+.tc-items.open{display:block}
+.tc-item{display:flex;justify-content:space-between;font-size:11.5px;padding:3px 10px;color:var(--g)}
+.tc-item:nth-child(even){background:var(--bg)}
+.tc-item-name{flex:1;padding-right:12px}
+.tc-item-sum{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -929,6 +948,11 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
       <tbody id="julAdminTable"></tbody>
     </table></div>
   </div>
+  <div class="panel" id="julTovarCatsPanel">
+    <h3>Товары · категории</h3>
+    <div class="panel-sub" id="julTovarCatsLabel">—</div>
+    <div id="julTovarCatsBody"></div>
+  </div>
   <div class="panel">
     <h3>Услуги и товары по администраторам</h3><div class="panel-sub" id="julAdminChartLabel">—</div>
     <div class="chart-h"><canvas id="chartJulAdmins"></canvas></div>
@@ -1192,6 +1216,8 @@ const MAY_ADMIN_WEEKS=['4–10 мая','11–17 мая','18–24 мая','25–3
 const JUN_ADMIN_WEEKS=['1–7 июн','8–14 июн','15–21 июн','22–28 июн'];
 const JUL_ADMIN_WEEKS=['22–28 июн','29 июн–5 июл','6–12 июл','13–19 июл','20–26 июл'];
 const JUL_WEEKS_ACTUAL=['29 июн–5 июл','6–12 июл','13–19 июл','20–26 июл'];
+
+const TOVAR_CATS_WEEKLY={"29 июн–5 июл":{"Марина":[{"c":"Косметика","t":1697,"i":[{"n":"HUMAN BEING роликовые духи","s":1170},{"n":"HUMAN BEING крем для тела","s":527}]},{"c":"Еда/напитки","t":580,"i":[{"n":"BOB батончик.","s":306},{"n":"RAW life чипсы","s":144},{"n":"NO STRESS вода питьевая 0,5","s":130}]}],"Лера З":[{"c":"Ковры","t":5000,"i":[{"n":"BODHI коврик","s":5000}]},{"c":"Аксессуары","t":3600,"i":[{"n":"WHITE SUN колечко","s":3600}]},{"c":"Еда/напитки","t":533,"i":[{"n":"ROCK IT WITH протеиновый брауни","s":380},{"n":"BOB батончик.","s":153}]}],"Аня К":[{"c":"Еда/напитки","t":1730,"i":[{"n":"ROCK IT WITH протеиновый брауни","s":864},{"n":"ROCK IT WITH батончик","s":380},{"n":"ЭТИКА лимонад","s":180},{"n":"ЛАПОЧКА лимонад","s":153},{"n":"BOB шоколад 20 гр","s":153}]},{"c":"Косметика","t":620,"i":[{"n":"HUMAN BEING крем для тела","s":620}]}],"Лера":[{"c":"Еда/напитки","t":1053,"i":[{"n":"RAW life батончик","s":323},{"n":"ROCK IT WITH протеиновый брауни","s":190},{"n":"ЭТИКА лимонад","s":180},{"n":"BOB батончик.","s":180},{"n":"BOB шоколад 20 гр","s":180}]}],"Вика":[{"c":"Одежда","t":5824,"i":[{"n":"МЕРЧ футболка","s":4800},{"n":"Yoga Space футболка \"Эта девушка может все/Yoga is my superpower\"","s":1024}]},{"c":"Еда/напитки","t":3144,"i":[{"n":"ROCK IT WITH батончик","s":1140},{"n":"BOB шоколад 20 гр","s":846},{"n":"ROCK IT WITH протеиновый брауни","s":513},{"n":"IKI кокосовая вода 320 ml","s":190},{"n":"BOB батончик.","s":180},{"n":"RAW life чипсы","s":144},{"n":"NO STRESS вода питьевая 0,5","s":130}]},{"c":"Косметика","t":1997,"i":[{"n":"EX TEMPORE гель для душа","s":697},{"n":"LABORATORIUM скраб 300 мл","s":680},{"n":"HUMAN BEING крем для тела","s":620}]}],"Настя":[{"c":"Еда/напитки","t":1334,"i":[{"n":"BOB батончик.","s":486},{"n":"ROCK IT WITH протеиновый брауни","s":352},{"n":"BOB шоколад 20 гр","s":306},{"n":"ROCK IT WITH батончик","s":190}]},{"c":"Косметика","t":1284,"i":[{"n":"HUMAN BEING крем для тела","s":527},{"n":"HUMAN BEING гель для душа","s":442},{"n":"CH бальзам для губ с суперфудами","s":314}]}]},"6–12 июл":{"Марина":[{"c":"Ковры","t":4250,"i":[{"n":"BODHI коврик","s":4250}]},{"c":"Косметика","t":4118,"i":[{"n":"карта тройка","s":1400},{"n":"OMM BLAT бальзам в кейсе","s":1148},{"n":"ZELENKA дезодорант","s":550},{"n":"HUMAN BEING крем для тела","s":544},{"n":"HUMAN BEING гель для умывания лица","s":476}]},{"c":"Одежда","t":1170,"i":[{"n":"шопер YOGA SPACE","s":1170}]},{"c":"Еда/напитки","t":1168,"i":[{"n":"ROCK IT WITH протеиновый брауни","s":646},{"n":"ЭТИКА лимонад","s":180},{"n":"BOB батончик.","s":180},{"n":"ROCK IT WITH батончик","s":162}]},{"c":"Для дома","t":265,"i":[{"n":"SPIRIT RITUALS пало санто 1 шт","s":265}]}],"Лера З":[{"c":"Косметика","t":756,"i":[{"n":"OMM BLAT бальзам в прозрачной упаковке","s":756}]},{"c":"Еда/напитки","t":674,"i":[{"n":"ROCK IT WITH протеиновый брауни","s":484},{"n":"ROCK IT WITH батончик","s":190}]}],"Аня К":[{"c":"Косметика","t":3600,"i":[{"n":"YOGA SPACE крем 50 мл","s":2900},{"n":"LABORATORIUM дезодорант твердый 14 мл","s":700}]},{"c":"Еда/напитки","t":1862,"i":[{"n":"ROCK IT WITH протеиновый брауни","s":646},{"n":"LU.CO. дрип с собачками","s":513},{"n":"ROCK IT WITH батончик","s":380},{"n":"IKI кокосовая вода 320 ml","s":323}]}],"Вика":[{"c":"Одежда","t":3960,"i":[{"n":"ГЕРБАРИЙ футболка","s":2600},{"n":"шопер YOGA SPACE","s":1360}]},{"c":"Аксессуары","t":3000,"i":[{"n":"АУТЕНТИЧНО моносерьга","s":3000}]},{"c":"Еда/напитки","t":2795,"i":[{"n":"ROCK IT WITH батончик","s":950},{"n":"ROCK IT WITH протеиновый брауни","s":703},{"n":"BOB шоколад 20 гр","s":360},{"n":"SATTVA пастила","s":314},{"n":"RAW life батончик","s":162},{"n":"BOB батончик.","s":153},{"n":"LU.CO. дрип с собачками","s":153}]},{"c":"Косметика","t":2440,"i":[{"n":"YOGA SPACE крем 50 мл","s":1450},{"n":"EX TEMPORE гель для душа","s":990}]}],"Настя":[{"c":"Косметика","t":8595,"i":[{"n":"HUMAN BEING роликовые духи","s":2340},{"n":"OMM BLAT бальзам в прозрачной упаковке","s":1780},{"n":"ZELENKA арома-спрей","s":1380},{"n":"ZELENKA свеча","s":1260},{"n":"HUMAN BEING крем для тела","s":1240},{"n":"LABORATORIUM дезодорант твердый 14 мл","s":595}]},{"c":"Еда/напитки","t":3432,"i":[{"n":"BOB батончик.","s":639},{"n":"CHABO чай","s":550},{"n":"ЭТИКА лимонад","s":486},{"n":"LU.CO. дрип с собачками","s":458},{"n":"ROCK IT WITH батончик","s":323},{"n":"SATTVA пастила","s":314},{"n":"IKI кокосовая вода 320 ml","s":190},{"n":"BOB шоколад 20 гр","s":180},{"n":"RAW life батончик","s":162},{"n":"NO STRESS вода питьевая 0,5","s":130}]},{"c":"Аксессуары","t":1800,"i":[{"n":"WHITE SUN колечко","s":1800}]},{"c":"Для дома","t":860,"i":[{"n":"PURE IN благовония","s":650},{"n":"благовония SATYA","s":210}]}]},"13–19 июл":{"Марина":[{"c":"Одежда","t":9500,"i":[{"n":"Absolute Venus футболка ЛЕО","s":5900},{"n":"ГЕРБАРИЙ футболка (плотный хлопок)","s":3600}]},{"c":"Еда/напитки","t":1408,"i":[{"n":"ROCK IT WITH протеиновый брауни","s":513},{"n":"BOB шоколад 20 гр","s":360},{"n":"IKI кокосовая вода 320 ml","s":323},{"n":"RAW TO GO пикник (в прозрачной упаковке)","s":212}]},{"c":"Косметика","t":586,"i":[{"n":"ZELENKA арома-спрей","s":586}]},{"c":"Для дома","t":210,"i":[{"n":"благовония SATYA","s":210}]}],"Аня К":[{"c":"Еда/напитки","t":2010,"i":[{"n":"ROCK IT WITH протеиновый брауни","s":1026},{"n":"IKI кокосовая вода 320 ml","s":190},{"n":"ЭТИКА лимонад","s":180},{"n":"RAW life чипсы","s":170},{"n":"RAW TO GO батончик в коробке","s":161},{"n":"BOB батончик.","s":153},{"n":"NO STRESS вода питьевая 0,5","s":130}]},{"c":"Косметика","t":955,"i":[{"n":"HUMAN BEING роликовые духи","s":585},{"n":"CH бальзам для губ с суперфудами","s":370}]},{"c":"Одежда","t":500,"i":[{"n":"ГЕРБАРИЙ носки","s":500}]}],"Лера":[{"c":"Для дома","t":3672,"i":[{"n":"LOVELY DAY свеча 180 мл","s":2260},{"n":"PURE IN благовония","s":1202},{"n":"благовония SATYA","s":210}]},{"c":"Одежда","t":2600,"i":[{"n":"ГЕРБАРИЙ футболка","s":2600}]},{"c":"Косметика","t":1420,"i":[{"n":"ТЕРМАЛЬНЫЙ ИСТОЧНИК свеча.","s":1420}]},{"c":"Еда/напитки","t":703,"i":[{"n":"IKI кокосовая вода 320 ml","s":190},{"n":"ROCK IT WITH протеиновый брауни","s":190},{"n":"RAW life чипсы","s":170},{"n":"BOB батончик.","s":153}]}],"Вика":[{"c":"Еда/напитки","t":3839,"i":[{"n":"ROCK IT WITH батончик","s":1492},{"n":"RAW TO GO пикник (в прозрачной упаковке)","s":1388},{"n":"IKI кокосовая вода 320 ml","s":637},{"n":"RAW TO GO батончик в коробке","s":162},{"n":"ROCK IT WITH протеиновый брауни","s":162}]},{"c":"Аксессуары","t":3700,"i":[{"n":"АУТЕНТИЧНО кулон на цепочке","s":3700}]},{"c":"Одежда","t":1785,"i":[{"n":"шопер мерч из плотной ткани","s":1785}]},{"c":"Косметика","t":1275,"i":[{"n":"ZELENKA арома-спрей","s":690},{"n":"HUMAN BEING роликовые духи","s":585}]}],"Настя":[{"c":"Еда/напитки","t":5355,"i":[{"n":"SHROOM SHROOM какао kids, love, dream","s":2400},{"n":"RAW TO GO бисквит / пончик","s":1020},{"n":"ROCK IT WITH протеиновый брауни","s":484},{"n":"BOB шоколад 20 гр","s":402},{"n":"RAW TO GO пикник (в прозрачной упаковке)","s":212},{"n":"ROCK IT WITH батончик","s":202},{"n":"IKI кокосовая вода 320 ml","s":190},{"n":"LU.CO. дрип с собачками","s":180},{"n":"ЭТИКА лимонад","s":153},{"n":"NO STRESS вода питьевая 0,5","s":110}]},{"c":"Косметика","t":3030,"i":[{"n":"YOGA SPACE крем 50 мл","s":1450},{"n":"99NN's крем для рук","s":680},{"n":"HUMAN BEING роликовые духи","s":585},{"n":"CH бальзам для губ с суперфудами","s":314}]},{"c":"Одежда","t":2990,"i":[{"n":"INNEME топ","s":2990}]}]},"20–26 июл":{"Марина":[{"c":"Одежда","t":14380,"i":[{"n":"SALTIBI лонгслив вены (красный, черный, белый)","s":8600},{"n":"INNEME топ","s":2990},{"n":"INNEME шорты / велосипедки","s":2790}]},{"c":"Еда/напитки","t":3699,"i":[{"n":"RAW TO GO пикник (в прозрачной упаковке)","s":925},{"n":"RAW TO GO батончик в коробке","s":893},{"n":"IKI кокосовая вода 320 ml","s":760},{"n":"ЭТИКА лимонад","s":333},{"n":"RAW TO GO бисквит / пончик","s":265},{"n":"ROCK IT WITH батончик","s":190},{"n":"ЛАПОЧКА лимонад","s":180},{"n":"BOB шоколад 20 гр","s":153}]},{"c":"Косметика","t":1702,"i":[{"n":"HUMAN BEING арома-спрей","s":590},{"n":"HUMAN BEING роликовые духи","s":585},{"n":"HUMAN BEING крем для тела","s":527}]},{"c":"Для дома","t":650,"i":[{"n":"PURE IN благовония","s":650}]}],"Лера З":[{"c":"Еда/напитки","t":871,"i":[{"n":"RAW TO GO бисквит / пончик","s":225},{"n":"RAW TO GO пикник (в прозрачной упаковке)","s":212},{"n":"IKI кокосовая вода 320 ml","s":162},{"n":"RAW TO GO батончик в коробке","s":162},{"n":"RE-FEEL мармелад","s":110}]}],"Аня К":[{"c":"Косметика","t":3045,"i":[{"n":"ZELENKA арома-спрей","s":1380},{"n":"HUMAN BEING арома-спрей","s":590},{"n":"HUMAN BEING роликовые духи","s":585},{"n":"ZELENKA мыло сфера","s":490}]},{"c":"Одежда","t":1360,"i":[{"n":"шопер YOGA SPACE","s":1360}]},{"c":"Еда/напитки","t":810,"i":[{"n":"SATTVA пастила","s":370},{"n":"RAW TO GO пикник (в прозрачной упаковке)","s":250},{"n":"RAW TO GO батончик в коробке","s":190}]},{"c":"Аксессуары","t":60,"i":[{"n":"наклейка","s":60}]}],"Лера":[{"c":"Еда/напитки","t":2958,"i":[{"n":"RAW TO GO пикник (в прозрачной упаковке)","s":1175},{"n":"RAW TO GO бисквит / пончик","s":755},{"n":"RAW TO GO батончик в коробке","s":352},{"n":"ЭТИКА лимонад","s":306},{"n":"IKI кокосовая вода 320 ml","s":190},{"n":"BOB батончик.","s":180}]},{"c":"Косметика","t":2110,"i":[{"n":"HUMAN BEING роликовые духи","s":1170},{"n":"LABORATORIUM дезодорант роликовый","s":940}]},{"c":"Одежда","t":1800,"i":[{"n":"ГЕРБАРИЙ кепка","s":1800}]},{"c":"Ковры","t":1210,"i":[{"n":"YOGAMATIC подушечка на глаза","s":1210}]},{"c":"Для дома","t":552,"i":[{"n":"PURE IN благовония","s":552}]}],"Вика":[{"c":"Еда/напитки","t":2912,"i":[{"n":"SATTVA пастила","s":740},{"n":"RAW TO GO пикник (в прозрачной упаковке)","s":675},{"n":"RAW TO GO бисквит / пончик","s":649},{"n":"IKI кокосовая вода 320 ml","s":352},{"n":"RAW TO GO батончик в коробке","s":190},{"n":"BOB батончик.","s":153},{"n":"BOB шоколад 20 гр","s":153}]}],"Настя":[{"c":"Одежда","t":7285,"i":[{"n":"UNDA шорты BIKE MINI SOFT","s":5485},{"n":"ГЕРБАРИЙ кепка","s":1800}]},{"c":"Еда/напитки","t":6624,"i":[{"n":"RAW TO GO пикник (в прозрачной упаковке)","s":1798},{"n":"RAW TO GO бисквит / пончик","s":1681},{"n":"IKI кокосовая вода 320 ml","s":1244},{"n":"RAW TO GO батончик в коробке","s":1244},{"n":"BOB батончик.","s":180},{"n":"RAW life чипсы","s":170},{"n":"ЭТИКА лимонад","s":153},{"n":"BOB шоколад 20 гр","s":153}]},{"c":"Косметика","t":2000,"i":[{"n":"YOGA SPACE крем 50 мл","s":1450},{"n":"ZELENKA дезодорант","s":550}]}]}};
 
 // TRIAL_PIE / TRIAL_PIE2 агрегируются по всем неделям мая динамически в renderTrialPie()
 const TRIAL_PIE_MAY_WEEKS=['4–10 мая','11–17 мая','18–24 мая','25–31 мая']; // добавлять сюда новые недели мая по мере появления данных
@@ -2516,6 +2542,77 @@ function renderMonth(prefix){
         shiftsBl.innerHTML=html;
       }
     }
+    if(isJul) renderTovarCats(weekKey);
+  }
+
+  function renderTovarCats(weekKey){
+    const body=document.getElementById('julTovarCatsBody');
+    const lbl=document.getElementById('julTovarCatsLabel');
+    if(!body||!lbl) return;
+    const isTotal=(weekKey==='Итог июля');
+    lbl.textContent=isTotal?'Итог июля':weekKey;
+
+    let data={};
+    if(isTotal){
+      JUL_WEEKS_ACTUAL.forEach(wk=>{
+        const wData=TOVAR_CATS_WEEKLY[wk]||{};
+        Object.entries(wData).forEach(([admin,cats])=>{
+          if(!data[admin]) data[admin]={};
+          cats.forEach(cat=>{
+            if(!data[admin][cat.c]) data[admin][cat.c]={t:0,items:{}};
+            data[admin][cat.c].t+=cat.t;
+            cat.i.forEach(item=>{
+              data[admin][cat.c].items[item.n]=(data[admin][cat.c].items[item.n]||0)+item.s;
+            });
+          });
+        });
+      });
+      const converted={};
+      Object.keys(data).forEach(admin=>{
+        converted[admin]=Object.entries(data[admin]).map(([c,d])=>({
+          c,t:d.t,
+          i:Object.entries(d.items).map(([n,s])=>({n,s})).sort((a,b)=>b.s-a.s)
+        })).sort((a,b)=>b.t-a.t);
+      });
+      data=converted;
+    } else {
+      data=TOVAR_CATS_WEEKLY[weekKey]||{};
+    }
+
+    const admins=Object.entries(data).sort((a,b)=>{
+      return b[1].reduce((s,c)=>s+c.t,0)-a[1].reduce((s,c)=>s+c.t,0);
+    });
+
+    if(!admins.length){body.innerHTML='<p style="color:var(--muted);font-size:12px;padding:8px 0">Нет данных за эту неделю</p>';return;}
+
+    const CAT_COLORS={'Еда/напитки':'#e8c87a','Косметика':'#A2B9C9','Одежда':'#5C6937','Аксессуары':'#9b89c4','Для дома':'#F0803B','Ковры':'#aeb49c','Ковры':'#8d6e63','Сертификат на сумму (Никитская)':'#78909c'};
+
+    body.innerHTML=admins.map(([admin,cats])=>{
+      const total=cats.reduce((s,c)=>s+c.t,0);
+      const catsHtml=cats.map(cat=>{
+        const col=CAT_COLORS[cat.c]||'var(--sage)';
+        const itemsHtml=cat.i.map(item=>
+          `<div class="tc-item"><span class="tc-item-name">${item.n}</span><span class="tc-item-sum">${fmt(item.s)}</span></div>`
+        ).join('');
+        return `<div class="tc-cat-row">
+          <div class="tc-cat-hd" onclick="var it=this.nextElementSibling,ar=this.querySelector('.tc-cat-arr');it.classList.toggle('open');ar.style.transform=it.classList.contains('open')?'rotate(90deg)':''">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${col};flex-shrink:0"></span>
+            <span class="tc-cat-name">${cat.c}</span>
+            <span class="tc-cat-amt">${fmt(cat.t)}</span>
+            <span class="tc-cat-arr">▶</span>
+          </div>
+          <div class="tc-items">${itemsHtml}</div>
+        </div>`;
+      }).join('');
+      return `<div class="tc-admin">
+        <div class="tc-admin-hd" onclick="var ct=this.nextElementSibling,ar=this.querySelector('.tc-admin-arr');ct.classList.toggle('open');ar.style.transform=ct.classList.contains('open')?'rotate(90deg)':''">
+          <span class="tc-admin-arr">▶</span>
+          <span class="tc-admin-name">${admin}</span>
+          <span class="tc-admin-tot">${fmt(total)} ₽</span>
+        </div>
+        <div class="tc-cats">${catsHtml}</div>
+      </div>`;
+    }).join('');
   }
 
   // ── INIT tabs ──

@@ -2550,6 +2550,8 @@ function renderMonth(prefix){
     const isTotal=(weekKey==='Итог июля');
     lbl.textContent=isTotal?'Итог июля':weekKey;
 
+    // ── Сбор данных ──
+    const CAT_COLORS={'Еда/напитки':'#e8c87a','Косметика':'#A2B9C9','Одежда':'#5C6937','Аксессуары':'#9b89c4','Для дома':'#F0803B','Ковры':'#8d6e63','Сертификат на сумму (Никитская)':'#78909c'};
     let data={};
     if(isTotal){
       JUL_WEEKS_ACTUAL.forEach(wk=>{
@@ -2559,57 +2561,78 @@ function renderMonth(prefix){
           cats.forEach(cat=>{
             if(!data[admin][cat.c]) data[admin][cat.c]={t:0,items:{}};
             data[admin][cat.c].t+=cat.t;
-            cat.i.forEach(item=>{
-              data[admin][cat.c].items[item.n]=(data[admin][cat.c].items[item.n]||0)+item.s;
-            });
+            cat.i.forEach(item=>{data[admin][cat.c].items[item.n]=(data[admin][cat.c].items[item.n]||0)+item.s;});
           });
         });
       });
-      const converted={};
+      const conv={};
       Object.keys(data).forEach(admin=>{
-        converted[admin]=Object.entries(data[admin]).map(([c,d])=>({
-          c,t:d.t,
-          i:Object.entries(d.items).map(([n,s])=>({n,s})).sort((a,b)=>b.s-a.s)
-        })).sort((a,b)=>b.t-a.t);
+        conv[admin]=Object.entries(data[admin]).map(([c,d])=>({c,t:d.t,i:Object.entries(d.items).map(([n,s])=>({n,s})).sort((a,b)=>b.s-a.s)})).sort((a,b)=>b.t-a.t);
       });
-      data=converted;
+      data=conv;
     } else {
       data=TOVAR_CATS_WEEKLY[weekKey]||{};
     }
 
-    const admins=Object.entries(data).sort((a,b)=>{
-      return b[1].reduce((s,c)=>s+c.t,0)-a[1].reduce((s,c)=>s+c.t,0);
-    });
-
+    const admins=Object.entries(data).sort((a,b)=>b[1].reduce((s,c)=>s+c.t,0)-a[1].reduce((s,c)=>s+c.t,0));
     if(!admins.length){body.innerHTML='<p style="color:var(--muted);font-size:12px;padding:8px 0">Нет данных за эту неделю</p>';return;}
 
-    const CAT_COLORS={'Еда/напитки':'#e8c87a','Косметика':'#A2B9C9','Одежда':'#5C6937','Аксессуары':'#9b89c4','Для дома':'#F0803B','Ковры':'#aeb49c','Ковры':'#8d6e63','Сертификат на сумму (Никитская)':'#78909c'};
+    // ── Категории присутствующие в этих данных ──
+    const allCats=[...new Set(admins.flatMap(([,cats])=>cats.map(c=>c.c)))];
+    const adminNames=admins.map(([a])=>a);
 
-    body.innerHTML=admins.map(([admin,cats])=>{
-      const total=cats.reduce((s,c)=>s+c.t,0);
-      const catsHtml=cats.map(cat=>{
-        const col=CAT_COLORS[cat.c]||'var(--sage)';
-        const itemsHtml=cat.i.map(item=>
-          `<div class="tc-item"><span class="tc-item-name">${item.n}</span><span class="tc-item-sum">${fmt(item.s)}</span></div>`
-        ).join('');
-        return `<div class="tc-cat-row">
-          <div class="tc-cat-hd" onclick="var it=this.nextElementSibling,ar=this.querySelector('.tc-cat-arr');it.classList.toggle('open');ar.style.transform=it.classList.contains('open')?'rotate(90deg)':''">
-            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${col};flex-shrink:0"></span>
-            <span class="tc-cat-name">${cat.c}</span>
-            <span class="tc-cat-amt">${fmt(cat.t)}</span>
-            <span class="tc-cat-arr">▶</span>
-          </div>
-          <div class="tc-items">${itemsHtml}</div>
-        </div>`;
-      }).join('');
-      return `<div class="tc-admin">
-        <div class="tc-admin-hd">
-          <span class="tc-admin-name">${admin}</span>
-          <span class="tc-admin-tot">${fmt(total)} ₽</span>
-        </div>
-        <div class="tc-cats">${catsHtml}</div>
-      </div>`;
-    }).join('');
+    // ── Chart.js stacked bar ──
+    const datasets=allCats.map(cat=>({
+      label:cat,
+      data:adminNames.map(admin=>{const e=(data[admin]||[]).find(c=>c.c===cat);return e?e.t:0;}),
+      backgroundColor:CAT_COLORS[cat]||'#aeb49c',
+      borderRadius:3,
+      borderSkipped:false,
+    }));
+
+    // ── TOP-15 позиций ──
+    const allItems=[];
+    admins.forEach(([admin,cats])=>{cats.forEach(cat=>{cat.i.forEach(item=>{allItems.push({admin,cat:cat.c,name:item.n,sum:item.s});});});});
+    allItems.sort((a,b)=>b.sum-a.sum);
+    const top15=allItems.slice(0,15);
+
+    // ── Легенда ──
+    const legendHtml=allCats.map(c=>`<div class="leg"><div class="leg-dot" style="background:${CAT_COLORS[c]||'#aeb49c'}"></div>${c}</div>`).join('');
+
+    // ── TOP-15 строки ──
+    const rowsHtml=top15.map((item,i)=>`<tr>
+      <td class="r" style="color:var(--muted);font-size:11px">${i+1}</td>
+      <td>${item.name}</td>
+      <td><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:${CAT_COLORS[item.cat]||'#aeb49c'};flex-shrink:0"></span>${item.cat}</span></td>
+      <td style="font-weight:500">${item.admin}</td>
+      <td class="r">${fmt(item.sum)}</td>
+    </tr>`).join('');
+
+    body.innerHTML=`
+      <div style="position:relative;height:240px;margin-bottom:14px"><canvas id="chartTovarCats"></canvas></div>
+      <div class="legend" style="margin-bottom:20px">${legendHtml}</div>
+      <p style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Топ 15 позиций по выручке</p>
+      <div class="twrap"><table>
+        <thead><tr><th class="r" style="width:22px">#</th><th>Позиция</th><th>Категория</th><th>Администратор</th><th class="r">Сумма</th></tr></thead>
+        <tbody>${rowsHtml}</tbody>
+      </table></div>`;
+
+    if(window._tovarCatsChart){window._tovarCatsChart.destroy();window._tovarCatsChart=null;}
+    const ctx=document.getElementById('chartTovarCats');
+    if(ctx){
+      window._tovarCatsChart=new Chart(ctx,{
+        type:'bar',
+        data:{labels:adminNames,datasets},
+        options:{
+          responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:false},datalabels:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.dataset.label+': '+fmt(c.raw);},title:function(c){return c[0].label;}}}},
+          scales:{
+            x:{stacked:true,grid:{display:false},ticks:{font:{family:'Montserrat',size:11}}},
+            y:{stacked:true,grid:{color:'rgba(92,105,55,0.07)'},ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'к':v,font:{size:10}}}
+          }
+        }
+      });
+    }
   }
 
   // ── INIT tabs ──

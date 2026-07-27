@@ -952,17 +952,9 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
     <div id="julTovarCatsBody"></div>
   </div>
   <div class="panel">
-    <h3>Продажи новичкам — First 20%</h3><div class="panel-sub"></div>
-    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
-      <div style="flex:1;min-width:260px;position:relative;height:200px"><canvas id="chartJulNewbies"></canvas></div>
-      <div id="julNewbiesLegend" style="flex:1;min-width:200px;font-size:12px;line-height:2.1;align-self:center"></div>
-    </div>
-    <div id="julNewbiesTypes" style="margin-top:12px;padding-top:10px;border-top:1px solid var(--light);display:none"></div>
-  </div>
-  <div class="panel">
     <h3>Продажа первого абонемента новичкам Недели</h3><div class="panel-sub" id="julFirstDayLabel">—</div>
     <div class="twrap"><table>
-      <thead><tr><th>Администратор</th><th class="r">Пробных гостей</th><th class="r">Продажи, шт.</th><th class="r">Продажи, руб.</th><th class="r">Конверсия</th></tr></thead>
+      <thead><tr><th>Администратор</th><th class="r">Пробных гостей</th><th class="r">Продажи, шт.</th><th class="r">Продажи, руб.</th><th class="r">Конверсия</th><th>Тип абонементов</th></tr></thead>
       <tbody id="julFirstDayTable"></tbody>
     </table></div>
   </div>
@@ -2483,24 +2475,35 @@ function renderMonth(prefix){
 
     // Таблица FIRST_DAY
     const fdTb=document.getElementById(prefix==='may'?'mayFirstDayTable':prefix==='jun'?'junFirstDayTable':prefix==='jul'?'julFirstDayTable':'aFirstDayTable');if(fdTb)fdTb.innerHTML='';
+    const _hasTypeCol=(prefix==='jul');
     if(fdTb&&firstDay.rows.length){
       firstDay.rows.forEach(r=>{
         const tr=document.createElement('tr');
         const convColor=r.conv>=30?G:r.conv>=15?O:'#bbb';
+        const typeCell=_hasTypeCol?'<td></td>':'';
         tr.innerHTML=`<td style="font-weight:500">${r.name}</td>
           <td class="r">${r.trial}</td>
           <td class="r">${r.soldQty>0?'<b>'+r.soldQty+'</b>':'—'}</td>
           <td class="r">${r.soldRub>0?fmt(r.soldRub):'—'}</td>
-          <td class="r"><span style="color:${convColor};font-weight:600">${r.conv}%</span></td>`;
+          <td class="r"><span style="color:${convColor};font-weight:600">${r.conv}%</span></td>${typeCell}`;
         fdTb.appendChild(tr);
       });
+      // Разбивка по типам для строки Итого
+      let typesHtml='';
+      if(_hasTypeCol){
+        const typeColors=['#5c6937','#A2B9C9','#F0803B','#9b89c4','#aeb49c','#e8c87a'];
+        const types=newbies.types||[];
+        typesHtml='<td style="white-space:nowrap">'+types.map((t,i)=>
+          `<span style="display:inline-flex;align-items:center;gap:4px;background:${typeColors[i%typeColors.length]}18;border:1px solid ${typeColors[i%typeColors.length]}44;border-radius:16px;padding:2px 8px;font-size:11px;margin:1px 3px 1px 0"><span style="width:6px;height:6px;border-radius:50%;background:${typeColors[i%typeColors.length]};flex-shrink:0"></span>${t.label} — ${t.qty} шт.</span>`
+        ).join('')+'</td>';
+      }
       const tfoot=document.createElement('tr');
       tfoot.className='tfoot';
       tfoot.innerHTML=`<td>Итого</td>
         <td class="r">${firstDay.total.trial}</td>
         <td class="r"><b>${firstDay.total.soldQty}</b></td>
         <td class="r">${fmt(firstDay.total.soldRub)}</td>
-        <td class="r"><span style="font-weight:600">${firstDay.total.conv}%</span></td>`;
+        <td class="r"><span style="font-weight:600">${firstDay.total.conv}%</span></td>${typesHtml}`;
       fdTb.appendChild(tfoot);
     }
     // ── Разбивка смен для Итог мая ──

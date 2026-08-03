@@ -2112,7 +2112,8 @@ function renderMonth(prefix){
     const augIdx0=WEEKS.isAugust?WEEKS.isAugust.map((m,i)=>m?i:-1).filter(i=>i>=0):[];
     const lastAprI=aprIdx0.length>0?aprIdx0[aprIdx0.length-1]:null;
     const lastJunI=junIdx0.length>0?junIdx0[junIdx0.length-1]:null;
-    const lastJulI=(()=>{const julOnly=W.isJuly.map((m,i)=>(m&&!(WEEKS.isAugust&&WEEKS.isAugust[i]))?i:-1).filter(i=>i>=0);return julOnly.length>0?julOnly[julOnly.length-1]:null;})();
+    const julOnlyIdx=WEEKS.isJuly?WEEKS.isJuly.map((m,i)=>(m&&!(WEEKS.isAugust&&WEEKS.isAugust[i]))?i:-1).filter(i=>i>=0):[];
+    const lastJulI=julOnlyIdx.length>0?julOnlyIdx[julOnlyIdx.length-1]:null;
     const curMonthIdx=isMar?marchIdx:isMay?mayIdx0:isJun?junIdx0:isJul?julIdx0:isAug?augIdx0:aprIdx0;
     const official=isMar?null:isMay?(MONTHLY.may||null):isJun?(MONTHLY.jun||null):isJul?(MONTHLY.jul||null):isAug?(MONTHLY.aug||null):(MONTHLY.apr||null);
     const totalAll=official?official.total:curMonthIdx.reduce((s,i)=>s+W.total[i],0);
@@ -2372,7 +2373,8 @@ function renderMonth(prefix){
     const P=prefix==='mar'?'Mar':prefix==='may'?'May':prefix==='jun'?'Jun':prefix==='jul'?'Jul':prefix==='aug'?'Aug':'Apr';
     const lastAprIdxV2=aprIdx.length>0?aprIdx[aprIdx.length-1]:null;
     const lastJunIdxV=junIdxV.length>0?junIdxV[junIdxV.length-1]:null;
-    const lastJulIdxV=(()=>{const julOnlyV=W.isJuly.map((m,i)=>(m&&!(WEEKS.isAugust&&WEEKS.isAugust[i]))?i:-1).filter(i=>i>=0);return julOnlyV.length>0?julOnlyV[julOnlyV.length-1]:null;})();
+    const julOnlyIdxV=WEEKS.isJuly?WEEKS.isJuly.map((m,i)=>(m&&!(WEEKS.isAugust&&WEEKS.isAugust[i]))?i:-1).filter(i=>i>=0):[];
+    const lastJulIdxV=julOnlyIdxV.length>0?julOnlyIdxV[julOnlyIdxV.length-1]:null;
     const visIdxFilter=isMay?(lastAprIdxV2!==null?[lastAprIdxV2,...mayIdxV]:mayIdxV):isJun?junIdxV:isJul?(lastJunIdxV!==null?[lastJunIdxV,...julIdxV]:julIdxV):isAug?(lastJulIdxV!==null?[lastJulIdxV,...augIdxV]:augIdxV):null;
     _visitCharts[prefix]=buildVisitWeeksChart('chart'+P+'Visits',isMar,visIdxFilter);
 

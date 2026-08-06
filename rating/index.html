@@ -175,7 +175,7 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
     </div>
     <h1>Сердца <i>Yoga Space</i></h1>
     <div class="period" style="font-size:13px;color:rgba(253,246,240,.75);font-family:'Noto Serif Display',serif;font-style:italic;letter-spacing:.04em;margin-bottom:.4rem">Эти девушки могут всё</div>
-    <div class="period">ИЮНЬ 2026</div>
+    <div class="period">ИЮЛЬ 2026</div>
   </div>
 </div>
 
@@ -185,7 +185,8 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;flex-wrap:wrap">
       <div id="winners-label" style="font-family:'Unbounded',sans-serif;font-size:11px;letter-spacing:.1em;color:#5C6937;white-space:nowrap">ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ</div>
       <div style="display:flex;gap:6px;margin-left:4px">
-        <button id="wbtn-jun" onclick="renderWinners('jun')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid #5C6937;background:#5C6937;color:#FDF6F0;cursor:pointer">ИЮНЬ</button>
+        <button id="wbtn-jul" onclick="renderWinners('jul')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid #5C6937;background:#5C6937;color:#FDF6F0;cursor:pointer">ИЮЛЬ</button>
+        <button id="wbtn-jun" onclick="renderWinners('jun')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">ИЮНЬ</button>
         <button id="wbtn-q2"  onclick="renderWinners('q2')"  style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">2 КВАРТАЛ</button>
       </div>
       <div style="flex:1;height:1px;background:rgba(92,105,55,.2);min-width:20px"></div>
@@ -223,7 +224,7 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
     <span style="font-family:'Unbounded',sans-serif;font-size:9px;color:rgba(253,246,240,.4);letter-spacing:.1em">YOGA SPACE</span>
   </div>
   <span>© <a href="https://yogaspace.ru">yogaspace.ru</a></span>
-  <span>ИЮНЬ 2026</span>
+  <span>ИЮЛЬ 2026</span>
 </div>
 
 <script>
@@ -409,6 +410,16 @@ const monthlyData = {
       {name:'Кузнецова Варя',      смены:9,  утро:0, вечер:9, пом:1, usl:704895, tov:84312,  ps:87690,  fsh:6,  fr:36000,  пробные:35},
       {name:'Соболева Ирина',      смены:8,  утро:5, вечер:3, пом:4, usl:358025, tov:41030,  ps:49882,  fsh:6,  fr:60160,  пробные:27},
     ],
+    jul: [
+      {name:'Андриянова Аня',      смены:9,  утро:0, вечер:9, пом:6, usl:755765, tov:102861, ps:95403, fsh:16, fr:127200, пробные:30},
+      {name:'Коклева Лада',        смены:9,  утро:2, вечер:7, пом:6, usl:566511, tov:85853,  ps:72485, fsh:7,  fr:42000,  пробные:51},
+      {name:'Кузнецова Варя',      смены:7,  утро:2, вечер:5, пом:2, usl:456634, tov:60765,  ps:73914, fsh:7,  fr:55920,  пробные:33},
+      {name:'Антропова Вероника',  смены:9,  утро:9, вечер:0, пом:5, usl:570625, tov:58559,  ps:69909, fsh:11, fr:96720,  пробные:40},
+      {name:'Гасимова Карина',     смены:9,  утро:4, вечер:5, пом:8, usl:435800, tov:115049, ps:61205, fsh:11, fr:81840,  пробные:48},
+      {name:'Корниенко Екатерина', смены:7,  утро:6, вечер:1, пом:6, usl:373100, tov:87236,  ps:65762, fsh:7,  fr:47120,  пробные:28},
+      {name:'Соболева Ирина',      смены:10, утро:7, вечер:3, пом:3, usl:434715, tov:86326,  ps:52104, fsh:13, fr:117440, пробные:61},
+      {name:'Яна',                 смены:2,  утро:1, вечер:1, пом:3, usl:142720, tov:19502,  ps:81111, fsh:4,  fr:38800,  пробные:9},
+    ],
   },
   'Мясницкая': {
     hasFst: true,
@@ -463,6 +474,15 @@ const monthlyData = {
       {name:'Павлова Виктория',  смены:8,  утро:4,  вечер:4,  пом:5,  usl:505749,  tov:46680,  ps:69054, fsh:10, fr:94880,  пробные:35},
       {name:'Смокот Полина',     смены:15, утро:9,  вечер:6,  пом:4,  usl:864829,  tov:89515,  ps:63623, fsh:13, fr:109200, пробные:45},
     ],
+    jul: [
+      {name:'Смокот Полина',    смены:16, утро:7, вечер:9, пом:5, usl:950416, tov:72894,  ps:63957, fsh:20, fr:175840, пробные:86},
+      {name:'Воробьева Ольга',  смены:13, утро:5, вечер:8, пом:7, usl:634869, tov:77570,  ps:54803, fsh:15, fr:137440, пробные:67},
+      {name:'Корнеева Ольга',   смены:10, утро:2, вечер:8, пом:2, usl:531225, tov:77209,  ps:60843, fsh:5,  fr:35120,  пробные:57},
+      {name:'Григорова Дарья',  смены:9,  утро:8, вечер:1, пом:2, usl:426635, tov:81691,  ps:56481, fsh:6,  fr:46720,  пробные:36},
+      {name:'Зубкова Алена',    смены:6,  утро:3, вечер:3, пом:3, usl:276400, tov:37694,  ps:52349, fsh:6,  fr:65920,  пробные:28},
+      {name:'Вика',             смены:6,  утро:4, вечер:2, пом:6, usl:221605, tov:19105,  ps:40118, fsh:9,  fr:83760,  пробные:30},
+      {name:'Наташа',           смены:1,  утро:1, вечер:0, пом:4, usl:24200,  tov:13509,  ps:37709, fsh:1,  fr:5000,   пробные:3},
+    ],
   },
   'Никитская': {
     hasFst: true,
@@ -513,6 +533,14 @@ const monthlyData = {
       {name:'Мохова Валерия',      смены:8,  утро:0,  вечер:8, пом:3, usl:196850, tov:22034, ps:27361, fsh:4,  fr:59100,  пробные:16},
       {name:'Сидякина Виктория',   смены:5,  утро:5,  вечер:0, пом:5, usl:149199, tov:11000, ps:32040, fsh:2,  fr:21200,  пробные:8},
       {name:'Солодовникова Настя', смены:10, утро:3,  вечер:7, пом:4, usl:193500, tov:21412, ps:21491, fsh:2,  fr:21200,  пробные:11},
+    ],
+    jul: [
+      {name:'Барышникова Марина',  смены:17, утро:10, вечер:7, пом:2, usl:598610, tov:78379,  ps:39823, fsh:15, fr:172000, пробные:40},
+      {name:'Кормилицина Анна',    смены:11, утро:3,  вечер:8, пом:8, usl:281952, tov:27970,  ps:28175, fsh:10, fr:100000, пробные:40},
+      {name:'Солодовникова Настя', смены:12, утро:6,  вечер:6, пом:3, usl:293526, tov:75160,  ps:30724, fsh:8,  fr:78200,  пробные:19},
+      {name:'Мохова Валерия',      смены:7,  утро:3,  вечер:4, пом:4, usl:277300, tov:19072,  ps:42339, fsh:6,  fr:92400,  пробные:26},
+      {name:'Зинченко Лера',       смены:7,  утро:4,  вечер:3, пом:3, usl:184780, tov:13535,  ps:28331, fsh:3,  fr:45200,  пробные:20},
+      {name:'Сидякина Виктория',   смены:8,  утро:5,  вечер:3, пом:7, usl:237177, tov:48669,  ps:35731, fsh:3,  fr:28800,  пробные:15},
     ],
   },
   'Чернышевская': {
@@ -570,12 +598,22 @@ const monthlyData = {
       {name:'Фахретдинова Анна',   смены:15, утро:15, вечер:0, пом:7, usl:394120, tov:55110,  ps:29949, fsh:18, fr:118520, пробные:66},
       {name:'Часовская Яна',       смены:11, утро:3,  вечер:8, пом:6, usl:336812, tov:115033, ps:41077, fsh:9,  fr:50200,  пробные:50},
     ],
+    jul: [
+      {name:'Фаррахова Алина',     смены:14, утро:5,  вечер:9,  пом:4,  usl:441571, tov:151920, ps:42392, fsh:24, fr:190900, пробные:74},
+      {name:'Часовская Яна',       смены:11, утро:5,  вечер:6,  пом:2,  usl:393030, tov:93152,  ps:44198, fsh:20, fr:156500, пробные:85},
+      {name:'Фахретдинова Анна',   смены:8,  утро:4,  вечер:4,  пом:4,  usl:328745, tov:38530,  ps:45909, fsh:17, fr:166950, пробные:74},
+      {name:'Смирнова Мария',      смены:14, утро:10, вечер:4,  пом:5,  usl:325810, tov:107028, ps:30917, fsh:14, fr:108500, пробные:95},
+      {name:'Лесная Анна',         смены:9,  утро:5,  вечер:4,  пом:10, usl:210665, tov:53799,  ps:29385, fsh:9,  fr:61500,  пробные:52},
+      {name:'Болдина Виктория',    смены:3,  утро:0,  вечер:3,  пом:5,  usl:134000, tov:20540,  ps:51513, fsh:8,  fr:71000,  пробные:16},
+      {name:'Бельтюкова Ксения',   смены:1,  утро:0,  вечер:1,  пом:5,  usl:28400,  tov:13134,  ps:41534, fsh:0,  fr:0,      пробные:1},
+      {name:'Дьячук Марина',       смены:2,  утро:2,  вечер:0,  пом:3,  usl:36200,  tov:9474,   ps:22837, fsh:0,  fr:0,      пробные:10},
+    ],
   },
 };
 
 // Sort monthly by score descending, assign places
 Object.values(monthlyData).forEach(d => {
-  ['jan','feb','mar','apr','may','jun'].forEach(m => {
+  ['jan','feb','mar','apr','may','jun','jul'].forEach(m => {
     if (!d[m]) return;
     const rows = d[m];
     const maxPs    = Math.max(...rows.map(r => r.ps||0)) || 1;
@@ -648,6 +686,22 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
   dataJun[studio] = { winner: scored[0] };
 });
 
+// July winners
+const dataJul = {};
+Object.entries(monthlyData).forEach(([studio, md]) => {
+  if (!md.jul) return;
+  const rows = md.jul;
+  const maxPs    = Math.max(...rows.map(r => r.ps||0)) || 1;
+  const maxFsh   = Math.max(...rows.map(r => r.fsh||0)) || 1;
+  const maxTovSm = Math.max(...rows.map(r => r.смены > 0 ? r.tov/r.смены : 0)) || 1;
+  const scored = rows.map(r => {
+    const tovSm = r.смены > 0 ? r.tov/r.смены : 0;
+    return { ...r, tovSm, score: Math.round(((r.ps||0)/maxPs*0.60 + (r.fsh||0)/maxFsh*0.30 + tovSm/maxTovSm*0.10)*100) };
+  });
+  scored.sort((a,b) => b.score - a.score);
+  dataJul[studio] = { winner: scored[0] };
+});
+
 // May winners
 const dataMay = {};
 Object.entries(monthlyData).forEach(([studio, md]) => {
@@ -665,11 +719,15 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
 });
 
 function renderWinners(mode) {
-  const data  = mode === 'q2' ? dataQ2 : dataJun;
-  const label = mode === 'q2' ? 'ЛИДЕРЫ 2 КВАРТАЛА ПО СТУДИЯМ' : 'ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ';
+  const data  = mode === 'q2' ? dataQ2 : mode === 'jun' ? dataJun : dataJul;
+  const label = mode === 'q2' ? 'ЛИДЕРЫ 2 КВАРТАЛА ПО СТУДИЯМ' : mode === 'jun' ? 'ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ' : 'ЛИДЕРЫ ИЮЛЯ ПО СТУДИЯМ';
   document.getElementById('winners-label').textContent = label;
+  const btnJul = document.getElementById('wbtn-jul');
   const btnJun = document.getElementById('wbtn-jun');
   const btnQ2  = document.getElementById('wbtn-q2');
+  btnJul.style.background    = mode === 'jul' ? '#5C6937' : 'transparent';
+  btnJul.style.color         = mode === 'jul' ? '#FDF6F0' : '#5C6937';
+  btnJul.style.borderColor   = mode === 'jul' ? '#5C6937' : 'rgba(92,105,55,.3)';
   btnJun.style.background    = mode === 'jun' ? '#5C6937' : 'transparent';
   btnJun.style.color         = mode === 'jun' ? '#FDF6F0' : '#5C6937';
   btnJun.style.borderColor   = mode === 'jun' ? '#5C6937' : 'rgba(92,105,55,.3)';
@@ -708,7 +766,7 @@ function renderWinners(mode) {
       </div>`;
   });
 }
-renderWinners('jun');
+renderWinners('jul');
 
 function switchTab(sid, tab) {
   document.querySelectorAll(`#studio-${sid} .tab-btn:not(.tab-disabled)`).forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
@@ -716,7 +774,7 @@ function switchTab(sid, tab) {
   if (tab === 'q2sum') {
     renderWinners('q2');
   } else {
-    renderWinners('jun');
+    renderWinners('jul');
   }
 }
 
@@ -853,7 +911,8 @@ Object.entries(data).forEach(([studio, d]) => {
         <span class="studio-header-name">${studio.toUpperCase()}</span>
       </div>
       <div class="tab-bar">
-        <button class="tab-btn active"    data-tab="jun"   onclick="switchTab('${sid}','jun')">ИЮНЬ</button>
+        <button class="tab-btn active"    data-tab="jul"   onclick="switchTab('${sid}','jul')">ИЮЛЬ</button>
+        <button class="tab-btn"           data-tab="jun"   onclick="switchTab('${sid}','jun')">ИЮНЬ</button>
         <button class="tab-btn"           data-tab="may"   onclick="switchTab('${sid}','may')">МАЙ</button>
         <button class="tab-btn"           data-tab="apr"   onclick="switchTab('${sid}','apr')">АПРЕЛЬ</button>
         <button class="tab-btn"           data-tab="q2sum" onclick="switchTab('${sid}','q2sum')">2 КВАРТАЛ</button>
@@ -877,7 +936,13 @@ Object.entries(data).forEach(([studio, d]) => {
           <tbody>${monthlyTbody(md.apr, hasFst, true)}</tbody>
         </table></div>
       </div>
-      <div class="tab-pane active" data-tab="jun">
+      <div class="tab-pane active" data-tab="jul">
+        <div class="table-wrap"><table>
+          <thead><tr>${monthlyThead(hasFst, true, true)}</tr></thead>
+          <tbody>${monthlyTbody(md.jul, hasFst, true, true)}</tbody>
+        </table></div>
+      </div>
+      <div class="tab-pane" data-tab="jun">
         <div class="table-wrap"><table>
           <thead><tr>${monthlyThead(hasFst, true, true)}</tr></thead>
           <tbody>${monthlyTbody(md.jun, hasFst, true, true)}</tbody>

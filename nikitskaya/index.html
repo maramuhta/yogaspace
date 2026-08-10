@@ -1715,11 +1715,11 @@ const FIRST_DAY_WEEKLY={
   },
   '3–9 авг':{
     rows:[
-      {name:'Аня К',  trial:5, soldQty:4, soldRub:42300,  conv:80},
-      {name:'Настя',  trial:6, soldQty:3, soldRub:22800,  conv:50},
-      {name:'Марина', trial:5, soldQty:2, soldRub:21500,  conv:40},
+      {name:'Аня К',  trial:5, soldQty:4, soldRub:42300,  conv:80, types:[{label:'8 занятий',qty:1},{label:'4 занятия',qty:3}]},
+      {name:'Настя',  trial:6, soldQty:3, soldRub:22800,  conv:50, types:[{label:'8 занятий',qty:1},{label:'4 занятия',qty:2}]},
+      {name:'Марина', trial:5, soldQty:2, soldRub:21500,  conv:40, types:[{label:'10 зан ДМ',qty:1},{label:'4 занятия',qty:1}]},
       {name:'Вика',   trial:5, soldQty:-1,soldRub:-6080,  conv:0},
-      {name:'Лера З', trial:6, soldQty:1, soldRub:7600,   conv:17},
+      {name:'Лера З', trial:6, soldQty:1, soldRub:7600,   conv:17, types:[{label:'5 зан ДМ',qty:1}]},
       {name:'Лера',   trial:0, soldQty:0, soldRub:0,      conv:0},
     ],
     total:{trial:27, soldQty:9, soldRub:88120, conv:33}
@@ -2763,11 +2763,13 @@ function renderMonth(prefix){
     // Таблица FIRST_DAY
     const fdTb=document.getElementById(prefix==='may'?'mayFirstDayTable':prefix==='jun'?'junFirstDayTable':prefix==='jul'?'julFirstDayTable':prefix==='aug'?'augFirstDayTable':'aFirstDayTable');if(fdTb)fdTb.innerHTML='';
     const _hasTypeCol=(prefix==='jul'||prefix==='aug');
+    const typeColors=['#5c6937','#A2B9C9','#F0803B','#9b89c4','#aeb49c','#e8c87a'];
+    const _mkChips=types=>types.map((t,i)=>`<span style="display:inline-flex;align-items:center;gap:4px;background:${typeColors[i%typeColors.length]}18;border:1px solid ${typeColors[i%typeColors.length]}44;border-radius:16px;padding:2px 8px;font-size:11px;margin:1px 3px 1px 0"><span style="width:6px;height:6px;border-radius:50%;background:${typeColors[i%typeColors.length]};flex-shrink:0"></span>${t.label} — ${t.qty} шт.</span>`).join('');
     if(fdTb&&firstDay.rows.length){
       firstDay.rows.forEach(r=>{
         const tr=document.createElement('tr');
         const convColor=r.conv>=30?G:r.conv>=15?O:'#bbb';
-        const typeCell=_hasTypeCol?'<td></td>':'';
+        const typeCell=_hasTypeCol?'<td style="white-space:nowrap">'+(r.types&&r.types.length?_mkChips(r.types):'')+'</td>':'';
         tr.innerHTML=`<td style="font-weight:500">${r.name}</td>
           <td class="r">${r.trial}</td>
           <td class="r">${r.soldQty>0?'<b>'+r.soldQty+'</b>':'—'}</td>
@@ -2778,7 +2780,6 @@ function renderMonth(prefix){
       // Разбивка по типам для строки Итого
       let typesHtml='';
       if(_hasTypeCol){
-        const typeColors=['#5c6937','#A2B9C9','#F0803B','#9b89c4','#aeb49c','#e8c87a'];
         const types=newbies.types||[];
         typesHtml='<td style="white-space:nowrap">'+types.map((t,i)=>
           `<span style="display:inline-flex;align-items:center;gap:4px;background:${typeColors[i%typeColors.length]}18;border:1px solid ${typeColors[i%typeColors.length]}44;border-radius:16px;padding:2px 8px;font-size:11px;margin:1px 3px 1px 0"><span style="width:6px;height:6px;border-radius:50%;background:${typeColors[i%typeColors.length]};flex-shrink:0"></span>${t.label} — ${t.qty} шт.</span>`

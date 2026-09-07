@@ -1146,8 +1146,9 @@ const WEEKS={
   abon:  [479000,505000,578000,616000,456000,664590,476300,565860,409460,559665,773110,704310,421810,489840,475821,536528,453430,448457,412380,480211,707672,549810,662730,421694,632101,400950],
   tovar: [64000, 39000, 62000, 50000, 50000, 53986, 33668,53969, 47197, 48198, 77801,40186, 52726, 22300, 54179, 77750,37960, 59435, 55118, 66528, 59055, 46320, 57573, 39919, 55640, 49800],
   visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286,324,322,321,294,317,317,321,313,327,313,383,293],
-  first: [32, 40, 37, 28, 39, 37, 34, 21, 27, 25, 34,12, 25,27, 22, 20,34, 36, 30, 30, 41, 27, 29, 36, 47, 42],
-  plan:  [587000,587000,587000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,587000,587000,587000,587000,587000,587000,587000,587000,587000,587000],
+  first: [32, 40, 37, 28, 39, 37, 34, 21, 27, 25, 34,12, 25,27, 22, 20,34, 36, 30, 30, 41, 27, 29, 36, 47, 43],
+  plan:  [587000,587000,587000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,587000,587000,587000,587000,587000,587000,587000,587000,587000,606000],
+  sepPart:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,410139],
   isMarch: [true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],
   isMay:   [false,false,false,false,false,false,false,false,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false],
   isJune:  [false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,false,false,false,false,false,false,false,false,false,false],
@@ -1198,8 +1199,8 @@ const VISITS_TIME={
 const TRIAL={
   labels:WEEKS.labels,isMarch:WEEKS.isMarch,
   visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286,324,322,321,294,317,317,321,313,327,313,383,293],
-  trial: [32, 40, 37, 28, 39, 32, 34, 21, 27, 25, 34,29, 25,27, 22, 20,34, 36, 30, 30, 41, 27, 29, 36, 47, 42],
-  conversion:[3,4,4,5,5,8,9,8,8,7,9,12,5,5,13,5,10,14,8,11,10,9,7,7,14,14],
+  trial: [32, 40, 37, 28, 39, 32, 34, 21, 27, 25, 34,29, 25,27, 22, 20,34, 36, 30, 30, 41, 27, 29, 36, 47, 43],
+  conversion:[3,4,4,5,5,8,9,8,8,7,9,12,5,5,13,5,10,14,8,11,10,9,7,7,14,23],
 };
 
 
@@ -1532,6 +1533,8 @@ const NEWBIES_WEEKLY={
     types:[{label:'4 занятия',qty:7}]},
   '24–30 авг':{labels:['Лера','Марина','Аня К','Лера З'],qty:[6,5,2,1],revenue:[51600,89400,15200,13600],colors:['#A2B9C9','#5C6937','#aeb49c','#9b89c4'],
     types:[{label:'4 занятия',qty:9},{label:'8 занятий',qty:3},{label:'20 занятий',qty:2}]},
+  '31 авг–6 сен':{labels:['Настя','Лера','Марина','Аня К'],qty:[4,4,1,1],revenue:[36400,30400,13600,7600],colors:['#e8c87a','#A2B9C9','#5C6937','#aeb49c'],
+    types:[{label:'4 занятия',qty:8},{label:'8 занятий',qty:2}]},
 };
 const NEWBIES=NEWBIES_WEEKLY['25–31 мая'];
 // TRIAL_PIE агрегируется по всем неделям мая (определяется здесь, после NEWBIES_WEEKLY)
@@ -1800,6 +1803,16 @@ const FIRST_DAY_WEEKLY={
       {name:'Вика',   trial:1, soldQty:0, soldRub:0,     conv:0},
     ],
     total:{trial:47, soldQty:14, soldRub:169800, conv:30}
+  },
+  '31 авг–6 сен':{
+    rows:[
+      {name:'Настя',  trial:13,soldQty:4, soldRub:36400, conv:31, types:[{label:'8 занятий',qty:1},{label:'4 занятия',qty:3}]},
+      {name:'Лера',   trial:12,soldQty:4, soldRub:30400, conv:33, types:[{label:'4 занятия',qty:4}]},
+      {name:'Марина', trial:8, soldQty:1, soldRub:13600, conv:13, types:[{label:'8 занятий',qty:1}]},
+      {name:'Аня К',  trial:5, soldQty:1, soldRub:7600,  conv:20, types:[{label:'4 занятия',qty:1}]},
+      {name:'Лера З', trial:5, soldQty:0, soldRub:0,     conv:0},
+    ],
+    total:{trial:43, soldQty:10, soldRub:88000, conv:23}
   },
 };
 const FIRST_DAY=FIRST_DAY_WEEKLY['25–31 мая'];
@@ -2263,7 +2276,10 @@ function renderMonth(prefix){
       const trendStr=li>0?trend(W.total[i],W.total[rows[li-1]]):'';
       const wPlan=W.plan[i];
       const planPct=wPlan>0?Math.round(W.total[i]/wPlan*100):null;
-      if(wPlan>0&&!isAprilCompare&&!isJunCompare&&!isJulCompare){cumul+=W.total[i];cumulPlanSum+=wPlan;}
+      const sp=W.sepPart&&W.sepPart[i]>0?W.sepPart[i]:0;
+      const augContrib=sp>0?W.total[i]-sp:W.total[i];
+      const planContrib=sp>0?Math.round(587000/7):wPlan;
+      if(wPlan>0&&!isAprilCompare&&!isJunCompare&&!isJulCompare){cumul+=augContrib;cumulPlanSum+=planContrib;}
       const cumulPct=cumulPlanSum>0?Math.round(cumul/cumulPlanSum*100):null;
       const planCell=planPct!==null?planPill(planPct):'—';
       const cumulCell=cumulPct!==null?planPill(cumulPct):'—';

@@ -2282,7 +2282,7 @@ function renderMonth(prefix){
       if(wPlan>0&&!isAprilCompare&&!isJunCompare&&!isJulCompare){cumul+=augContrib;cumulPlanSum+=planContrib;}
       const cumulPct=cumulPlanSum>0?Math.round(cumul/cumulPlanSum*100):null;
       const planCell=planPct!==null?planPill(planPct):'—';
-      const cumulCell=cumulPct!==null?planPill(cumulPct):'—';
+      const cumulCell=sp>0?planPill(Math.round(sp/(W.plan[i]*6/7)*100)):(cumulPct!==null?planPill(cumulPct):'—');
       tr.innerHTML=`<td>${W.labels[i]}</td>
         <td class="r">${fmt(W.abon[i])}</td>
         <td class="r">${fmt(W.tovar[i])}</td>

@@ -753,11 +753,11 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
     const maxTovSm = Math.max(...rows.map(r => r.смены > 0 ? r.tov/r.смены : 0)) || 1;
     scored = rows.map(r => {
       const tovSm = r.смены > 0 ? r.tov/r.смены : 0;
-      return { ...r, tovSm, score: Math.round(((r.ps||0)/maxPs*0.60 + (r.fsh||0)/maxFsh*0.30 + tovSm/maxTovSm*0.10)*1000)/10 };
+      return { ...r, tovSm, score: Math.round(((r.ps||0)/maxPs*0.60 + (r.fsh||0)/maxFsh*0.30 + tovSm/maxTovSm*0.10)*100) };
     });
   } else {
     const maxProbny = Math.max(...rows.map(r => r.пробные||0)) || 1;
-    scored = rows.map(r => ({ ...r, tovSm: 0, score: Math.round((r.пробные||0)/maxProbny*1000)/10 }));
+    scored = rows.map(r => ({ ...r, tovSm: 0, score: Math.round((r.пробные||0)/maxProbny*100) }));
   }
   scored.sort((a,b) => b.score - a.score);
   scored.forEach((r,i) => r.place = i+1);
@@ -878,7 +878,7 @@ function monthlyTbody(rows, hasFst, perShift, showProbny) {
     if (perShift) {
       const konv = (showProbny && r.пробные && r.fsh) ? Math.round(r.fsh/r.пробные*100)+'%' : '—';
       const fstCells = hasFst ? (showProbny ? `<td>${r.пробные??'—'}</td><td>${r.fsh||'—'}</td><td>${konv}</td><td>${r.fr ? fmt(r.fr) : '—'}</td>` : `<td>${r.fsh||'—'}</td><td>${r.fr ? fmt(r.fr) : '—'}</td>`) : '';
-      const score = Math.round(((r.ps||0)/(maxPs||1)*0.60 + (r.fsh||0)/(maxFsh||1)*0.30 + tovSm/(maxTovSm||1)*0.10)*1000)/10;
+      const score = Math.round(((r.ps||0)/(maxPs||1)*0.60 + (r.fsh||0)/(maxFsh||1)*0.30 + tovSm/(maxTovSm||1)*0.10)*100);
       const breakdown = JSON.stringify({
         name: r.name,
         ps:  {val:r.ps||0,         max:maxPs,              w:60, pts:+((r.ps||0)/(maxPs||1)*60).toFixed(1)},

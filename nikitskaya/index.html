@@ -1758,6 +1758,18 @@ const TRIAL_PIE_AUG={
   revenue:[163800,149700,107600,44000,28800,34600],
   colors:['#5C6937','#aeb49c','#A2B9C9','#e8c87a','#9b89c4','#F0803B']
 };
+const TRIAL_PIE2_SEP={
+  labels:['4 занятия','20 занятий','8 занятий'],
+  qty:   [7,           1,           1],
+  revenue:[53200,      30300,       13600],
+  colors: ['#5c6937','#e8c87a','#A2B9C9']
+};
+const TRIAL_PIE_SEP={
+  labels:['Лера','Марина','Настя','Аня К','Вика','Лера З'],
+  conversions:[3,2,2,1,1,0],
+  revenue:[22800,21200,37900,7600,7600,0],
+  colors:['#A2B9C9','#5C6937','#e8c87a','#aeb49c','#c9b89c','#9b89c4']
+};
 
 const FIRST_DAY_WEEKLY={
   '6–12 апр':{
@@ -2526,7 +2538,7 @@ function renderMonth(prefix){
     tb.appendChild(tf);
 
     // [FIX 3] График с линией плана
-    const P=prefix==='mar'?'Mar':prefix==='may'?'May':prefix==='jun'?'Jun':prefix==='jul'?'Jul':prefix==='aug'?'Aug':'Apr';
+    const P=prefix==='mar'?'Mar':prefix==='may'?'May':prefix==='jun'?'Jun':prefix==='jul'?'Jul':prefix==='aug'?'Aug':prefix==='sep'?'Sep':'Apr';
     // Для мая показываем последнюю неделю апреля + все недели мая; для июня — только июнь
     const chIdxs=isMay?(lastAprI!==null?[lastAprI,...mayIdx0]:mayIdx0):isJun?junIdx0:isJul?(lastJunI!==null?[lastJunI,...julIdx0]:julIdx0):isAug?(lastJulI!==null?[lastJulI,...augIdx0]:augIdx0):isSep?(lastAugI!==null?[lastAugI,...sepIdx0]:sepIdx0):null;
     const chLabels=chIdxs?chIdxs.map(i=>W.labels[i]):W.labels;
@@ -2721,7 +2733,7 @@ function renderMonth(prefix){
     }
 
     // Построение через общий билдер (поддерживает переключение)
-    const P=prefix==='mar'?'Mar':prefix==='may'?'May':prefix==='jun'?'Jun':prefix==='jul'?'Jul':prefix==='aug'?'Aug':'Apr';
+    const P=prefix==='mar'?'Mar':prefix==='may'?'May':prefix==='jun'?'Jun':prefix==='jul'?'Jul':prefix==='aug'?'Aug':prefix==='sep'?'Sep':'Apr';
     const lastAprIdxV2=aprIdx.length>0?aprIdx[aprIdx.length-1]:null;
     const lastJunIdxV=junIdxV.length>0?junIdxV[junIdxV.length-1]:null;
     const julOnlyIdxV=WEEKS.isJuly?WEEKS.isJuly.map((m,i)=>(m&&!(WEEKS.isAugust&&WEEKS.isAugust[i]))?i:-1).filter(i=>i>=0):[];
@@ -2794,7 +2806,7 @@ function renderMonth(prefix){
           y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},title:{display:true,text:'Пробных, шт.'}},
           y1:{position:'right',grid:{display:false},title:{display:true,text:'Конверсия, %'},ticks:{callback:v=>v+'%'}}}}
     });
-    {const _tp=isJun?TRIAL_PIE_JUN:isAug?TRIAL_PIE_AUG:isSep?(typeof TRIAL_PIE_SEP!=='undefined'?TRIAL_PIE_SEP:TRIAL_PIE_AUG):TRIAL_PIE;
+    {const _tp=isJun?TRIAL_PIE_JUN:isAug?TRIAL_PIE_AUG:isSep?TRIAL_PIE_SEP:TRIAL_PIE;
     new Chart(document.getElementById('chart'+P+'TrialPie'),{type:'doughnut',
       data:{labels:_tp.labels,datasets:[{data:_tp.conversions,backgroundColor:_tp.colors,borderWidth:2}]},
       options:{responsive:true,maintainAspectRatio:false,plugins:{datalabels:{color:'white',font:{weight:'700',size:12},formatter:v=>v},legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.raw+' конв., '+fmt(_tp.revenue[ctx.dataIndex])}}}}
@@ -2802,7 +2814,7 @@ function renderMonth(prefix){
     const leg1=document.getElementById(prefix==='mar'?'mTrialPieLegend':prefix==='may'?'myTrialPieLegend':prefix==='jun'?'juTrialPieLegend':prefix==='jul'?'julTrialPieLegend':prefix==='aug'?'augTrialPieLegend':prefix==='sep'?'sepTrialPieLegend':'aTrialPieLegend');
     if(leg1)_tp.labels.forEach((lbl,i)=>{leg1.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="width:10px;height:10px;border-radius:2px;background:${_tp.colors[i]};flex-shrink:0"></div><span><b>${lbl}</b> — ${_tp.conversions[i]} конв., ${fmt(_tp.revenue[i])}</span></div>`;});
     }
-    {const _tp2=isJun?TRIAL_PIE2_JUN:isJul?TRIAL_PIE2_JUL:isAug?TRIAL_PIE2_AUG:isSep?(typeof TRIAL_PIE2_SEP!=='undefined'?TRIAL_PIE2_SEP:TRIAL_PIE2_AUG):TRIAL_PIE2;
+    {const _tp2=isJun?TRIAL_PIE2_JUN:isJul?TRIAL_PIE2_JUL:isAug?TRIAL_PIE2_AUG:isSep?TRIAL_PIE2_SEP:TRIAL_PIE2;
     new Chart(document.getElementById('chart'+P+'TrialPie2'),{type:'doughnut',
       data:{labels:_tp2.labels,datasets:[{data:_tp2.qty,backgroundColor:_tp2.colors,borderWidth:2}]},
       plugins:[{id:'outlabel',afterDraw(chart){

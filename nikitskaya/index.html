@@ -3087,15 +3087,14 @@ function renderMonth(prefix){
     const maxTotal=Math.max(...admins.map(a=>a.total),1);
     const maxTovar=Math.max(...admins.map(a=>a.tovar),1);
     const maxAbon=Math.max(...admins.map(a=>a.abon),1);
-    const maxNewQty=Math.max(...admins.map(a=>a.newQty),1);
-    const maxAbonPS=Math.max(...admins.filter(a=>a.shifts>0).map(a=>a.abon/a.shifts),0);
     admins.forEach((adm,rank)=>{
       const tr=document.createElement('tr');
       const bc=rank===0?'b1':rank===1?'b2':rank===2?'b3':'bn';
       const pb=Math.round(adm.total/maxTotal*100);
-      const badges=(maxAbonPS>0&&adm.shifts>0&&Math.round(adm.abon/adm.shifts)===Math.round(maxAbonPS)?'<span title="Лидер по услугам в смену" style="font-size:13px;margin-left:4px">💰</span>':'')
-        +(adm.tovar===Math.max(...admins.map(a=>a.tovar))?'<span title="Лидер по продажам товаров" style="font-size:13px;margin-left:4px">🛍️</span>':'')
-        +(maxNewQty>0&&adm.newQty===Math.max(...admins.map(a=>a.newQty))?'<span title="Лидер по кол-ву новичков" style="font-size:13px;margin-left:4px">👥</span>':'');
+      const _bdg=(ok,tip,ico)=>ok?`<span title="${tip}" style="font-size:13px;margin-left:4px">${ico}</span>`:'';
+      const badges=_bdg(adm.abonPS>0&&adm.pl_abonPS===1,'Лидер по услугам в смену','💰')
+        +_bdg(adm.tovarPS>0&&adm.pl_tovarPS===1,'Лидер по товарам в смену','🛍️')
+        +_bdg(adm.newQty>0&&adm.pl_newQty===1,'Лидер по кол-ву новичков','👥');
       const _appCell=_showAppQty?`<td class="r">${adm.appQty!=null?adm.appQty:'—'}</td>`:'';
       const _plTip=`Среднее место ${adm.avgPlace.toFixed(2)} — услуги/смену: ${adm.pl_abonPS}, товары/смену: ${adm.pl_tovarPS}, новичков шт.: ${adm.pl_newQty}, новичкам руб.: ${adm.pl_newRub}`;
       tr.innerHTML=`<td><span class="bx ${bc}" title="${_plTip}">${rank+1}</span></td><td style="font-weight:500">${adm.name}${badges}</td>

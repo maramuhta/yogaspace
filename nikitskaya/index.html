@@ -1370,7 +1370,7 @@ const TRIAL={
   labels:WEEKS.labels,isMarch:WEEKS.isMarch,
   visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286,324,322,321,294,317,317,321,313,327,313,383,293,360,306],
   trial: [32, 40, 37, 28, 39, 32, 34, 21, 27, 25, 34,29, 25,27, 22, 20,34, 36, 30, 30, 41, 27, 29, 36, 47, 43, 57, 50],
-  conversion:[3,4,4,5,5,8,9,8,8,7,9,12,5,5,13,5,10,14,8,11,10,9,7,7,14,10,9,10],
+  conversion:[3,4,4,5,5,8,9,8,8,7,9,12,5,5,13,5,10,14,8,11,10,9,7,7,14,10,9,12],
 };
 
 
@@ -1732,10 +1732,10 @@ const NEWBIES_WEEKLY={
     types:[{label:'4 занятия',qty:7},{label:'8 занятий',qty:1},{label:'20 занятий',qty:1}]
   },
   '14–20 сен':{
-    labels:['Лера','Настя','Марина'],
-    qty:[5,3,2],
-    revenue:[30400,47420,12160],
-    colors:['#A2B9C9','#e8c87a','#5C6937'],
+    labels:['Настя','Лера','Марина'],
+    qty:[3,5,2],
+    revenue:[59900,38000,15200],
+    colors:['#e8c87a','#A2B9C9','#5C6937'],
     types:[{label:'4 занятия',qty:8},{label:'20 занятий',qty:1},{label:'Безлимит',qty:1}]
   },
 };
@@ -1777,14 +1777,14 @@ const TRIAL_PIE_AUG={
 };
 const TRIAL_PIE2_SEP={
   labels:['4 занятия','8 занятий','20 занятий','Безлимит'],
-  qty:   [23,          3,          2,            1],
-  revenue:[162640,     40800,      50640,        21000],
+  qty:   [25,          3,          2,            1],
+  revenue:[190000,     40800,      60600,        22000],
   colors: ['#5c6937','#e8c87a','#A2B9C9','#F0803B']
 };
 const TRIAL_PIE_SEP={
   labels:['Настя','Лера','Марина','Аня К','Вика','Лера З'],
-  conversions:[9,12,5,2,1,0],
-  revenue:[121720,83600,46960,15200,7600,0],
+  conversions:[9,12,5,4,1,0],
+  revenue:[134200,91200,50000,30400,7600,0],
   colors:['#e8c87a','#A2B9C9','#5C6937','#aeb49c','#c9b89c','#9b89c4']
 };
 
@@ -2042,13 +2042,14 @@ const FIRST_DAY_WEEKLY={
   },
   '14–20 сен':{
     rows:[
-      {name:'Лера',   trial:14, soldQty:5, soldRub:30400, conv:36, types:[{label:'4 занятия',qty:5}]},
-      {name:'Настя',  trial:6,  soldQty:3, soldRub:47420, conv:50, types:[{label:'4 занятия',qty:1},{label:'20 занятий',qty:1},{label:'Безлимит',qty:1}]},
-      {name:'Марина', trial:9,  soldQty:2, soldRub:12160, conv:22, types:[{label:'4 занятия',qty:2}]},
+      {name:'Лера',   trial:14, soldQty:5, soldRub:38000, conv:36, types:[{label:'4 занятия',qty:5}]},
+      {name:'Настя',  trial:6,  soldQty:3, soldRub:59900, conv:50, types:[{label:'4 занятия',qty:1},{label:'20 занятий',qty:1},{label:'Безлимит',qty:1}]},
+      {name:'Марина', trial:9,  soldQty:2, soldRub:15200, conv:22, types:[{label:'4 занятия',qty:2}]},
+      {name:'Аня К',  trial:0,  soldQty:2, soldRub:15200, conv:0,  types:[{label:'4 занятия',qty:2}]},
       {name:'Лера З', trial:5,  soldQty:0, soldRub:0,     conv:0},
       {name:'Вика',   trial:4,  soldQty:0, soldRub:0,     conv:0},
     ],
-    total:{trial:38, soldQty:10, soldRub:89980, conv:26}
+    total:{trial:38, soldQty:12, soldRub:128300, conv:32}
   },
 };
 const FIRST_DAY=FIRST_DAY_WEEKLY['25–31 мая'];

@@ -122,7 +122,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
 <header class="hd">
   <div class="hd-logo">
     <svg viewBox="0 0 30 30" fill="none"><ellipse cx="15" cy="15" rx="9.5" ry="9.5" stroke="#fdf6f0" stroke-width="1.1"/><ellipse cx="15" cy="15" rx="13.5" ry="5.5" stroke="#fdf6f0" stroke-width="1.1" transform="rotate(-24 15 15)"/></svg>
-    <div><div class="hd-name">Yoga Space · Никитская</div><div class="hd-sub">обновлено 28 сен 2026</div></div>
+    <div><div class="hd-name">Yoga Space · Никитская</div><div class="hd-sub">обновлено 5 окт 2026</div></div>
   </div>
   <div class="hd-badge" id="hd-badge">2026</div>
 </header>
@@ -1187,6 +1187,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
         <th class="r">7–13 сен</th>
         <th class="r">14–20 сен</th>
         <th class="r">21–27 сен</th>
+        <th class="r">28 сен–4 окт</th>
         <th class="r" style="background:#4a5429">Итого сентябрь</th>
       </tr></thead>
       <tbody id="sepCatsTableBody"></tbody>
@@ -1306,19 +1307,19 @@ Chart.register(ChartDataLabels);
 
 // ── ДАННЫЕ ────────────────────────────────────
 const WEEKS={
-  labels:['9–15 мар','16–22 мар','23–29 мар','30 мар–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая','4–10 мая','11–17 мая','18–24 мая','25–31 мая','1–7 июн','8–14 июн','15–21 июн','22–28 июн','29 июн–5 июл','6–12 июл','13–19 июл','20–26 июл','27 июл–2 авг','3–9 авг','10–16 авг','17–23 авг','24–30 авг','31 авг–6 сен','7–13 сен','14–20 сен','21–27 сен'],
-  abon:  [479000,505000,578000,616000,456000,664590,476300,565860,409460,559665,773110,704310,421810,489840,475821,536528,453430,448457,412380,480211,707672,549810,662730,421694,632101,400950,629640,562601,359545],
-  tovar: [64000, 39000, 62000, 50000, 50000, 53986, 33668,53969, 47197, 48198, 77801,40186, 52726, 22300, 54179, 77750,37960, 59435, 55118, 66528, 59055, 46320, 57573, 39919, 55640, 49800, 47391, 45825,57954],
-  visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286,324,322,321,294,317,317,321,313,327,313,383,293,360,306,314],
-  first: [32, 40, 37, 28, 39, 37, 34, 21, 27, 25, 34,12, 25,27, 22, 20,34, 36, 30, 30, 41, 27, 29, 36, 47, 43, 57, 50,39],
-  plan:  [587000,587000,587000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,587000,587000,587000,587000,587000,587000,587000,587000,587000,606000,606000,606000,606000],
-  sepPart:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,418999,0,0,0],
-  isMarch:    [true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],
-  isMay:      [false,false,false,false,false,false,false,false,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],
-  isJune:     [false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false],
-  isJuly:     [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,true,false,false,false,false,false,false,false,false],
-  isAugust:   [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,true,true,false,false,false],
-  isSeptember:[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true],
+  labels:['9–15 мар','16–22 мар','23–29 мар','30 мар–5 апр','6–12 апр','13–19 апр','20–26 апр','27 апр–3 мая','4–10 мая','11–17 мая','18–24 мая','25–31 мая','1–7 июн','8–14 июн','15–21 июн','22–28 июн','29 июн–5 июл','6–12 июл','13–19 июл','20–26 июл','27 июл–2 авг','3–9 авг','10–16 авг','17–23 авг','24–30 авг','31 авг–6 сен','7–13 сен','14–20 сен','21–27 сен','28 сен–4 окт'],
+  abon:  [479000,505000,578000,616000,456000,664590,476300,565860,409460,559665,773110,704310,421810,489840,475821,536528,453430,448457,412380,480211,707672,549810,662730,421694,632101,400950,629640,562601,359545,507226],
+  tovar: [64000, 39000, 62000, 50000, 50000, 53986, 33668,53969, 47197, 48198, 77801,40186, 52726, 22300, 54179, 77750,37960, 59435, 55118, 66528, 59055, 46320, 57573, 39919, 55640, 49800, 47391, 45825,57954,37708],
+  visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286,324,322,321,294,317,317,321,313,327,313,383,293,360,306,314,310],
+  first: [32, 40, 37, 28, 39, 37, 34, 21, 27, 25, 34,12, 25,27, 22, 20,34, 36, 30, 30, 41, 27, 29, 36, 47, 43, 57, 50,39,55],
+  plan:  [587000,587000,587000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,607000,587000,587000,587000,587000,587000,587000,587000,587000,587000,606000,606000,606000,606000,606000],
+  sepPart:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,418999,0,0,0,0],
+  isMarch:    [true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],
+  isMay:      [false,false,false,false,false,false,false,false,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],
+  isJune:     [false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false],
+  isJuly:     [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,true,false,false,false,false,false,false,false,false,false],
+  isAugust:   [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,true,true,false,false,false,false],
+  isSeptember:[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true],
 };
 WEEKS.total=WEEKS.abon.map((a,i)=>a+WEEKS.tovar[i]);
 
@@ -1331,8 +1332,8 @@ const toRub=arr=>arr.map(v=>v*1000);
 // Продажи по времени суток — май (в рублях)
 const CATS_MAY_TIME={
   labels:['4–10 мая','11–17 мая','18–24 мая','25–31 мая'],
-  abon:{morn:[149500,185000,254420,87940],eve:[107080,194000,189410,210650],wknd:[113280,180000,173130,122880]},
-  tovar:{morn:[17300,16000,66178,16731],eve:[15011,17000,49978,25610],wknd:[14887,15000,0,12206]},
+  abon:{morn:[149500,185000,254420,87940,119910],eve:[107080,194000,189410,210650,220180],wknd:[113280,180000,173130,122880,148692]},
+  tovar:{morn:[17300,16000,66178,16731,6674],eve:[15011,17000,49978,25610,27034],wknd:[14887,15000,0,12206,4004]},
 };
 // Продажи по времени суток — июнь (в рублях; null = нет данных из 1С)
 const CATS_JUN_TIME={
@@ -1356,22 +1357,22 @@ const CATS_AUG_TIME={
 };
 // Продажи по времени суток — сентябрь (в рублях)
 const CATS_SEP_TIME={
-  labels:['31 авг–6 сен','7–13 сен','14–20 сен','21–27 сен'],
+  labels:['31 авг–6 сен','7–13 сен','14–20 сен','21–27 сен','28 сен–4 окт'],
   abon:{morn:[113120,158660,132353,92665],eve:[146710,210060,237234,76957],wknd:[119520,157100,193014,123393]},
   tovar:{morn:[17000,10812,8671,10556],eve:[15764,23262,15545,36928],wknd:[15676,13316,12609,10481]},
 };
 
 const VISITS_TIME={
-  morn: [null,null,null,null,null,114,96,135,85, 103,137,100,70,65, 115,130,116,110,67, 95, 108,101,117,111,108,66, 94, 72,75],
-  eve:  [null,null,null,null,null,122,148,77, 104,108,85, 121,121,106,94, 107,120,101,148,103, 129,137,118,114,161,129,154,129,121],
-  wknd: [null,null,null,null,null,123,108,85, 87, 100,96, 99, 72,88, 115,85, 85, 83, 102,119, 84, 75, 92, 88, 114,98, 112,105,118],
+  morn: [null,null,null,null,null,114,96,135,85, 103,137,100,70,65, 115,130,116,110,67, 95, 108,101,117,111,108,66, 94, 72,75,84],
+  eve:  [null,null,null,null,null,122,148,77, 104,108,85, 121,121,106,94, 107,120,101,148,103, 129,137,118,114,161,129,154,129,121,132],
+  wknd: [null,null,null,null,null,123,108,85, 87, 100,96, 99, 72,88, 115,85, 85, 83, 102,119, 84, 75, 92, 88, 114,98, 112,105,118,94],
 };
 
 const TRIAL={
   labels:WEEKS.labels,isMarch:WEEKS.isMarch,
-  visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286,324,322,321,294,317,317,321,313,327,313,383,293,360,306,314],
-  trial: [32, 40, 37, 28, 39, 32, 34, 21, 27, 25, 34,29, 25,27, 22, 20,34, 36, 30, 30, 41, 27, 29, 36, 47, 43, 57, 50,39],
-  conversion:[3,4,4,5,5,8,9,8,8,7,9,12,5,5,13,5,10,14,8,11,10,9,7,7,14,10,9,12,8],
+  visits:[331,310,339,338,350,359,352,297,276,311,318,320,289,286,324,322,321,294,317,317,321,313,327,313,383,293,360,306,314,310],
+  trial: [32, 40, 37, 28, 39, 32, 34, 21, 27, 25, 34,29, 25,27, 22, 20,34, 36, 30, 30, 41, 27, 29, 36, 47, 43, 57, 50,39,55],
+  conversion:[3,4,4,5,5,8,9,8,8,7,9,12,5,5,13,5,10,14,8,11,10,9,7,7,14,10,9,12,8,5],
 };
 
 
@@ -2099,7 +2100,7 @@ const MONTHLY={
   jun:null,
   jul:null,
   aug:{total:2939714,abon:2674545,tovar:265169},
-  sep:{total:2170853,abon:1953455,tovar:217398},
+  sep:{total:2715787,abon:2460681,tovar:255106},
 };
 
 // ── УТИЛИТЫ ──────────────────────────────────
@@ -2197,9 +2198,9 @@ function switchVisitView(pfx, view, btn){
 
 function buildVisitWeeksChart(canvasId,isMar,idxFilter){
   // Утро 6-11, День 12-16, Вечер 17+
-  const _morn = [null,null,null,null,null,106,81,71,85, 103,137,100,70,65, 115,130,116,110,67, 95, 108,101,117,111,108,66, 94,72,75];
-  const _eve  = [null,null,null,null,null,130,126,141,104,108,85, 121,121,106,94, 107,120,101,148,103, 129,137,118,114,161,129,154,129,121];
-  const _wknd = [null,null,null,null,null,123,94,85,87, 100,96, 99,72,88, 115,85, 85, 83, 102,119, 84, 75, 92, 88, 114,98, 112,105,118];
+  const _morn = [null,null,null,null,null,106,81,71,85, 103,137,100,70,65, 115,130,116,110,67, 95, 108,101,117,111,108,66, 94,72,75,84];
+  const _eve  = [null,null,null,null,null,130,126,141,104,108,85, 121,121,106,94, 107,120,101,148,103, 129,137,118,114,161,129,154,129,121,132];
+  const _wknd = [null,null,null,null,null,123,94,85,87, 100,96, 99,72,88, 115,85, 85, 83, 102,119, 84, 75, 92, 88, 114,98, 112,105,118,94];
   const _total= WEEKS.visits;
   const _first= WEEKS.first;
   // Apply index filter for May comparison view
@@ -2423,20 +2424,20 @@ const CATS_WEEKLY = {
     ],
   },
   sep: {
-    cols: ['1–6 сен','7–13 сен','14–20 сен','21–27 сен','Итого сентябрь'],
+    cols: ['1–6 сен','7–13 сен','14–20 сен','21–27 сен','28 сен–4 окт','Итого сентябрь'],
     rows: [
-      {name:'Абонементы на групповые занятия', vals:[203670, 304520, 423301, 132845, 1064336]},
-      {name:'Разовые',                          vals:[107700, 111700, 99300, 115164, 433864]},
-      {name:'Фитмост',                          vals:[0, 0, 0, 1140, 1140]},
-      {name:'Абонементы индивидуальные',        vals:[38000, 52500, 16000, 17000, 123500]},
-      {name:'Абонементы майсор и разовые',      vals:[5700, 21100, 0, 13500, 40300]},
-      {name:'Аренда',                            vals:[9000, 36000, 24000, 12000, 81000]},
-      {name:'Мероприятия',                       vals:[0, 0, 0, 2500, 2500]},
-      {name:'Модификаторы',                  vals:[0, 0, 0, 49406, 49406]},
-      {name:'Товары',                            vals:[42329, 47391, 36825, 23904, 150449]},
-      {name:'Подарочный сертификат',             vals:[23900, 0, 9000, 34050, 66950]},
-      {name:'ОНЛАЙН',                            vals:[5100, 27900, 25000, 15000, 73000]},
-      {name:'Прочее (др. студии)',               vals:[7500, 75920, 0, 990, 84410]},
+      {name:'Абонементы на групповые занятия', vals:[203670, 304520, 423301, 132845, 294290, 1358626]},
+      {name:'Разовые',                          vals:[107700, 111700, 99300, 115164, 118988, 552852]},
+      {name:'Фитмост',                          vals:[0, 0, 0, 1140, 0, 1140]},
+      {name:'Абонементы индивидуальные',        vals:[38000, 52500, 16000, 17000, 28000, 151500]},
+      {name:'Абонементы майсор и разовые',      vals:[5700, 21100, 0, 13500, 0, 40300]},
+      {name:'Аренда',                            vals:[9000, 36000, 24000, 12000, 28500, 109500]},
+      {name:'Мероприятия',                       vals:[0, 0, 0, 2500, 19000, 21500]},
+      {name:'Модификаторы',                  vals:[0, 0, 0, 49406, 0, 49406]},
+      {name:'Товары',                            vals:[42329, 47391, 36825, 23904, 37708, 188157]},
+      {name:'Подарочный сертификат',             vals:[23900, 0, 9000, 34050, 0, 66950]},
+      {name:'ОНЛАЙН',                            vals:[5100, 27900, 25000, 15000, 17458, 90458]},
+      {name:'Прочее (др. студии)',               vals:[7500, 75920, 0, 990, 990, 85400]},
     ],
   },
 };

@@ -1332,8 +1332,8 @@ const toRub=arr=>arr.map(v=>v*1000);
 // Продажи по времени суток — май (в рублях)
 const CATS_MAY_TIME={
   labels:['4–10 мая','11–17 мая','18–24 мая','25–31 мая'],
-  abon:{morn:[149500,185000,254420,87940,119910],eve:[107080,194000,189410,210650,220180],wknd:[113280,180000,173130,122880,148692]},
-  tovar:{morn:[17300,16000,66178,16731,6674],eve:[15011,17000,49978,25610,27034],wknd:[14887,15000,0,12206,4004]},
+  abon:{morn:[149500,185000,254420,87940],eve:[107080,194000,189410,210650],wknd:[113280,180000,173130,122880]},
+  tovar:{morn:[17300,16000,66178,16731],eve:[15011,17000,49978,25610],wknd:[14887,15000,0,12206]},
 };
 // Продажи по времени суток — июнь (в рублях; null = нет данных из 1С)
 const CATS_JUN_TIME={
@@ -1358,8 +1358,8 @@ const CATS_AUG_TIME={
 // Продажи по времени суток — сентябрь (в рублях)
 const CATS_SEP_TIME={
   labels:['31 авг–6 сен','7–13 сен','14–20 сен','21–27 сен','28 сен–4 окт'],
-  abon:{morn:[113120,158660,132353,92665],eve:[146710,210060,237234,76957],wknd:[119520,157100,193014,123393]},
-  tovar:{morn:[17000,10812,8671,10556],eve:[15764,23262,15545,36928],wknd:[15676,13316,12609,10481]},
+  abon:{morn:[113120,158660,132353,92665,119910],eve:[146710,210060,237234,76957,220180],wknd:[119520,157100,193014,123393,148692]},
+  tovar:{morn:[17000,10812,8671,10556,6674],eve:[15764,23262,15545,36928,27034],wknd:[15676,13316,12609,10481,4004]},
 };
 
 const VISITS_TIME={
@@ -2222,6 +2222,7 @@ function switchVisitView(pfx, view, btn){
   }
 }
 
+const WEEKS_WINDOW=9; // показываем максимум 2 месяца истории
 function buildVisitWeeksChart(canvasId,isMar,idxFilter){
   // Утро 6-11, День 12-16, Вечер 17+
   const _morn = [null,null,null,null,null,106,81,71,85, 103,137,100,70,65, 115,130,116,110,67, 95, 108,101,117,111,108,66, 94,72,75,84];
@@ -2230,7 +2231,7 @@ function buildVisitWeeksChart(canvasId,isMar,idxFilter){
   const _total= WEEKS.visits;
   const _first= WEEKS.first;
   // Apply index filter for May comparison view
-  const idxs  = idxFilter || WEEKS.labels.map((_,i)=>i);
+  const idxs  = (idxFilter || WEEKS.labels.map((_,i)=>i)).slice(-WEEKS_WINDOW);
   const morn  = idxs.map(i=>_morn[i]);
   const eve   = idxs.map(i=>_eve[i]);
   const wknd  = idxs.map(i=>_wknd[i]);
@@ -2876,21 +2877,24 @@ function renderMonth(prefix){
 
     const P=prefix==='mar'?'Mar':prefix==='may'?'May':prefix==='jun'?'Jun':prefix==='jul'?'Jul':prefix==='aug'?'Aug':prefix==='sep'?'Sep':'Apr';
     const trialRest=T.trial.map((v,i)=>v-(T.conversion[i]||0));
+    const _wS=Math.max(0,T.labels.length-WEEKS_WINDOW);
+    const TW={labels:T.labels.slice(_wS),conversion:T.conversion.slice(_wS),trial:T.trial.slice(_wS),isMarch:T.isMarch.slice(_wS)};
+    const restW=trialRest.slice(_wS), convW=convPct.slice(_wS);
     new Chart(document.getElementById('chart'+P+'TrialWeeks'),{type:'bar',
-      data:{labels:T.labels,datasets:[
-        {label:'Купили First',data:T.conversion,
-          backgroundColor:T.isMarch.map(m=>(!isMar&&m)?'rgba(92,105,55,.25)':'rgba(92,105,55,.82)'),
+      data:{labels:TW.labels,datasets:[
+        {label:'Купили First',data:TW.conversion,
+          backgroundColor:TW.isMarch.map(m=>(!isMar&&m)?'rgba(92,105,55,.25)':'rgba(92,105,55,.82)'),
           stack:'visits',borderRadius:0,order:2,yAxisID:'y',
-          datalabels:{display:ctx=>T.conversion[ctx.dataIndex]>0,anchor:'center',align:'center',
+          datalabels:{display:ctx=>TW.conversion[ctx.dataIndex]>0,anchor:'center',align:'center',
             font:{size:10,weight:'700'},color:'#fff',
             formatter:v=>v>0?v+' абон.':''}},
-        {label:'Остальные первые',data:trialRest,
-          backgroundColor:T.isMarch.map(m=>(!isMar&&m)?'rgba(155,137,196,.2)':'rgba(155,137,196,.55)'),
+        {label:'Остальные первые',data:restW,
+          backgroundColor:TW.isMarch.map(m=>(!isMar&&m)?'rgba(155,137,196,.2)':'rgba(155,137,196,.55)'),
           stack:'visits',borderRadius:5,order:2,yAxisID:'y',
           datalabels:{display:ctx=>ctx.datasetIndex===1,anchor:'end',align:'end',offset:3,
-            font:{size:10,weight:'600'},color:ctx=>(!isMar&&T.isMarch[ctx.dataIndex])?'#aaa':PU,
-            formatter:(v,ctx)=>T.trial[ctx.dataIndex]}},
-        {label:'% конверсии',data:convPct,type:'line',borderColor:O,pointBackgroundColor:O,
+            font:{size:10,weight:'600'},color:ctx=>(!isMar&&TW.isMarch[ctx.dataIndex])?'#aaa':PU,
+            formatter:(v,ctx)=>TW.trial[ctx.dataIndex]}},
+        {label:'% конверсии',data:convW,type:'line',borderColor:O,pointBackgroundColor:O,
           pointRadius:5,borderWidth:2,fill:false,order:1,yAxisID:'y1',datalabels:{display:false}}
       ]},
       options:{responsive:true,maintainAspectRatio:false,

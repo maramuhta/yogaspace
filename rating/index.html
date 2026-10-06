@@ -186,6 +186,7 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
       <div id="winners-label" style="font-family:'Unbounded',sans-serif;font-size:11px;letter-spacing:.1em;color:#5C6937;white-space:nowrap">ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ</div>
       <div style="display:flex;gap:6px;margin-left:4px">
         <button id="wbtn-sep" onclick="renderWinners('sep')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid #5C6937;background:#5C6937;color:#FDF6F0;cursor:pointer">СЕНТЯБРЬ</button>
+        <button id="wbtn-q3"  onclick="renderWinners('q3')"  style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">3 КВАРТАЛ</button>
         <button id="wbtn-aug" onclick="renderWinners('aug')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">АВГУСТ</button>
         <button id="wbtn-jul" onclick="renderWinners('jul')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">ИЮЛЬ</button>
         <button id="wbtn-jun" onclick="renderWinners('jun')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">ИЮНЬ</button>
@@ -695,6 +696,45 @@ Object.values(monthlyData).forEach(d => {
   });
 });
 
+// Q3 aggregate data (July + August + September)
+const dataQ3 = {};
+Object.entries(monthlyData).forEach(([studio, md]) => {
+  const months = ['jul','aug','sep'].map(k => md[k]).filter(Boolean);
+  if (!months.length) return;
+  const adminMap = {};
+  months.forEach(monthData => {
+    monthData.forEach(r => {
+      if (!adminMap[r.name]) {
+        adminMap[r.name] = {name:r.name, смены:0, утро:0, вечер:0, пом:0, usl:0, tov:0, fsh:0, fr:0, пробные:null};
+      }
+      const a = adminMap[r.name];
+      a.смены += r.смены||0;
+      a.утро  += r.утро||0;
+      a.вечер += r.вечер||0;
+      a.пом   += r.пом||0;
+      a.usl   += r.usl||0;
+      a.tov   += r.tov||0;
+      a.fsh   += r.fsh||0;
+      a.fr    += r.fr||0;
+      if (r.пробные != null) a.пробные = (a.пробные||0) + r.пробные;
+    });
+  });
+  const combined = Object.values(adminMap).map(a => ({
+    ...a,
+    ps: a.смены > 0 ? Math.round((a.usl+a.tov)/a.смены) : 0
+  }));
+  const maxPs    = Math.max(...combined.map(r => r.ps)) || 1;
+  const maxFsh   = Math.max(...combined.map(r => r.fsh||0)) || 1;
+  const maxTovSm = Math.max(...combined.map(r => r.смены > 0 ? r.tov/r.смены : 0)) || 1;
+  const scored = combined.map(r => {
+    const tovSm = r.смены > 0 ? r.tov / r.смены : 0;
+    return { ...r, tovSm, score: Math.round(((r.ps||0)/maxPs*0.60 + (r.fsh||0)/maxFsh*0.30 + tovSm/maxTovSm*0.10)*100) };
+  });
+  scored.sort((a,b) => b.score - a.score);
+  scored.forEach((r,i) => r.place = i+1);
+  dataQ3[studio] = { all: scored, winner: scored[0] };
+});
+
 // Q2 aggregate data (April + May)
 const dataQ2 = {};
 Object.entries(monthlyData).forEach(([studio, md]) => {
@@ -834,10 +874,11 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
 });
 
 function renderWinners(mode) {
-  const data  = mode === 'sep' ? dataSep : mode === 'q2' ? dataQ2 : mode === 'jun' ? dataJun : mode === 'aug' ? dataAug : dataJul;
-  const label = mode === 'sep' ? 'ЛИДЕРЫ СЕНТЯБРЯ ПО СТУДИЯМ' : mode === 'q2' ? 'ЛИДЕРЫ 2 КВАРТАЛА ПО СТУДИЯМ' : mode === 'jun' ? 'ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ' : mode === 'aug' ? 'ЛИДЕРЫ АВГУСТА ПО СТУДИЯМ' : 'ЛИДЕРЫ ИЮЛЯ ПО СТУДИЯМ';
+  const data  = mode === 'sep' ? dataSep : mode === 'q3' ? dataQ3 : mode === 'q2' ? dataQ2 : mode === 'jun' ? dataJun : mode === 'aug' ? dataAug : dataJul;
+  const label = mode === 'sep' ? 'ЛИДЕРЫ СЕНТЯБРЯ ПО СТУДИЯМ' : mode === 'q3' ? 'ЛИДЕРЫ 3 КВАРТАЛА ПО СТУДИЯМ' : mode === 'q2' ? 'ЛИДЕРЫ 2 КВАРТАЛА ПО СТУДИЯМ' : mode === 'jun' ? 'ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ' : mode === 'aug' ? 'ЛИДЕРЫ АВГУСТА ПО СТУДИЯМ' : 'ЛИДЕРЫ ИЮЛЯ ПО СТУДИЯМ';
   document.getElementById('winners-label').textContent = label;
   const btnSep = document.getElementById('wbtn-sep');
+  const btnQ3  = document.getElementById('wbtn-q3');
   const btnAug = document.getElementById('wbtn-aug');
   const btnJul = document.getElementById('wbtn-jul');
   const btnJun = document.getElementById('wbtn-jun');
@@ -845,6 +886,9 @@ function renderWinners(mode) {
   btnSep.style.background    = mode === 'sep' ? '#5C6937' : 'transparent';
   btnSep.style.color         = mode === 'sep' ? '#FDF6F0' : '#5C6937';
   btnSep.style.borderColor   = mode === 'sep' ? '#5C6937' : 'rgba(92,105,55,.3)';
+  btnQ3.style.background     = mode === 'q3'  ? '#5C6937' : 'transparent';
+  btnQ3.style.color          = mode === 'q3'  ? '#FDF6F0' : '#5C6937';
+  btnQ3.style.borderColor    = mode === 'q3'  ? '#5C6937' : 'rgba(92,105,55,.3)';
   btnAug.style.background    = mode === 'aug' ? '#5C6937' : 'transparent';
   btnAug.style.color         = mode === 'aug' ? '#FDF6F0' : '#5C6937';
   btnAug.style.borderColor   = mode === 'aug' ? '#5C6937' : 'rgba(92,105,55,.3)';
@@ -894,7 +938,9 @@ renderWinners('sep');
 function switchTab(sid, tab) {
   document.querySelectorAll(`#studio-${sid} .tab-btn:not(.tab-disabled)`).forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll(`#studio-${sid} .tab-pane`).forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
-  if (tab === 'q2sum') {
+  if (tab === 'q3sum') {
+    renderWinners('q3');
+  } else if (tab === 'q2sum') {
     renderWinners('q2');
   } else if (tab === 'jul') {
     renderWinners('jul');
@@ -994,6 +1040,39 @@ function buildQ1Rows(d) {
   return rows;
 }
 
+// Build Q3 aggregate rows (uses dataQ3, товары/смену)
+function buildQ3Rows(d3) {
+  const maxUsl   = Math.max(...d3.all.map(r=>r.usl)) || 1;
+  const maxTovSm = Math.max(...d3.all.map(r=>r.tovSm||0)) || 1;
+  const maxFsh   = Math.max(...d3.all.map(r=>r.fsh||0)) || 1;
+  const maxPs    = Math.max(...d3.all.map(r=>r.ps))  || 1;
+  let rows = '';
+  d3.all.forEach(r => {
+    const isW = r.place === 1;
+    const rankEl = isW ? `<span class="rank-1">1</span>` : `<span class="rank-other">${r.place}</span>`;
+    const icons = [];
+    if(r.ps === maxPs && r.ps > 0) icons.push('<span title="Лидер по средним продажам в смену" style="font-size:14px">💰</span>');
+    if((r.tovSm||0) === maxTovSm && maxTovSm > 0) icons.push('<span title="Лидер по товарам в смену" style="font-size:14px">🛍️</span>');
+    if(r.fsh && r.fsh === maxFsh) icons.push('<span title="Лидер по кол-ву First" style="font-size:14px">👥</span>');
+    const iconsHtml = icons.length ? `<span style="margin-left:5px">${icons.join('')}</span>` : '';
+    const breakdown = JSON.stringify({
+      name: r.name,
+      ps:  {val:r.ps||0,              max:maxPs,               w:60, pts:+((r.ps||0)/maxPs*60).toFixed(1)},
+      fsh: {val:r.fsh||0,             max:maxFsh,              w:30, pts:+((r.fsh||0)/maxFsh*30).toFixed(1)},
+      tov: {val:Math.round(r.tovSm||0), max:Math.round(maxTovSm), w:10, pts:+((r.tovSm||0)/maxTovSm*10).toFixed(1)},
+      total: Math.round(r.score)
+    });
+    rows += `<tr class="${isW?'winner-row':''}">
+      <td>${rankEl}</td>
+      <td class="${isW?'winner-name-cell':''}" style="white-space:nowrap">${r.name}${iconsHtml}</td>
+      <td>${r.смены}</td><td>${r.утро??'—'}</td><td>${r.вечер??'—'}</td><td>${r.пом??'—'}</td><td>${r.usl?fmt(r.usl):'—'}</td><td>${fmt(r.tov)}</td>
+      <td>${r.ps?fmt(r.ps):'—'}</td><td>${r.tovSm > 0 ? fmt(Math.round(r.tovSm)) : '—'}</td><td>${r.пробные??'—'}</td><td>${r.fsh||'—'}</td><td>${r.fr?fmt(r.fr):'—'}</td>
+      <td class="score-cell ${scoreClass(r.score)}" data-breakdown='${breakdown.replace(/'/g,"&#39;")}'>${Math.round(r.score)}</td>
+    </tr>`;
+  });
+  return rows;
+}
+
 // Build Q2 aggregate rows (uses dataQ2, товары/смену)
 function buildQ2Rows(d2) {
   const maxUsl   = Math.max(...d2.all.map(r=>r.usl)) || 1;
@@ -1043,6 +1122,7 @@ Object.entries(data).forEach(([studio, d]) => {
       </div>
       <div class="tab-bar">
         <button class="tab-btn active"    data-tab="sep"   onclick="switchTab('${sid}','sep')">СЕНТЯБРЬ</button>
+        <button class="tab-btn"           data-tab="q3sum" onclick="switchTab('${sid}','q3sum')">3 КВАРТАЛ</button>
         <button class="tab-btn"           data-tab="aug"   onclick="switchTab('${sid}','aug')">АВГУСТ</button>
         <button class="tab-btn"           data-tab="jul"   onclick="switchTab('${sid}','jul')">ИЮЛЬ</button>
         <button class="tab-btn"           data-tab="jun"   onclick="switchTab('${sid}','jun')">ИЮНЬ</button>
@@ -1088,6 +1168,14 @@ Object.entries(data).forEach(([studio, d]) => {
             return '<thead><tr><th>#</th><th>Имя</th><th>Смены</th><th>Утро</th><th>Вечер</th><th>Пом.</th><th>Пробные</th><th>Балл</th></tr></thead><tbody>'+rowsHtml+'</tbody>';
           })()}
         </table></div>
+      </div>
+      <div class="tab-pane" data-tab="q3sum">
+        ${(()=>{ const d3=dataQ3[studio]; return d3 ? `<div class="table-wrap"><table>
+          <thead><tr><th>#</th><th>Имя</th><th>Смены</th><th>Утро</th><th>Вечер</th><th>Пом.</th><th>Продажи услуг</th>
+            <th>Продажи товаров</th><th>Услуги/смену</th><th>Товары/смену</th><th>Пробные</th><th>First шт</th><th>First руб</th><th>Балл</th>
+          </tr></thead>
+          <tbody>${buildQ3Rows(d3)}</tbody>
+        </table></div>` : '<p style="padding:1rem;color:rgba(92,105,55,.5)">Данных пока нет</p>'; })()}
       </div>
       <div class="tab-pane" data-tab="q2sum">
         <div class="table-wrap"><table>

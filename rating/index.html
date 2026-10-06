@@ -175,7 +175,7 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
     </div>
     <h1>Сердца <i>Yoga Space</i></h1>
     <div class="period" style="font-size:13px;color:rgba(253,246,240,.75);font-family:'Noto Serif Display',serif;font-style:italic;letter-spacing:.04em;margin-bottom:.4rem">Эти девушки могут всё</div>
-    <div class="period">АВГУСТ 2026</div>
+    <div class="period">СЕНТЯБРЬ 2026</div>
   </div>
 </div>
 
@@ -185,7 +185,8 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;flex-wrap:wrap">
       <div id="winners-label" style="font-family:'Unbounded',sans-serif;font-size:11px;letter-spacing:.1em;color:#5C6937;white-space:nowrap">ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ</div>
       <div style="display:flex;gap:6px;margin-left:4px">
-        <button id="wbtn-aug" onclick="renderWinners('aug')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid #5C6937;background:#5C6937;color:#FDF6F0;cursor:pointer">АВГУСТ</button>
+        <button id="wbtn-sep" onclick="renderWinners('sep')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid #5C6937;background:#5C6937;color:#FDF6F0;cursor:pointer">СЕНТЯБРЬ</button>
+        <button id="wbtn-aug" onclick="renderWinners('aug')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">АВГУСТ</button>
         <button id="wbtn-jul" onclick="renderWinners('jul')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">ИЮЛЬ</button>
         <button id="wbtn-jun" onclick="renderWinners('jun')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">ИЮНЬ</button>
         <button id="wbtn-q2"  onclick="renderWinners('q2')"  style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">2 КВАРТАЛ</button>
@@ -225,7 +226,7 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
     <span style="font-family:'Unbounded',sans-serif;font-size:9px;color:rgba(253,246,240,.4);letter-spacing:.1em">YOGA SPACE</span>
   </div>
   <span>© <a href="https://yogaspace.ru">yogaspace.ru</a></span>
-  <span>АВГУСТ 2026</span>
+  <span>СЕНТЯБРЬ 2026</span>
 </div>
 
 <script>
@@ -431,6 +432,16 @@ const monthlyData = {
       {name:'Коклева Лада',        смены:5,  утро:1, вечер:4, пом:3, usl:320495, tov:66509,  ps:77401, fsh:9,  fr:69840,  пробные:23},
       {name:'Крупнова Яна',        смены:6,  утро:0, вечер:6, пом:7, usl:316760, tov:60605,  ps:62894, fsh:8,  fr:58240,  пробные:24},
     ],
+    sep: [
+      {name:'Андриянова Аня',      смены:7,  утро:1, вечер:6, пом:0, usl:547874,  tov:81534,  ps:89915,  fsh:12, fr:97600,  пробные:36},
+      {name:'Гасимова Карина',     смены:9,  утро:3, вечер:6, пом:0, usl:715220,  tov:85016,  ps:88915,  fsh:11, fr:96160,  пробные:38},
+      {name:'Кузнецова Варя',      смены:6,  утро:1, вечер:5, пом:0, usl:645470,  tov:45351,  ps:115137, fsh:6,  fr:41120,  пробные:24},
+      {name:'Антропова Вероника',  смены:8,  утро:8, вечер:0, пом:0, usl:544460,  tov:73355,  ps:77227,  fsh:8,  fr:79200,  пробные:32},
+      {name:'Крупнова Яна',        смены:7,  утро:2, вечер:5, пом:0, usl:426285,  tov:67559,  ps:70549,  fsh:6,  fr:51360,  пробные:38},
+      {name:'Соболева Ирина',      смены:8,  утро:7, вечер:1, пом:0, usl:487510,  tov:67120,  ps:69329,  fsh:4,  fr:39840,  пробные:25},
+      {name:'Коклева Лада',        смены:8,  утро:2, вечер:6, пом:0, usl:458585,  tov:80995,  ps:67448,  fsh:9,  fr:74960,  пробные:45},
+      {name:'Корниенко Екатерина', смены:7,  утро:6, вечер:1, пом:0, usl:372475,  tov:51256,  ps:60533,  fsh:8,  fr:58240,  пробные:28},
+    ],
   },
   'Мясницкая': {
     hasFst: true,
@@ -504,6 +515,16 @@ const monthlyData = {
       {name:'Павлова Виктория',   смены:3,  утро:2,  вечер:1, пом:4, usl:141482,  tov:30018, ps:57167, fsh:3,  fr:28720,  пробные:9},
       {name:'Матюпатенко Алена',  смены:0,  утро:0,  вечер:0, пом:0, usl:0,       tov:2560,  ps:0,     fsh:0,  fr:0,      пробные:0},
     ],
+    sep: [
+      {name:'Воробьева Ольга',   смены:13, утро:2,  вечер:11, пом:0, usl:1058130, tov:87216, ps:88104, fsh:37, fr:328400, пробные:65},
+      {name:'Смокот Полина',     смены:11, утро:7,  вечер:4,  пом:0, usl:830990,  tov:38422, ps:79037, fsh:18, fr:157760, пробные:49},
+      {name:'Павлова Виктория',  смены:5,  утро:5,  вечер:0,  пом:0, usl:340878,  tov:29268, ps:74029, fsh:8,  fr:101920, пробные:11},
+      {name:'Корнеева Ольга',    смены:7,  утро:2,  вечер:5,  пом:0, usl:440165,  tov:36007, ps:68025, fsh:11, fr:130960, пробные:44},
+      {name:'Кидяева Наталья',   смены:8,  утро:4,  вечер:4,  пом:0, usl:461318,  tov:74906, ps:67028, fsh:11, fr:100160, пробные:46},
+      {name:'Зубкова Алена',     смены:8,  утро:5,  вечер:3,  пом:0, usl:388924,  tov:53261, ps:55273, fsh:8,  fr:72160,  пробные:36},
+      {name:'Григорова Дарья',   смены:8,  утро:5,  вечер:3,  пом:0, usl:339389,  tov:46565, ps:48244, fsh:7,  fr:47120,  пробные:45},
+      {name:'Матюпатенко Алена', смены:0,  утро:0,  вечер:0,  пом:0, usl:0,       tov:2360,  ps:0,     fsh:0,  fr:0,      пробные:0},
+    ],
   },
   'Никитская': {
     hasFst: true,
@@ -570,6 +591,14 @@ const monthlyData = {
       {name:'Мохова Валерия',      смены:10, утро:6, вечер:4,  пом:3, usl:187120, tov:35383, ps:22250, fsh:9,  fr:64320,  пробные:29},
       {name:'Сидякина Виктория',   смены:6,  утро:3, вечер:3,  пом:8, usl:230220, tov:24045, ps:42378, fsh:3,  fr:9440,   пробные:13},
       {name:'Зинченко Лера',       смены:7,  утро:3, вечер:4,  пом:3, usl:195680, tov:54385, ps:35724, fsh:3,  fr:23040,  пробные:23},
+    ],
+    sep: [
+      {name:'Барышникова Марина',  смены:16, утро:10, вечер:6, пом:0, usl:639140, tov:76000,  ps:44696, fsh:9,  fr:73560,  пробные:39},
+      {name:'Мохова Валерия',      смены:9,  утро:1,  вечер:8, пом:0, usl:333051, tov:30080,  ps:40348, fsh:15, fr:91200,  пробные:56},
+      {name:'Кормилицина Анна',    смены:9,  утро:2,  вечер:7, пом:0, usl:232720, tov:32224,  ps:29438, fsh:6,  fr:36480,  пробные:31},
+      {name:'Солодовникова Настя', смены:11, утро:5,  вечер:6, пом:0, usl:215351, tov:54516,  ps:24533, fsh:10, fr:118240, пробные:27},
+      {name:'Зинченко Лера',       смены:10, утро:8,  вечер:2, пом:0, usl:222686, tov:21019,  ps:24371, fsh:0,  fr:0,      пробные:22},
+      {name:'Сидякина Виктория',   смены:5,  утро:4,  вечер:1, пом:0, usl:138730, tov:17943,  ps:31335, fsh:1,  fr:6840,   пробные:8},
     ],
   },
   'Чернышевская': {
@@ -651,7 +680,7 @@ const monthlyData = {
 
 // Sort monthly by score descending, assign places
 Object.values(monthlyData).forEach(d => {
-  ['jan','feb','mar','apr','may','jun','jul','aug'].forEach(m => {
+  ['jan','feb','mar','apr','may','jun','jul','aug','sep'].forEach(m => {
     if (!d[m]) return;
     const rows = d[m];
     const maxPs    = Math.max(...rows.map(r => r.ps||0)) || 1;
@@ -764,6 +793,30 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
   dataAug[studio] = { all: scored, winner: scored[0], hasFinancial };
 });
 
+// Sep winners
+const dataSep = {};
+Object.entries(monthlyData).forEach(([studio, md]) => {
+  if (!md.sep) return;
+  const rows = md.sep.filter(r => r.смены > 0 || (r.пробные||0) > 0);
+  const hasFinancial = rows.some(r => (r.ps||0) > 0 || (r.fsh||0) > 0);
+  let scored;
+  if (hasFinancial) {
+    const maxPs    = Math.max(...rows.map(r => r.ps||0)) || 1;
+    const maxFsh   = Math.max(...rows.map(r => r.fsh||0)) || 1;
+    const maxTovSm = Math.max(...rows.map(r => r.смены > 0 ? r.tov/r.смены : 0)) || 1;
+    scored = rows.map(r => {
+      const tovSm = r.смены > 0 ? r.tov/r.смены : 0;
+      return { ...r, tovSm, score: Math.round(((r.ps||0)/maxPs*0.60 + (r.fsh||0)/maxFsh*0.30 + tovSm/maxTovSm*0.10)*100) };
+    });
+  } else {
+    const maxProbny = Math.max(...rows.map(r => r.пробные||0)) || 1;
+    scored = rows.map(r => ({ ...r, tovSm: 0, score: Math.round((r.пробные||0)/maxProbny*100) }));
+  }
+  scored.sort((a,b) => b.score - a.score);
+  scored.forEach((r,i) => r.place = i+1);
+  dataSep[studio] = { all: scored, winner: scored[0], hasFinancial };
+});
+
 // May winners
 const dataMay = {};
 Object.entries(monthlyData).forEach(([studio, md]) => {
@@ -781,13 +834,17 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
 });
 
 function renderWinners(mode) {
-  const data  = mode === 'q2' ? dataQ2 : mode === 'jun' ? dataJun : mode === 'aug' ? dataAug : dataJul;
-  const label = mode === 'q2' ? 'ЛИДЕРЫ 2 КВАРТАЛА ПО СТУДИЯМ' : mode === 'jun' ? 'ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ' : mode === 'aug' ? 'ЛИДЕРЫ АВГУСТА ПО СТУДИЯМ' : 'ЛИДЕРЫ ИЮЛЯ ПО СТУДИЯМ';
+  const data  = mode === 'sep' ? dataSep : mode === 'q2' ? dataQ2 : mode === 'jun' ? dataJun : mode === 'aug' ? dataAug : dataJul;
+  const label = mode === 'sep' ? 'ЛИДЕРЫ СЕНТЯБРЯ ПО СТУДИЯМ' : mode === 'q2' ? 'ЛИДЕРЫ 2 КВАРТАЛА ПО СТУДИЯМ' : mode === 'jun' ? 'ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ' : mode === 'aug' ? 'ЛИДЕРЫ АВГУСТА ПО СТУДИЯМ' : 'ЛИДЕРЫ ИЮЛЯ ПО СТУДИЯМ';
   document.getElementById('winners-label').textContent = label;
+  const btnSep = document.getElementById('wbtn-sep');
   const btnAug = document.getElementById('wbtn-aug');
   const btnJul = document.getElementById('wbtn-jul');
   const btnJun = document.getElementById('wbtn-jun');
   const btnQ2  = document.getElementById('wbtn-q2');
+  btnSep.style.background    = mode === 'sep' ? '#5C6937' : 'transparent';
+  btnSep.style.color         = mode === 'sep' ? '#FDF6F0' : '#5C6937';
+  btnSep.style.borderColor   = mode === 'sep' ? '#5C6937' : 'rgba(92,105,55,.3)';
   btnAug.style.background    = mode === 'aug' ? '#5C6937' : 'transparent';
   btnAug.style.color         = mode === 'aug' ? '#FDF6F0' : '#5C6937';
   btnAug.style.borderColor   = mode === 'aug' ? '#5C6937' : 'rgba(92,105,55,.3)';
@@ -832,7 +889,7 @@ function renderWinners(mode) {
       </div>`;
   });
 }
-renderWinners('aug');
+renderWinners('sep');
 
 function switchTab(sid, tab) {
   document.querySelectorAll(`#studio-${sid} .tab-btn:not(.tab-disabled)`).forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
@@ -843,10 +900,12 @@ function switchTab(sid, tab) {
     renderWinners('jul');
   } else if (tab === 'jun') {
     renderWinners('jun');
+  } else if (tab === 'sep') {
+    renderWinners('sep');
   } else if (tab === 'aug') {
     renderWinners('aug');
   } else {
-    renderWinners('aug');
+    renderWinners('sep');
   }
 }
 
@@ -983,7 +1042,8 @@ Object.entries(data).forEach(([studio, d]) => {
         <span class="studio-header-name">${studio.toUpperCase()}</span>
       </div>
       <div class="tab-bar">
-        <button class="tab-btn active"    data-tab="aug"   onclick="switchTab('${sid}','aug')">АВГУСТ</button>
+        <button class="tab-btn active"    data-tab="sep"   onclick="switchTab('${sid}','sep')">СЕНТЯБРЬ</button>
+        <button class="tab-btn"           data-tab="aug"   onclick="switchTab('${sid}','aug')">АВГУСТ</button>
         <button class="tab-btn"           data-tab="jul"   onclick="switchTab('${sid}','jul')">ИЮЛЬ</button>
         <button class="tab-btn"           data-tab="jun"   onclick="switchTab('${sid}','jun')">ИЮНЬ</button>
         <button class="tab-btn"           data-tab="may"   onclick="switchTab('${sid}','may')">МАЙ</button>
@@ -995,7 +1055,24 @@ Object.entries(data).forEach(([studio, d]) => {
         <button class="tab-btn"           data-tab="feb" onclick="switchTab('${sid}','feb')">ФЕВРАЛЬ</button>
         <button class="tab-btn"           data-tab="mar" onclick="switchTab('${sid}','mar')">МАРТ</button>
       </div>
-      <div class="tab-pane active" data-tab="aug">
+      <div class="tab-pane active" data-tab="sep">
+        <div class="table-wrap"><table>
+          ${(()=>{
+            const sepStudio = dataSep[studio];
+            if (sepStudio?.hasFinancial) {
+              return '<thead><tr>' + monthlyThead(hasFst, true, true) + '</tr></thead><tbody>' + monthlyTbody(md.sep.filter(r=>r.смены>0||(r.пробные||0)>0), hasFst, true, true) + '</tbody>';
+            }
+            const sepRows = sepStudio?.all || [];
+            const rowsHtml = sepRows.map(r => {
+              const isW = r.place === 1;
+              const rankEl = isW ? '<span class="rank-1">1</span>' : '<span class="rank-other">'+r.place+'</span>';
+              return '<tr class="'+(isW?'winner-row':'')+'"><td>'+rankEl+'</td><td class="'+(isW?'winner-name-cell':'')+'" style="white-space:nowrap">'+r.name+'</td><td>'+r.смены+'</td><td>'+r.утро+'</td><td>'+r.вечер+'</td><td>'+r.пом+'</td><td>'+r.пробные+'</td><td class="score-cell '+(r.score===100?'top':r.score>=70?'mid':'low')+'">'+r.score+'</td></tr>';
+            }).join('');
+            return '<thead><tr><th>#</th><th>Имя</th><th>Смены</th><th>Утро</th><th>Вечер</th><th>Пом.</th><th>Пробные</th><th>Балл</th></tr></thead><tbody>'+rowsHtml+'</tbody>';
+          })()}
+        </table></div>
+      </div>
+      <div class="tab-pane" data-tab="aug">
         <div class="table-wrap"><table>
           ${(()=>{
             const augStudio = dataAug[studio];

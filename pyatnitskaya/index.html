@@ -93,7 +93,7 @@ function bars(el,rows,color){const mx=Math.max(...rows.map(r=>r[1]));document.ge
 // sales
 const tq=TYPES.reduce((s,t)=>s+t[1].reduce((a,x)=>a+x[0],0),0),ts=TYPES.reduce((s,t)=>s+t[1].reduce((a,x)=>a+x[1],0),0);
 const nb=BUYERS.length,known=BUYERS.filter(b=>b.status!='new').length;
-document.getElementById('kpis').innerHTML=[[R(ts),'выручка предпродаж'],[fmt(tq),'абонементов (за вычетом 5 возвратов)'],[R(ts/tq),'средний чек'],[fmt(nb),'покупателей'],[Math.round(known/nb*100)+'%','уже наши гости']].map(k=>`<div class="kpi"><div class="n">${k[0]}</div><div class="l">${k[1]}</div></div>`).join('');
+document.getElementById('kpis').innerHTML=[[R(ts),'выручка предпродаж'],[fmt(tq),'абонементов (за вычетом 5 возвратов)'],[R(ts/tq),'средний чек'],[fmt(nb),'покупателей'],[Math.round((nb-known)/nb*100)+'%',`новых гостей · ${nb-known} из ${nb}`]].map(k=>`<div class="kpi"><div class="n">${k[0]}</div><div class="l">${k[1]}</div></div>`).join('');
 const st=STUD.map((s,i)=>[s,TYPES.reduce((a,t)=>a+t[1][i][1],0),TYPES.reduce((a,t)=>a+t[1][i][0],0)]);
 bars('byStudio',st.map(s=>[s[0],s[1],`${R(s[1])} · ${s[2]} шт`]),'#5C6937');
 bars('byType',TYPES.map(t=>{const q=t[1].reduce((a,x)=>a+x[0],0),s=t[1].reduce((a,x)=>a+x[1],0);return[t[0],s,`${R(s)} · ${q} шт`]}),'#F0803B');

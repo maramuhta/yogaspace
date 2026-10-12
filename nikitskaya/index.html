@@ -3666,7 +3666,8 @@ document.addEventListener('DOMContentLoaded', function(){
   // Определяем последний месяц из данных автоматически
   const n = WEEKS.labels.length - 1;
   let latestId = 'apr';
-  if(WEEKS.isSeptember && WEEKS.isSeptember[n]) latestId = 'sep';
+  if(WEEKS.isOctober && WEEKS.isOctober[n]) latestId = 'oct';
+  else if(WEEKS.isSeptember && WEEKS.isSeptember[n]) latestId = 'sep';
   else if(WEEKS.isAugust && WEEKS.isAugust[n]) latestId = 'aug';
   else if(WEEKS.isJuly && WEEKS.isJuly[n]) latestId = 'jul';
   else if(WEEKS.isJune && WEEKS.isJune[n]) latestId = 'jun';
@@ -3681,7 +3682,7 @@ document.addEventListener('DOMContentLoaded', function(){
     document.querySelectorAll('.mpane').forEach(p => p.classList.remove('active'));
     document.getElementById('month-' + latestId).classList.add('active');
     // Переключаем кнопки месяцев
-    const nameMap = {mar:'Март', apr:'Апрель', may:'Май', jun:'Июнь', jul:'Июль', aug:'Август', sep:'Сентябрь'};
+    const nameMap = {mar:'Март', apr:'Апрель', may:'Май', jun:'Июнь', jul:'Июль', aug:'Август', sep:'Сентябрь', oct:'Октябрь'};
     document.querySelectorAll('.mbtn').forEach(b => {
       b.classList.remove('active');
       if(b.textContent.trim() === nameMap[latestId]) b.classList.add('active');

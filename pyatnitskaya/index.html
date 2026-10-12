@@ -65,9 +65,6 @@ ul{margin:0;padding-left:16px}.u{color:var(--m);font-size:12px}.g{color:var(--m)
 <div class="box"><b>Онлайн или администратор</b><div id="byChan"></div></div>
 <div class="box"><b>Продавцы, ₽</b><div id="bySeller"></div></div>
 </div>
-<div class="tw" style="margin-bottom:14px"><table class="big" id="sellerTable"></table></div>
-<div class="note" style="margin:-4px 0 18px">«Сайт» — продажи через служебного пользователя API (онлайн-оплата на сайте), «Приложение» — продажи через Mobifitness. Возвраты вычтены: у Соловьевой Юлии 3 тестовые продажи по 1 ₽ отменены, у Антроповой Вероники 1 абонемент возвращён.</div>
-<div class="tw"><table id="typeTable"></table></div>
 
 </div>
 
@@ -101,7 +98,6 @@ const st=STUD.map((s,i)=>[s,TYPES.reduce((a,t)=>a+t[1][i][1],0),TYPES.reduce((a,
 bars('byStudio',st.map(s=>[s[0],s[1],`${R(s[1])} · ${s[2]} шт`]),'#5C6937');
 bars('byType',TYPES.map(t=>{const q=t[1].reduce((a,x)=>a+x[0],0),s=t[1].reduce((a,x)=>a+x[1],0);return[t[0],s,`${R(s)} · ${q} шт`]}),'#F0803B');
 document.getElementById('keySales').innerHTML=`<b>Коротко:</b> продано ${fmt(tq)} абонементов на ${R(ts)}. ${Math.round(st[0][1]/ts*100)}% выручки оформлено на самой Пятницкой, остальное — в других студиях (чаще на Мясницкой). Больше всего денег принесли абонементы на 20 занятий (${Math.round(TYPES[2][1].reduce((a,x)=>a+x[1],0)/ts*100)}%), чаще всего покупали 5 занятий.`;
-document.getElementById('typeTable').innerHTML='<thead><tr><th>Абонемент</th>'+STUD.map(s=>`<th class="num">${s}</th>`).join('')+'<th class="num">Итого</th></tr></thead><tbody>'+TYPES.map(t=>`<tr><td class="nm">${t[0]}</td>${t[1].map(x=>`<td class="num">${x[0]?x[0]+' · '+R(x[1]):'—'}</td>`).join('')}<td class="num"><b>${t[1].reduce((a,x)=>a+x[0],0)} · ${R(t[1].reduce((a,x)=>a+x[1],0))}</b></td></tr>`).join('')+`<tr class="tot"><td>Итого</td>${st.map(s=>`<td class="num">${s[2]} · ${R(s[1])}</td>`).join('')}<td class="num">${tq} · ${R(ts)}</td></tr></tbody>`;
 // who
 const g={};Object.keys(ST).forEach(k=>g[k]=BUYERS.filter(b=>b.status==k));
 const short=a=>a.replace(' занятий','').replace('Безлимит 1 мес','Безлимит');
@@ -131,10 +127,6 @@ const SELLERS=[{"name": "Служебный пользователь API (не �
  bars('byChan',Object.entries(ch).sort((a,b)=>b[1].s-a[1].s).map(([k,v])=>[k,v.s,`${R(v.s)} · ${v.q} шт · ${Math.round(v.s/tot*100)}%`,CC[k]]));
  const act=SELLERS.filter(x=>x.q>0);
  bars('bySeller',act.map(x=>[NM(x.name).replace(' (онлайн-оплата)','').replace(' (Mobifitness)',''),x.s,`${R(x.s)} · ${x.q} шт`,CC[CH(x.name)]]));
- const kinds=['5 занятий','10 занятий','20 занятий','Безлимит 1 мес'];
- document.getElementById('sellerTable').innerHTML='<thead><tr><th>Продавец</th><th>Канал</th><th>Студия оформления</th>'+kinds.map(k=>`<th class="num">${k.replace(' занятий','').replace(' 1 мес','')}</th>`).join('')+'<th class="num">Шт</th><th class="num">Сумма</th><th class="num">Доля</th></tr></thead><tbody>'+
-  SELLERS.map(x=>`<tr><td class="nm">${NM(x.name)}</td><td>${CH(x.name)}</td><td>${Object.keys(x.st).join(', ')}</td>${kinds.map(k=>`<td class="num">${x.by[k]&&x.by[k][0]?x.by[k][0]:'—'}</td>`).join('')}<td class="num">${x.q}${x.ret?` <span class="u">(возвр. ${-x.ret})</span>`:''}</td><td class="num">${R(x.s)}</td><td class="num">${Math.round(x.s/tot*100)}%</td></tr>`).join('')+
-  `<tr class="tot"><td>Итого</td><td></td><td></td>${kinds.map(k=>`<td class="num">${SELLERS.reduce((a,x)=>a+(x.by[k]?x.by[k][0]:0),0)}</td>`).join('')}<td class="num">${tq}</td><td class="num">${R(tot)}</td><td class="num">100%</td></tr></tbody>`;
  const on=(ch['Сайт']?ch['Сайт'].q:0)+(ch['Приложение']?ch['Приложение'].q:0),ad=ch['Администратор']||{q:0,s:0};
  document.getElementById('keySales').innerHTML+=` <br><b>Кто продал:</b> ${on} из ${tq} абонементов (${Math.round(on/tq*100)}%) гости купили сами — на сайте или в приложении. Через администраторов продано ${ad.q} шт. на ${R(ad.s)}.`;
 })();

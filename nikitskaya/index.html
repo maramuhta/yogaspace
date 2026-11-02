@@ -1296,6 +1296,24 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
       <tbody id="sepFirstDayTable"></tbody>
     </table></div>
   </div>
+  <div class="panel">
+    <h3>Методология оценки</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(92,105,55,.06);border-radius:12px;padding:14px 18px">
+        <span style="font-size:22px;font-weight:600;color:var(--g);min-width:62px">60%</span>
+        <span>Средние продажи услуг в смену</span></div>
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(92,105,55,.06);border-radius:12px;padding:14px 18px">
+        <span style="font-size:22px;font-weight:600;color:var(--g);min-width:62px">30%</span>
+        <span>Количество проданных First</span></div>
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(92,105,55,.06);border-radius:12px;padding:14px 18px">
+        <span style="font-size:22px;font-weight:600;color:var(--g);min-width:62px">10%</span>
+        <span>Средние продажи товаров в смену</span></div>
+    </div>
+    <p style="margin-top:16px;color:var(--muted);font-size:13px;line-height:1.6">
+      Каждый показатель нормируется относительно лучшего результата в студии и умножается на
+      соответствующий вес. Итоговый балл отражает общую эффективность администратора: насколько
+      результативно он работает в смену, продаёт абонементы First и товары.</p>
+  </div>
   <div id="sepShiftsBreakdown" class="panel"></div>
 </div>
 
@@ -1451,6 +1469,24 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
       <thead><tr><th>Администратор</th><th class="r">Пробных гостей</th><th class="r">Продажи, шт.</th><th class="r">Продажи, руб.</th><th class="r">Конверсия</th><th>Тип абонементов</th></tr></thead>
       <tbody id="octFirstDayTable"></tbody>
     </table></div>
+  </div>
+  <div class="panel">
+    <h3>Методология оценки</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(92,105,55,.06);border-radius:12px;padding:14px 18px">
+        <span style="font-size:22px;font-weight:600;color:var(--g);min-width:62px">60%</span>
+        <span>Средние продажи услуг в смену</span></div>
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(92,105,55,.06);border-radius:12px;padding:14px 18px">
+        <span style="font-size:22px;font-weight:600;color:var(--g);min-width:62px">30%</span>
+        <span>Количество проданных First</span></div>
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(92,105,55,.06);border-radius:12px;padding:14px 18px">
+        <span style="font-size:22px;font-weight:600;color:var(--g);min-width:62px">10%</span>
+        <span>Средние продажи товаров в смену</span></div>
+    </div>
+    <p style="margin-top:16px;color:var(--muted);font-size:13px;line-height:1.6">
+      Каждый показатель нормируется относительно лучшего результата в студии и умножается на
+      соответствующий вес. Итоговый балл отражает общую эффективность администратора: насколько
+      результативно он работает в смену, продаёт абонементы First и товары.</p>
   </div>
   <div id="octShiftsBreakdown" class="panel"></div>
 </div>
@@ -1794,17 +1830,20 @@ const ADMINS_WEEKLY={
     {name:'Вика',   abon:149200,tovar:11000,shifts:5, shifts_morn:5,shifts_eve:0,shifts_p:5, newQty:2,newRub:21200},
   ],
 };
-// Рейтинг = среднее место по 4 категориям: услуги/смену, товары/смену, кол-во новичков, сумма новичкам.
-// При равенстве значений место общее (1-1-2), при равенстве среднего места — приоритет по обороту.
+// Рейтинг = балл 0–100. Каждый показатель нормируется к лучшему результату
+// в студии и умножается на вес: услуги/смену 60%, кол-во First 30%, товары/смену 10%.
+const ADM_WEIGHTS=[['abonPS',60,'услуги в смену'],['newQty',30,'First, шт.'],['tovarPS',10,'товары в смену']];
 function prepAdmins(arr){
   const a=arr.map(d=>({...d,total:d.abon+d.tovar,
     perShift:d.shifts>0?Math.round((d.abon+d.tovar)/d.shifts):0,
     abonPS:d.shifts>0?d.abon/d.shifts:0,
     tovarPS:d.shifts>0?d.tovar/d.shifts:0}));
-  const CATS=['abonPS','tovarPS','newQty','newRub'];
-  CATS.forEach(k=>{const vals=[...new Set(a.map(x=>x[k]||0))].sort((p,q)=>q-p);a.forEach(x=>{x['pl_'+k]=vals.indexOf(x[k]||0)+1;});});
-  a.forEach(x=>{x.avgPlace=CATS.reduce((s,k)=>s+x['pl_'+k],0)/CATS.length;});
-  return a.sort((p,q)=>p.avgPlace-q.avgPlace||q.total-p.total);
+  ADM_WEIGHTS.forEach(([k,w])=>{
+    const mx=Math.max(...a.map(x=>x[k]||0),0);
+    a.forEach(x=>{x['sc_'+k]=mx>0?(x[k]||0)/mx*w:0;});
+  });
+  a.forEach(x=>{x.score=ADM_WEIGHTS.reduce((s,[k])=>s+x['sc_'+k],0);});
+  return a.sort((p,q)=>q.score-p.score||q.total-p.total);
 }
 // Итог апреля — данные из официальных отчётов (услуги и товары paid, First из xlsx)
 const ADMINS_APR=[
@@ -3410,11 +3449,11 @@ function renderMonth(prefix){
       const bc=rank===0?'b1':rank===1?'b2':rank===2?'b3':'bn';
       const pb=Math.round(adm.total/maxTotal*100);
       const _bdg=(ok,tip,ico)=>ok?`<span title="${tip}" style="font-size:13px;margin-left:4px">${ico}</span>`:'';
-      const badges=_bdg(adm.abonPS>0&&adm.pl_abonPS===1,'Лидер по услугам в смену','💰')
-        +_bdg(adm.tovarPS>0&&adm.pl_tovarPS===1,'Лидер по товарам в смену','🛍️')
-        +_bdg(adm.newQty>0&&adm.pl_newQty===1,'Лидер по кол-ву новичков','👥');
+      const badges=_bdg(adm.abonPS>0&&adm.sc_abonPS>=60-1e-9,'Лидер по услугам в смену','💰')
+        +_bdg(adm.tovarPS>0&&adm.sc_tovarPS>=10-1e-9,'Лидер по товарам в смену','🛍️')
+        +_bdg(adm.newQty>0&&adm.sc_newQty>=30-1e-9,'Лидер по кол-ву новичков','👥');
       const _appCell=_showAppQty?`<td class="r">${adm.appQty!=null?adm.appQty:'—'}</td>`:'';
-      const _plTip=`Среднее место ${adm.avgPlace.toFixed(2)} — услуги/смену: ${adm.pl_abonPS}, товары/смену: ${adm.pl_tovarPS}, новичков шт.: ${adm.pl_newQty}, новичкам руб.: ${adm.pl_newRub}`;
+      const _plTip=`Балл ${adm.score.toFixed(1)} из 100 — услуги в смену ${adm.sc_abonPS.toFixed(1)}/60, First ${adm.sc_newQty.toFixed(1)}/30, товары в смену ${adm.sc_tovarPS.toFixed(1)}/10`;
       tr.innerHTML=`<td><span class="bx ${bc}" title="${_plTip}">${rank+1}</span></td><td style="font-weight:500">${adm.name}${badges}</td>
         <td class="r"><div class="mbar"><div class="mbar-bg"><div class="mbar-fill" style="width:${pb}%"></div></div><span class="mbar-val">${fmt(adm.abon)}</span></div></td>
         <td class="r"><div class="mbar"><div class="mbar-bg"><div class="mbar-fill o" style="width:${Math.round(adm.tovar/maxTovar*100)}%"></div></div><span class="mbar-val">${fmt(adm.tovar)}</span></div></td>

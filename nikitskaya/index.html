@@ -1344,7 +1344,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
     </div>
   </div>
   <div class="panel">
-    <h3>Детализация по категориям</h3><div class="panel-sub">строки — категории · столбцы — недели · итог — сумма недель; первая неделя переходная, захватывает 28–30 сентября</div>
+    <h3>Детализация по категориям</h3><div class="panel-sub">строки — категории · столбцы — недели · итог — полный месяц из 1С (1–31 октября), поэтому не равен сумме недель</div>
     <div class="twrap"><table id="octCatsTable">
       <thead><tr><th>Категория</th><th class="r">28 сен–4 окт</th><th class="r">5–11 окт</th><th class="r">12–18 окт</th><th class="r" style="background:#4a5429">Итого октябрь</th></tr></thead>
       <tbody id="octCatsTableBody"></tbody>
@@ -1721,6 +1721,14 @@ const ADMINS_WEEKLY={
     {name:'Вика',   abon:9600,  tovar:2750, shifts:1,shifts_morn:1,shifts_eve:0,shifts_p:0,newQty:0, newRub:0},
   ],
   // Итог мая: услуги из Май услуги.xlsx (оплата с учётом возврата), First из Ферст.xlsx
+  'Итог октября':[
+    {name:'Марина', abon:532940, tovar:42948, shifts:14, newQty:17, newRub:171200},
+    {name:'Аня К',  abon:322500, tovar:35210, shifts:11, newQty:5,  newRub:56000},
+    {name:'Лера З', abon:287920, tovar:60714, shifts:10, newQty:5,  newRub:38000},
+    {name:'Вика',   abon:242310, tovar:14904, shifts:5,  newQty:2,  newRub:15200},
+    {name:'Настя',  abon:229365, tovar:57277, shifts:11, newQty:1,  newRub:13600},
+    {name:'Лера',   abon:228160, tovar:39941, shifts:11, newQty:4,  newRub:42400},
+  ],
   'Итог мая':[
     {name:'Марина',abon:738665,tovar:44927,shifts:13,shifts_morn:7,shifts_eve:6,shifts_p:5,newQty:11,newRub:107600,visitors:26},
     {name:'Аня К', abon:496460,tovar:49385,shifts:13,shifts_morn:6,shifts_eve:7,shifts_p:4,newQty:9, newRub:80400, visitors:19},
@@ -2355,7 +2363,7 @@ const MONTHLY={
   jun:null,
   jul:null,
   aug:{total:2939714,abon:2674545,tovar:265169},
-  oct:null,
+  oct:{total:2585468,abon:2334474,tovar:250994},
   sep:{total:2641179,abon:2408793,tovar:232386},
 };
 
@@ -2700,18 +2708,18 @@ const CATS_WEEKLY = {
   oct: {
     cols: ['28 сен–4 окт','5–11 окт','12–18 окт','Итого октябрь'],
     rows: [
-      {name:'Абонементы на групповые занятия',   vals:[294290, 325280, 297920, 917490]},
-      {name:'Разовые',                           vals:[118988, 102025, 110500, 331513]},
+      {name:'Абонементы на групповые занятия',   vals:[294290, 325280, 297920, 1366380]},
+      {name:'Разовые',                           vals:[118988, 102025, 110500, 462285]},
       {name:'Фитмост',                           vals:[0, 0, 0, 0]},
-      {name:'Абонементы индивидуальные',         vals:[28000, 44000, 56000, 128000]},
-      {name:'Абонементы майсор и разовые',       vals:[0, 15000, 0, 15000]},
-      {name:'Аренда',                            vals:[28500, 51000, 15000, 94500]},
-      {name:'Мероприятия',                       vals:[19000, 0, 0, 19000]},
-      {name:'Модификаторы',                      vals:[0, 0, 0, 0]},
-      {name:'Товары',                            vals:[37708, 39826, 43675, 121209]},
-      {name:'Подарочный сертификат',             vals:[0, 0, 23330, 23330]},
-      {name:'ОНЛАЙН',                            vals:[17458, 16637, 4000, 38095]},
-      {name:'Прочее (др. студии)',               vals:[990, 55945, 6000, 62935]},
+      {name:'Абонементы индивидуальные',         vals:[28000, 44000, 56000, 179000]},
+      {name:'Абонементы майсор и разовые',       vals:[0, 15000, 0, 59040]},
+      {name:'Аренда',                            vals:[28500, 51000, 15000, 117500]},
+      {name:'Мероприятия',                       vals:[19000, 0, 0, 9000]},
+      {name:'Модификаторы',                      vals:[0, 0, 0, 3000]},
+      {name:'Товары',                            vals:[37708, 39826, 43675, 210584]},
+      {name:'Подарочный сертификат',             vals:[0, 0, 23330, 40410]},
+      {name:'ОНЛАЙН',                            vals:[17458, 16637, 4000, 66595]},
+      {name:'Прочее (др. студии)',               vals:[990, 55945, 6000, 71675]},
     ],
   },
 };
@@ -3366,6 +3374,9 @@ function renderMonth(prefix){
       newbies=NEWBIES_WEEKLY[weekKey]||{labels:[],qty:[],revenue:[],colors:[]};
       firstDay=FIRST_DAY_WEEKLY[weekKey]||{rows:[],total:{trial:0,soldQty:0,soldRub:0,conv:0}};
     }
+
+    // Если для месяца есть прямая выгрузка (напр. «Итог октября») — она главнее суммы недель
+    if(ADMINS_WEEKLY[weekKey]) admins=prepAdmins(ADMINS_WEEKLY[weekKey]);
 
     // ── Обновить карточки шапки ──
     {const pfxA=prefix==='mar'?'ma':prefix==='may'?'mya':prefix==='jun'?'jua':prefix==='jul'?'jula':prefix==='aug'?'auga':prefix==='oct'?'octa':prefix==='sep'?'sepa':'aa';

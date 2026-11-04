@@ -142,6 +142,8 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
 <body>
 <canvas id="confetti-canvas"></canvas>
 
+<button id="fullscreen-btn" onclick="toggleFullscreen()" title="На весь экран" style="position:fixed;bottom:20px;right:20px;z-index:9998;width:40px;height:40px;border-radius:50%;background:#5C6937;color:#FDF6F0;border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.7;transition:opacity .2s" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='.7'">⛶</button>
+
 <div id="score-popup">
   <span id="score-popup-close">✕</span>
   <h4>РАСЧЁТ БАЛЛА</h4>
@@ -1539,6 +1541,23 @@ Object.entries(data).forEach(([studio, d]) => {
 
   closeBtn.addEventListener('click', () => popup.style.display = 'none');
 })();
+
+function toggleFullscreen() {
+  const btn = document.getElementById('fullscreen-btn');
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(()=>{});
+    btn.textContent = '⊠';
+    btn.title = 'Выйти из полного экрана';
+  } else {
+    document.exitFullscreen();
+    btn.textContent = '⛶';
+    btn.title = 'На весь экран';
+  }
+}
+document.addEventListener('fullscreenchange', () => {
+  const btn = document.getElementById('fullscreen-btn');
+  if (!document.fullscreenElement) { btn.textContent = '⛶'; btn.title = 'На весь экран'; }
+});
 </script>
 </body>
 </html>

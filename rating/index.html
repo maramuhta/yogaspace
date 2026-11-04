@@ -175,7 +175,7 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
     </div>
     <h1>Сердца <i>Yoga Space</i></h1>
     <div class="period" style="font-size:13px;color:rgba(253,246,240,.75);font-family:'Noto Serif Display',serif;font-style:italic;letter-spacing:.04em;margin-bottom:.4rem">Эти девушки могут всё</div>
-    <div class="period">СЕНТЯБРЬ 2026</div>
+    <div class="period">ОКТЯБРЬ 2026</div>
   </div>
 </div>
 
@@ -185,7 +185,9 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;flex-wrap:wrap">
       <div id="winners-label" style="font-family:'Unbounded',sans-serif;font-size:11px;letter-spacing:.1em;color:#5C6937;white-space:nowrap">ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ</div>
       <div style="display:flex;gap:6px;margin-left:4px">
-        <button id="wbtn-sep" onclick="renderWinners('sep')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid #5C6937;background:#5C6937;color:#FDF6F0;cursor:pointer">СЕНТЯБРЬ</button>
+        <button id="wbtn-oct" onclick="renderWinners('oct')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid #5C6937;background:#5C6937;color:#FDF6F0;cursor:pointer">ОКТЯБРЬ</button>
+        <button id="wbtn-q4"  onclick="renderWinners('q4')"  style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">4 КВАРТАЛ</button>
+        <button id="wbtn-sep" onclick="renderWinners('sep')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">СЕНТЯБРЬ</button>
         <button id="wbtn-q3"  onclick="renderWinners('q3')"  style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">3 КВАРТАЛ</button>
         <button id="wbtn-aug" onclick="renderWinners('aug')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">АВГУСТ</button>
         <button id="wbtn-jul" onclick="renderWinners('jul')" style="font-family:'Unbounded',sans-serif;font-size:9px;letter-spacing:.05em;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(92,105,55,.3);background:transparent;color:#5C6937;cursor:pointer">ИЮЛЬ</button>
@@ -227,7 +229,7 @@ td.winner-name-cell{color:#F0803B;font-weight:600}
     <span style="font-family:'Unbounded',sans-serif;font-size:9px;color:rgba(253,246,240,.4);letter-spacing:.1em">YOGA SPACE</span>
   </div>
   <span>© <a href="https://yogaspace.ru">yogaspace.ru</a></span>
-  <span>СЕНТЯБРЬ 2026</span>
+  <span>ОКТЯБРЬ 2026</span>
 </div>
 
 <script>
@@ -443,6 +445,16 @@ const monthlyData = {
       {name:'Коклева Лада',        смены:8,  утро:2, вечер:4, вых:2, пом:0, usl:458585,  tov:80995,  ps:67448,  fsh:9,  fr:74960,  пробные:45},
       {name:'Корниенко Екатерина', смены:7,  утро:4, вечер:1, вых:2, пом:0, usl:372475,  tov:51256,  ps:60533,  fsh:8,  fr:58240,  пробные:28},
     ],
+    oct: [
+      {name:'Кузнецова Варя',      смены:8,  утро:1, вечер:4, вых:3, пом:0, usl:892427,  tov:63070,  ps:119437, fsh:17, fr:468200,  пробные:41},
+      {name:'Гасимова Карина',     смены:10, утро:4, вечер:3, вых:3, пом:0, usl:857188,  tov:90473,  ps:94766,  fsh:15, fr:194000,  пробные:57},
+      {name:'Коклева Лада',        смены:9,  утро:0, вечер:8, вых:1, пом:0, usl:592100,  tov:94949,  ps:76339,  fsh:13, fr:117300,  пробные:56},
+      {name:'Соболева Ирина',      смены:8,  утро:5, вечер:0, вых:3, пом:0, usl:527260,  tov:102365, ps:78703,  fsh:12, fr:163500,  пробные:40},
+      {name:'Антропова Вероника',  смены:7,  утро:7, вечер:0, вых:0, пом:0, usl:491304,  tov:48780,  ps:77155,  fsh:1,  fr:24900,   пробные:14},
+      {name:'Корниенко Екатерина', смены:8,  утро:5, вечер:0, вых:3, пом:0, usl:543646,  tov:60913,  ps:75570,  fsh:9,  fr:98300,   пробные:62},
+      {name:'Андриянова Аня',      смены:10, утро:0, вечер:6, вых:4, пом:0, usl:620953,  tov:113797, ps:73475,  fsh:11, fr:113800,  пробные:46},
+      {name:'Крупнова Яна',        смены:2,  утро:0, вечер:1, вых:1, пом:0, usl:120770,  tov:18502,  ps:69636,  fsh:5,  fr:75200,   пробные:14},
+    ],
   },
   'Мясницкая': {
     hasFst: true,
@@ -526,6 +538,16 @@ const monthlyData = {
       {name:'Григорова Дарья',   смены:8,  утро:3,  вечер:2,  вых:3, пом:0, usl:339389,  tov:46565, ps:48244, fsh:7,  fr:47120,  пробные:45},
       {name:'Матюпатенко Алена', смены:0,  утро:0,  вечер:0,  вых:0, пом:0, usl:0,       tov:2360,  ps:0,     fsh:0,  fr:0,      пробные:0},
     ],
+    oct: [
+      {name:'Смокот Полина',      смены:15, утро:7, вечер:4, вых:4, пом:0, usl:1158522, tov:102611, ps:84076,  fsh:23, fr:179920,  пробные:74},
+      {name:'Воробьева Ольга',    смены:17, утро:3, вечер:10,вых:4, пом:0, usl:1158488, tov:99570,  ps:74003,  fsh:25, fr:221200,  пробные:84},
+      {name:'Кидяева Наталья',    смены:9,  утро:0, вечер:4, вых:5, пом:0, usl:545414,  tov:63105,  ps:67613,  fsh:11, fr:71120,   пробные:50},
+      {name:'Корнеева Ольга',     смены:9,  утро:1, вечер:4, вых:4, пом:0, usl:365115,  tov:40913,  ps:45114,  fsh:12, fr:103200,  пробные:49},
+      {name:'Настя',              смены:6,  утро:6, вечер:0, вых:0, пом:0, usl:308325,  tov:24546,  ps:55479,  fsh:8,  fr:87040,   пробные:20},
+      {name:'Зубкова Алена',      смены:2,  утро:1, вечер:0, вых:1, пом:0, usl:141300,  tov:23118,  ps:82209,  fsh:2,  fr:25920,   пробные:7},
+      {name:'Алина',              смены:4,  утро:4, вечер:0, вых:0, пом:0, usl:196045,  tov:13440,  ps:52371,  fsh:7,  fr:62240,   пробные:13},
+      {name:'Матюпатенко Алена',  смены:0,  утро:0, вечер:0, вых:0, пом:0, usl:0,       tov:2670,   ps:0,      fsh:0,  fr:0,       пробные:0},
+    ],
   },
   'Никитская': {
     hasFst: true,
@@ -600,6 +622,14 @@ const monthlyData = {
       {name:'Солодовникова Настя', смены:11, утро:2, вечер:5, вых:4, пом:0, usl:215351, tov:54516,  ps:24533, fsh:10, fr:118240, пробные:27},
       {name:'Зинченко Лера',       смены:10, утро:8, вечер:0, вых:2, пом:0, usl:222686, tov:21019,  ps:24371, fsh:0,  fr:0,      пробные:22},
       {name:'Сидякина Виктория',   смены:5,  утро:4, вечер:0, вых:1, пом:0, usl:138730, tov:17943,  ps:31335, fsh:1,  fr:6840,   пробные:8},
+    ],
+    oct: [
+      {name:'Барышникова Марина',  смены:14, утро:4, вечер:4, вых:6, пом:0, usl:532940,  tov:42948,  ps:41135,  fsh:17, fr:171200,  пробные:53},
+      {name:'Зинченко Лера',       смены:10, утро:6, вечер:0, вых:4, пом:0, usl:287920,  tov:60714,  ps:34863,  fsh:5,  fr:38000,   пробные:19},
+      {name:'Кормилицина Анна',    смены:11, утро:4, вечер:7, вых:0, пом:0, usl:322500,  tov:35210,  ps:32519,  fsh:5,  fr:56000,   пробные:28},
+      {name:'Солодовникова Настя', смены:11, утро:5, вечер:4, вых:2, пом:0, usl:229365,  tov:57277,  ps:26058,  fsh:1,  fr:13600,   пробные:21},
+      {name:'Мохова Валерия',      смены:11, утро:1, вечер:6, вых:4, пом:0, usl:228160,  tov:39941,  ps:24373,  fsh:4,  fr:42400,   пробные:36},
+      {name:'Сидякина Виктория',   смены:5,  утро:2, вечер:1, вых:2, пом:0, usl:242310,  tov:14904,  ps:51443,  fsh:2,  fr:15200,   пробные:10},
     ],
   },
   'Чернышевская': {
@@ -690,7 +720,7 @@ const monthlyData = {
 
 // Sort monthly by score descending, assign places
 Object.values(monthlyData).forEach(d => {
-  ['jan','feb','mar','apr','may','jun','jul','aug','sep'].forEach(m => {
+  ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct'].forEach(m => {
     if (!d[m]) return;
     const rows = d[m];
     const maxPs    = Math.max(...rows.map(r => r.ps||0)) || 1;
@@ -743,6 +773,46 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
   scored.sort((a,b) => b.score - a.score);
   scored.forEach((r,i) => r.place = i+1);
   dataQ3[studio] = { all: scored, winner: scored[0] };
+});
+
+// Q4 aggregate data (October + November + December)
+const dataQ4 = {};
+Object.entries(monthlyData).forEach(([studio, md]) => {
+  const months = ['oct','nov','dec'].map(k => md[k]).filter(Boolean);
+  if (!months.length) return;
+  const adminMap = {};
+  months.forEach(monthData => {
+    monthData.forEach(r => {
+      if (!adminMap[r.name]) {
+        adminMap[r.name] = {name:r.name, смены:0, утро:0, вечер:0, вых:0, пом:0, usl:0, tov:0, fsh:0, fr:0, пробные:null};
+      }
+      const a = adminMap[r.name];
+      a.смены += r.смены||0;
+      a.утро  += r.утро||0;
+      a.вечер += r.вечер||0;
+      a.вых   += r.вых||0;
+      a.пом   += r.пом||0;
+      a.usl   += r.usl||0;
+      a.tov   += r.tov||0;
+      a.fsh   += r.fsh||0;
+      a.fr    += r.fr||0;
+      if (r.пробные != null) a.пробные = (a.пробные||0) + r.пробные;
+    });
+  });
+  const combined = Object.values(adminMap).map(a => ({
+    ...a,
+    ps: a.смены > 0 ? Math.round((a.usl+a.tov)/a.смены) : 0
+  }));
+  const maxPs    = Math.max(...combined.map(r => r.ps)) || 1;
+  const maxFsh   = Math.max(...combined.map(r => r.fsh||0)) || 1;
+  const maxTovSm = Math.max(...combined.map(r => r.смены > 0 ? r.tov/r.смены : 0)) || 1;
+  const scored = combined.map(r => {
+    const tovSm = r.смены > 0 ? r.tov / r.смены : 0;
+    return { ...r, tovSm, score: Math.round(((r.ps||0)/maxPs*0.60 + (r.fsh||0)/maxFsh*0.30 + tovSm/maxTovSm*0.10)*100) };
+  });
+  scored.sort((a,b) => b.score - a.score);
+  scored.forEach((r,i) => r.place = i+1);
+  dataQ4[studio] = { all: scored, winner: scored[0] };
 });
 
 // Q2 aggregate data (April + May)
@@ -868,6 +938,30 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
   dataSep[studio] = { all: scored, winner: scored[0], hasFinancial };
 });
 
+// Oct winners
+const dataOct = {};
+Object.entries(monthlyData).forEach(([studio, md]) => {
+  if (!md.oct) return;
+  const rows = md.oct.filter(r => r.смены > 0 || (r.пробные||0) > 0);
+  const hasFinancial = rows.some(r => (r.ps||0) > 0 || (r.fsh||0) > 0);
+  let scored;
+  if (hasFinancial) {
+    const maxPs    = Math.max(...rows.map(r => r.ps||0)) || 1;
+    const maxFsh   = Math.max(...rows.map(r => r.fsh||0)) || 1;
+    const maxTovSm = Math.max(...rows.map(r => r.смены > 0 ? r.tov/r.смены : 0)) || 1;
+    scored = rows.map(r => {
+      const tovSm = r.смены > 0 ? r.tov/r.смены : 0;
+      return { ...r, tovSm, score: Math.round(((r.ps||0)/maxPs*0.60 + (r.fsh||0)/maxFsh*0.30 + tovSm/maxTovSm*0.10)*100) };
+    });
+  } else {
+    const maxProbny = Math.max(...rows.map(r => r.пробные||0)) || 1;
+    scored = rows.map(r => ({ ...r, tovSm: 0, score: Math.round((r.пробные||0)/maxProbny*100) }));
+  }
+  scored.sort((a,b) => b.score - a.score);
+  scored.forEach((r,i) => r.place = i+1);
+  dataOct[studio] = { all: scored, winner: scored[0], hasFinancial };
+});
+
 // May winners
 const dataMay = {};
 Object.entries(monthlyData).forEach(([studio, md]) => {
@@ -885,15 +979,23 @@ Object.entries(monthlyData).forEach(([studio, md]) => {
 });
 
 function renderWinners(mode) {
-  const data  = mode === 'sep' ? dataSep : mode === 'q3' ? dataQ3 : mode === 'q2' ? dataQ2 : mode === 'jun' ? dataJun : mode === 'aug' ? dataAug : dataJul;
-  const label = mode === 'sep' ? 'ЛИДЕРЫ СЕНТЯБРЯ ПО СТУДИЯМ' : mode === 'q3' ? 'ЛИДЕРЫ 3 КВАРТАЛА ПО СТУДИЯМ' : mode === 'q2' ? 'ЛИДЕРЫ 2 КВАРТАЛА ПО СТУДИЯМ' : mode === 'jun' ? 'ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ' : mode === 'aug' ? 'ЛИДЕРЫ АВГУСТА ПО СТУДИЯМ' : 'ЛИДЕРЫ ИЮЛЯ ПО СТУДИЯМ';
+  const data  = mode === 'oct' ? dataOct : mode === 'q4' ? dataQ4 : mode === 'sep' ? dataSep : mode === 'q3' ? dataQ3 : mode === 'q2' ? dataQ2 : mode === 'jun' ? dataJun : mode === 'aug' ? dataAug : dataJul;
+  const label = mode === 'oct' ? 'ЛИДЕРЫ ОКТЯБРЯ ПО СТУДИЯМ' : mode === 'q4' ? 'ЛИДЕРЫ 4 КВАРТАЛА ПО СТУДИЯМ' : mode === 'sep' ? 'ЛИДЕРЫ СЕНТЯБРЯ ПО СТУДИЯМ' : mode === 'q3' ? 'ЛИДЕРЫ 3 КВАРТАЛА ПО СТУДИЯМ' : mode === 'q2' ? 'ЛИДЕРЫ 2 КВАРТАЛА ПО СТУДИЯМ' : mode === 'jun' ? 'ЛИДЕРЫ ИЮНЯ ПО СТУДИЯМ' : mode === 'aug' ? 'ЛИДЕРЫ АВГУСТА ПО СТУДИЯМ' : 'ЛИДЕРЫ ИЮЛЯ ПО СТУДИЯМ';
   document.getElementById('winners-label').textContent = label;
+  const btnOct = document.getElementById('wbtn-oct');
+  const btnQ4  = document.getElementById('wbtn-q4');
   const btnSep = document.getElementById('wbtn-sep');
   const btnQ3  = document.getElementById('wbtn-q3');
   const btnAug = document.getElementById('wbtn-aug');
   const btnJul = document.getElementById('wbtn-jul');
   const btnJun = document.getElementById('wbtn-jun');
   const btnQ2  = document.getElementById('wbtn-q2');
+  btnOct.style.background    = mode === 'oct' ? '#5C6937' : 'transparent';
+  btnOct.style.color         = mode === 'oct' ? '#FDF6F0' : '#5C6937';
+  btnOct.style.borderColor   = mode === 'oct' ? '#5C6937' : 'rgba(92,105,55,.3)';
+  btnQ4.style.background     = mode === 'q4'  ? '#5C6937' : 'transparent';
+  btnQ4.style.color          = mode === 'q4'  ? '#FDF6F0' : '#5C6937';
+  btnQ4.style.borderColor    = mode === 'q4'  ? '#5C6937' : 'rgba(92,105,55,.3)';
   btnSep.style.background    = mode === 'sep' ? '#5C6937' : 'transparent';
   btnSep.style.color         = mode === 'sep' ? '#FDF6F0' : '#5C6937';
   btnSep.style.borderColor   = mode === 'sep' ? '#5C6937' : 'rgba(92,105,55,.3)';
@@ -944,12 +1046,16 @@ function renderWinners(mode) {
       </div>`;
   });
 }
-renderWinners('sep');
+renderWinners('oct');
 
 function switchTab(sid, tab) {
   document.querySelectorAll(`#studio-${sid} .tab-btn:not(.tab-disabled)`).forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll(`#studio-${sid} .tab-pane`).forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
-  if (tab === 'q3sum') {
+  if (tab === 'oct') {
+    renderWinners('oct');
+  } else if (tab === 'q4sum') {
+    renderWinners('q4');
+  } else if (tab === 'q3sum') {
     renderWinners('q3');
   } else if (tab === 'q2sum') {
     renderWinners('q2');
@@ -962,7 +1068,7 @@ function switchTab(sid, tab) {
   } else if (tab === 'aug') {
     renderWinners('aug');
   } else {
-    renderWinners('sep');
+    renderWinners('oct');
   }
 }
 
@@ -1051,6 +1157,39 @@ function buildQ1Rows(d) {
   return rows;
 }
 
+// Build Q4 aggregate rows (uses dataQ4, товары/смену)
+function buildQ4Rows(d4) {
+  const maxUsl   = Math.max(...d4.all.map(r=>r.usl)) || 1;
+  const maxTovSm = Math.max(...d4.all.map(r=>r.tovSm||0)) || 1;
+  const maxFsh   = Math.max(...d4.all.map(r=>r.fsh||0)) || 1;
+  const maxPs    = Math.max(...d4.all.map(r=>r.ps))  || 1;
+  let rows = '';
+  d4.all.forEach(r => {
+    const isW = r.place === 1;
+    const rankEl = isW ? `<span class="rank-1">1</span>` : `<span class="rank-other">${r.place}</span>`;
+    const icons = [];
+    if(r.ps === maxPs && r.ps > 0) icons.push('<span title="Лидер по средним продажам в смену" style="font-size:14px">💰</span>');
+    if((r.tovSm||0) === maxTovSm && maxTovSm > 0) icons.push('<span title="Лидер по товарам в смену" style="font-size:14px">🛍️</span>');
+    if(r.fsh && r.fsh === maxFsh) icons.push('<span title="Лидер по кол-ву First" style="font-size:14px">👥</span>');
+    const iconsHtml = icons.length ? `<span style="margin-left:5px">${icons.join('')}</span>` : '';
+    const breakdown = JSON.stringify({
+      name: r.name,
+      ps:  {val:r.ps||0,              max:maxPs,               w:60, pts:+((r.ps||0)/maxPs*60).toFixed(1)},
+      fsh: {val:r.fsh||0,             max:maxFsh,              w:30, pts:+((r.fsh||0)/maxFsh*30).toFixed(1)},
+      tov: {val:Math.round(r.tovSm||0), max:Math.round(maxTovSm), w:10, pts:+((r.tovSm||0)/maxTovSm*10).toFixed(1)},
+      total: Math.round(r.score)
+    });
+    rows += `<tr class="${isW?'winner-row':''}">
+      <td>${rankEl}</td>
+      <td class="${isW?'winner-name-cell':''}" style="white-space:nowrap">${r.name}${iconsHtml}</td>
+      <td>${r.смены}</td><td>${r.утро??0}</td><td>${r.вечер??0}</td><td>${r.вых??0}</td><td>${r.usl?fmt(r.usl):'—'}</td><td>${fmt(r.tov)}</td>
+      <td>${r.ps?fmt(r.ps):'—'}</td><td>${r.tovSm > 0 ? fmt(Math.round(r.tovSm)) : '—'}</td><td>${r.пробные??'—'}</td><td>${r.fsh||'—'}</td><td>${r.fr?fmt(r.fr):'—'}</td>
+      <td class="score-cell ${scoreClass(r.score)}" data-breakdown='${breakdown.replace(/'/g,"&#39;")}'>${Math.round(r.score)}</td>
+    </tr>`;
+  });
+  return rows;
+}
+
 // Build Q3 aggregate rows (uses dataQ3, товары/смену)
 function buildQ3Rows(d3) {
   const maxUsl   = Math.max(...d3.all.map(r=>r.usl)) || 1;
@@ -1132,7 +1271,9 @@ Object.entries(data).forEach(([studio, d]) => {
         <span class="studio-header-name">${studio.toUpperCase()}</span>
       </div>
       <div class="tab-bar">
-        <button class="tab-btn active"    data-tab="sep"   onclick="switchTab('${sid}','sep')">СЕНТЯБРЬ</button>
+        <button class="tab-btn active"    data-tab="oct"   onclick="switchTab('${sid}','oct')">ОКТЯБРЬ</button>
+        <button class="tab-btn"           data-tab="q4sum" onclick="switchTab('${sid}','q4sum')">4 КВАРТАЛ</button>
+        <button class="tab-btn"           data-tab="sep"   onclick="switchTab('${sid}','sep')">СЕНТЯБРЬ</button>
         <button class="tab-btn"           data-tab="q3sum" onclick="switchTab('${sid}','q3sum')">3 КВАРТАЛ</button>
         <button class="tab-btn"           data-tab="aug"   onclick="switchTab('${sid}','aug')">АВГУСТ</button>
         <button class="tab-btn"           data-tab="jul"   onclick="switchTab('${sid}','jul')">ИЮЛЬ</button>
@@ -1146,7 +1287,32 @@ Object.entries(data).forEach(([studio, d]) => {
         <button class="tab-btn"           data-tab="feb" onclick="switchTab('${sid}','feb')">ФЕВРАЛЬ</button>
         <button class="tab-btn"           data-tab="mar" onclick="switchTab('${sid}','mar')">МАРТ</button>
       </div>
-      <div class="tab-pane active" data-tab="sep">
+      <div class="tab-pane active" data-tab="oct">
+        <div class="table-wrap"><table>
+          ${(()=>{
+            const octStudio = dataOct[studio];
+            if (octStudio?.hasFinancial) {
+              return '<thead><tr>' + monthlyThead(hasFst, true, true) + '</tr></thead><tbody>' + monthlyTbody(md.oct.filter(r=>r.смены>0||(r.пробные||0)>0), hasFst, true, true) + '</tbody>';
+            }
+            const octRows = octStudio?.all || [];
+            const rowsHtml = octRows.map(r => {
+              const isW = r.place === 1;
+              const rankEl = isW ? '<span class="rank-1">1</span>' : '<span class="rank-other">'+r.place+'</span>';
+              return '<tr class="'+(isW?'winner-row':'')+'"><td>'+rankEl+'</td><td class="'+(isW?'winner-name-cell':'')+'" style="white-space:nowrap">'+r.name+'</td><td>'+r.смены+'</td><td>'+(r.утро||0)+'</td><td>'+(r.вечер||0)+'</td><td>'+(r.вых||0)+'</td><td>'+r.пробные+'</td><td class="score-cell '+(r.score===100?'top':r.score>=70?'mid':'low')+'">'+r.score+'</td></tr>';
+            }).join('');
+            return '<thead><tr><th>#</th><th>Имя</th><th>Смены</th><th>Утро б.</th><th>Вечер б.</th><th>Вых.</th><th>Пробные</th><th>Балл</th></tr></thead><tbody>'+rowsHtml+'</tbody>';
+          })()}
+        </table></div>
+      </div>
+      <div class="tab-pane" data-tab="q4sum">
+        ${(()=>{ const d4=dataQ4[studio]; return d4 ? `<div class="table-wrap"><table>
+          <thead><tr><th>#</th><th>Имя</th><th>Смены</th><th>Утро б.</th><th>Вечер б.</th><th>Вых.</th><th>Продажи услуг</th>
+            <th>Продажи товаров</th><th>Услуги/смену</th><th>Товары/смену</th><th>Пробные</th><th>First шт</th><th>First руб</th><th>Балл</th>
+          </tr></thead>
+          <tbody>${buildQ4Rows(d4)}</tbody>
+        </table></div>` : '<p style="padding:1rem;color:rgba(92,105,55,.5)">Данных пока нет</p>'; })()}
+      </div>
+      <div class="tab-pane" data-tab="sep">
         <div class="table-wrap"><table>
           ${(()=>{
             const sepStudio = dataSep[studio];

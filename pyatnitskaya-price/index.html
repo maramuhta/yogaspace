@@ -238,8 +238,7 @@
   </div>
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('t1', this)">Занятия и скидки</button>
-    <button class="tab-btn" onclick="showTab('t2', this)">Аренда залов</button>
-    <button class="tab-btn" onclick="showTab('t3', this)">Бонусы и акции</button>
+    <button class="tab-btn" onclick="showTab('t2', this)">Аренда и мини-группы</button>
   </div>
 </div>
 
@@ -416,42 +415,6 @@
     <p>Индивидуальные — <b>для одного человека</b> и <b>только в одну студию</b>: здесь привязка к преподавателю. На Пятницкой цены как на Дмитровке и Мясницкой.</p>
   </div>
 
-  <div class="section-title">Мини-группы (до 4 человек)</div>
-  <div class="table-wrap"><table class="price-table">
-    <thead>
-      <tr>
-        <th>Сколько человек</th>
-        <th class="right">1 час — за класс</th>
-        <th class="right">На человека</th>
-        <th class="right">1,5 часа — за класс</th>
-        <th class="right">На человека</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>1 человек <span class="price-per">индивидуальное</span></td>
-        <td class="right price-num">7 000 ₽</td><td class="right price-per">7 000 ₽</td>
-        <td class="right price-num">8 000 ₽</td><td class="right price-per">8 000 ₽</td></tr>
-      <tr><td>2 человека</td>
-        <td class="right price-num">8 000 ₽</td><td class="right price-green">4 000 ₽</td>
-        <td class="right price-num">9 000 ₽</td><td class="right price-green">4 500 ₽</td></tr>
-      <tr><td>3 человека</td>
-        <td class="right price-num">9 000 ₽</td><td class="right price-green">3 000 ₽</td>
-        <td class="right price-num">10 000 ₽</td><td class="right price-green">3 333 ₽</td></tr>
-      <tr><td>4 человека <span class="price-per">максимум</span></td>
-        <td class="right price-num">10 000 ₽</td><td class="right price-green">2 500 ₽</td>
-        <td class="right price-num">11 000 ₽</td><td class="right price-green">2 750 ₽</td></tr>
-    </tbody>
-  </table></div>
-  <div class="info-box">
-    <div class="info-box-title">Как считается</div>
-    <ul>
-      <li>Берём цену индивидуального занятия и <b>добавляем 1 000 ₽ за каждого участника сверх первого</b>. Итоговая сумма делится на всех поровну.</li>
-      <li>В классе может быть <b>до 4 человек</b>.</li>
-      <li>Аргумент для гостя: вдвоём заметно дешевле, а вчетвером выходит почти как обычное групповое занятие.</li>
-      <li>Коврики, пледы, полотенца, душевые принадлежности, вода и травяной чай входят в стоимость.</li>
-    </ul>
-  </div>
-
   <div class="section-title">Скидки</div>
   <div class="grid2">
     <div class="info-box orange">
@@ -554,69 +517,39 @@
     </div>
   </div>
 
-</div>
-
-<!-- ===== TAB 3 ===== -->
-<div id="t3" class="tab-panel">
-
-  <div class="section-title">Бонусы с 1 декабря</div>
+  <div class="section-title">Мини-группы (до 4 человек)</div>
   <div class="table-wrap"><table class="price-table">
     <thead>
-      <tr><th>Что</th><th>Условия</th><th class="center">Статус</th></tr>
+      <tr>
+        <th>Сколько человек</th>
+        <th class="right">1 час — за класс</th>
+        <th class="right">На человека</th>
+        <th class="right">1,5 часа — за класс</th>
+        <th class="right">На человека</th>
+      </tr>
     </thead>
     <tbody>
-      <tr>
-        <td><b>Гостевой визит для друга</b></td>
-        <td>Один визит в абонементе на 20 занятий и во всех безлимитах (1, 3, 6, 12 месяцев). Гость пишет администратору, тот добавляет визит вручную и проверяет, что в текущем абонементе такого ещё не было.</td>
-        <td class="center"><span class="badge badge-green">с 1 декабря</span></td>
-      </tr>
-      <tr>
-        <td><b>«Приведи друга»</b></td>
-        <td>Если друг в день визита купил любой абонемент, приведший получает одно занятие на свой абонемент. Занятие добавляет администратор вручную. За разовое занятие друга бонуса нет. Число друзей не ограничено.</td>
-        <td class="center"><span class="badge badge-green">бессрочно</span></td>
-      </tr>
-      <tr>
-        <td><b>Разовое для друга</b></td>
-        <td>500 ₽, как и сейчас.</td>
-        <td class="center"><span class="badge badge-gray">без изменений</span></td>
-      </tr>
-      <tr>
-        <td><b>Массаж в подарок</b></td>
-        <td>Для знакомства с массажем на Пятницкой: подарок к безлимиту на 1 месяц и к абонементу на 20 занятий.</td>
-        <td class="center"><span class="badge badge-orange">ждём массажистов</span></td>
-      </tr>
-      <tr>
-        <td><b>Поздравления за регулярность</b></td>
-        <td>На 10-м, 21-м и 100-м занятии: карточка для сторис, на 100-м — подарок.</td>
-        <td class="center"><span class="badge badge-orange">изучаем</span></td>
-      </tr>
+      <tr><td>1 человек <span class="price-per">индивидуальное</span></td>
+        <td class="right price-num">7 000 ₽</td><td class="right price-per">7 000 ₽</td>
+        <td class="right price-num">8 000 ₽</td><td class="right price-per">8 000 ₽</td></tr>
+      <tr><td>2 человека</td>
+        <td class="right price-num">8 000 ₽</td><td class="right price-green">4 000 ₽</td>
+        <td class="right price-num">9 000 ₽</td><td class="right price-green">4 500 ₽</td></tr>
+      <tr><td>3 человека</td>
+        <td class="right price-num">9 000 ₽</td><td class="right price-green">3 000 ₽</td>
+        <td class="right price-num">10 000 ₽</td><td class="right price-green">3 333 ₽</td></tr>
+      <tr><td>4 человека <span class="price-per">максимум</span></td>
+        <td class="right price-num">10 000 ₽</td><td class="right price-green">2 500 ₽</td>
+        <td class="right price-num">11 000 ₽</td><td class="right price-green">2 750 ₽</td></tr>
     </tbody>
   </table></div>
-
-  <div class="info-box red">
-    <div class="info-box-title">Что администратор делает руками</div>
-    <ul>
-      <li><b>Гостевой визит</b> в 1С не зашит. Гость пишет администратору — администратор добавляет визит и проверяет, что в этом абонементе визита ещё не было.</li>
-      <li><b>Занятие за приведённого друга</b> тоже добавляем вручную, на абонемент того, кто привёл.</li>
-      <li>Массаж в подарок идёт <b>отдельной акцией</b>, не зашит в абонемент.</li>
-    </ul>
-  </div>
-
-  <div class="section-title">Чего на Пятницкой нет</div>
   <div class="info-box">
+    <div class="info-box-title">Как считается</div>
     <ul>
-      <li><b>Гонг</b> и <b>гвоздестояние</b> — на Пятницкой не проводим.</li>
-      <li><b>Абонемент на две студии</b> — отменён во всей сети.</li>
-      <li><b>Безлимит в три студии</b> — не существует: либо одна студия, либо все.</li>
-    </ul>
-  </div>
-
-  <div class="section-title">Ещё не решено</div>
-  <div class="info-box orange">
-    <ul>
-      <li><b>Массаж в подарок</b> — ждём массажистов со ставками или запускаем вариант с нашими преподавателями.</li>
-      <li><b>Отмена записи за 8 часов</b> — как и за сколько до 1 декабря предупреждаем гостей.</li>
-      <li><b>Дата технического открытия</b> — от неё зависит, когда −30% сменится на −20%.</li>
+      <li>Берём цену индивидуального занятия и <b>добавляем 1 000 ₽ за каждого участника сверх первого</b>. Итоговая сумма делится на всех поровну.</li>
+      <li>В классе может быть <b>до 4 человек</b>.</li>
+      <li>Аргумент для гостя: вдвоём заметно дешевле, а вчетвером выходит почти как обычное групповое занятие.</li>
+      <li>Коврики, пледы, полотенца, душевые принадлежности, вода и травяной чай входят в стоимость.</li>
     </ul>
   </div>
 

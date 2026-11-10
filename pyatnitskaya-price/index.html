@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Прайс — Yoga Space Пятницкая</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: #FDF6F0;
+    color: #2d2d2d;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: #5C6937;
+    padding: 28px 40px 0;
+  }
+  .header-top {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .header h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.03em;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 500;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 4px;
+  }
+  .tab-btn {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.75);
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .tab-btn:hover { background: rgba(255,255,255,0.25); color: #fff; }
+  .tab-btn.active { background: #FDF6F0; color: #5C6937; }
+
+  /* CONTENT */
+  .content { padding: 36px 40px; max-width: 960px; margin: 0 auto; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .section-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #5C6937;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e8ddd5;
+  }
+  .section-title + .section-title { margin-top: 40px; }
+
+  /* CARDS ROW */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border: 1.5px solid #ede6df;
+  }
+  .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .card-price {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #5C6937;
+  }
+  .card-price span { font-size: 13px; font-weight: 500; color: #aaa; }
+  .card-note { font-size: 11px; color: #888; margin-top: 6px; }
+
+  /* TABLES */
+  .price-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    margin-bottom: 32px;
+    font-size: 13px;
+  }
+  .price-table th {
+    background: #5C6937;
+    color: #fff;
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .price-table th.right, .price-table td.right { text-align: right; }
+  .price-table th.center, .price-table td.center { text-align: center; }
+  .price-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid #f0ebe5;
+    vertical-align: middle;
+  }
+  .price-table tr:last-child td { border-bottom: none; }
+  .price-table tbody tr:nth-child(even) { background: #fdf9f6; }
+  .price-table tbody tr:hover { background: #f5efe8; }
+  .price-table .section-row td {
+    background: #f0ebe5;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #5C6937;
+    padding: 8px 16px;
+  }
+  .price-table .section-row:hover td { background: #f0ebe5; }
+  .price-num {
+    font-weight: 600;
+    color: #2d2d2d;
+    white-space: nowrap;
+  }
+  .price-per {
+    font-size: 11px;
+    color: #999;
+    white-space: nowrap;
+  }
+  .price-green { color: #5C6937; font-weight: 700; }
+  .price-orange { color: #F0803B; font-weight: 700; }
+  .dash { color: #ccc; }
+
+  /* INFO BOXES */
+  .info-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    border-left: 4px solid #5C6937;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .info-box.orange { border-left-color: #F0803B; }
+  .info-box.red { border-left-color: #d94f4f; }
+  .info-box-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #5C6937;
+    margin-bottom: 10px;
+  }
+  .info-box.orange .info-box-title { color: #F0803B; }
+  .info-box.red .info-box-title { color: #d94f4f; }
+  .info-box ul { padding-left: 18px; }
+  .info-box li { font-size: 13px; line-height: 1.7; color: #555; }
+  .info-box p { font-size: 13px; line-height: 1.7; color: #555; }
+
+  /* DISCOUNT BADGES */
+  .badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .badge-green { background: #e8f0d8; color: #5C6937; }
+  .badge-orange { background: #fde8d8; color: #F0803B; }
+  .badge-gray { background: #eee; color: #666; }
+
+  /* GRID 2 COL */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+  @media(max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .cards { grid-template-columns: 1fr 1fr; } .content { padding: 24px 20px; } .header { padding: 20px 20px 0; } }
+
+  .table-wrap { overflow-x: auto; margin-bottom: 32px; -webkit-overflow-scrolling: touch; }
+  .table-wrap .price-table { margin-bottom: 0; min-width: 1040px; }
+  .spacer { height: 32px; }
+  .label-row { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; margin-top: 24px; }
+
+  /* TIME SLOTS */
+  .time-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .time-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px 18px;
+    border: 1.5px solid #ede6df;
+  }
+  .time-card-day { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .time-card-time { font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 600; color: #5C6937; }
+  .time-card.unavail { border-color: #f0d0d0; }
+  .time-card.unavail .time-card-time { color: #d94f4f; }
+  .time-card.partial .time-card-time { color: #F0803B; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <h1>YOGA SPACE · ПЯТНИЦКАЯ</h1>
+    <div class="header-sub">Прайс для администраторов · обновлён 10 ноября 2026</div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('t1', this)">Занятия и скидки</button>
+    <button class="tab-btn" onclick="showTab('t2', this)">Аренда залов</button>
+    <button class="tab-btn" onclick="showTab('t3', this)">Бонусы и акции</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ===== TAB 1 ===== -->
+<div id="t1" class="tab-panel active">
+
+  <div class="info-box orange">
+    <div class="info-box-title">Главное про Пятницкую</div>
+    <p>Цены групповых, майсора и индивидуальных — <b>как на Дмитровке и Мясницкой</b>. С 21 ноября продаём по старым условиям, с 1 декабря — по новым срокам абонементов. Абонементы, купленные по 30 ноября включительно, дохаживаются по старым срокам.</p>
+  </div>
+
+  <div class="section-title">Разовые посещения</div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-label">Пробное занятие</div>
+      <div class="card-price">1 000 <span>₽</span></div>
+      <div class="card-note">одно на все направления, не повторяется</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Разовое занятие</div>
+      <div class="card-price">1 700 <span>₽</span></div>
+      <div class="card-note">в том числе майсор — действует только на Пятницкой</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Разовое для друга</div>
+      <div class="card-price">500 <span>₽</span></div>
+      <div class="card-note">по акции «Приведи друга»</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Индивидуальное, 1 ч</div>
+      <div class="card-price">7 000 <span>₽</span></div>
+    </div>
+  </div>
+
+  <div class="section-title">Абонементы — групповые занятия</div>
+  <div class="table-wrap"><table class="price-table">
+    <thead>
+      <tr>
+        <th>Абонемент</th>
+        <th class="right">Пятницкая</th>
+        <th class="right">За занятие</th>
+        <th class="right">NEXT −10%</th>
+        <th class="right" style="background:#F0803B">−30%<br><span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">до тех. открытия</span></th>
+        <th class="right" style="background:#7d8a4e">−20%<br><span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">до 12 декабря</span></th>
+        <th class="right" style="background:#d94f4f">Срок с 1 декабря</th>
+        <th class="right">Три студии <span style="font-weight:400;text-transform:none;letter-spacing:0">(без Никитской)</span></th>
+        <th class="right">Все студии</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="section-row"><td colspan="9">По количеству занятий</td></tr>
+      <tr><td>1 занятие</td><td class="right price-num">1 700 ₽</td><td class="right price-per">1 700 ₽</td><td class="right dash">—</td><td class="right dash">—</td><td class="right dash">—</td><td class="right dash">—</td><td class="right dash">—</td><td class="right dash">—</td></tr>
+      <tr><td>5 занятий</td><td class="right price-num">7 500 ₽</td><td class="right price-per">1 500 ₽</td><td class="right dash">—</td><td class="right price-orange">5 250 ₽<br><span class="price-per">1 050 / зан.</span></td><td class="right price-green">6 000 ₽<br><span class="price-per">1 200 / зан.</span></td><td class="right"><span style="color:#d94f4f;font-weight:700">4 недели</span><br><span class="price-per" style="text-decoration:line-through">5 недель</span></td><td class="right price-num">8 600 ₽<br><span class="price-per">1 720 / зан.</span></td><td class="right price-num">9 500 ₽<br><span class="price-per">1 900 / зан.</span></td></tr>
+      <tr><td>10 занятий</td><td class="right price-num">13 900 ₽</td><td class="right price-per">1 390 ₽</td><td class="right price-num">12 510 ₽<br><span class="price-per">1 251 / зан.</span></td><td class="right price-orange">9 730 ₽<br><span class="price-per">973 / зан.</span></td><td class="right price-green">11 120 ₽<br><span class="price-per">1 112 / зан.</span></td><td class="right"><span style="color:#d94f4f;font-weight:700">7 недель</span><br><span class="price-per" style="text-decoration:line-through">10 недель</span></td><td class="right price-num">15 900 ₽<br><span class="price-per">1 590 / зан.</span></td><td class="right price-num">17 000 ₽<br><span class="price-per">1 700 / зан.</span></td></tr>
+      <tr><td>20 занятий</td><td class="right price-num">24 900 ₽</td><td class="right price-per">1 245 ₽</td><td class="right price-num">22 410 ₽<br><span class="price-per">1 121 / зан.</span></td><td class="right price-orange">17 430 ₽<br><span class="price-per">872 / зан.</span></td><td class="right price-green">19 920 ₽<br><span class="price-per">996 / зан.</span></td><td class="right"><span style="color:#d94f4f;font-weight:700">14 недель</span><br><span class="price-per" style="text-decoration:line-through">20 недель</span></td><td class="right price-num">28 600 ₽<br><span class="price-per">1 430 / зан.</span></td><td class="right price-num">30 300 ₽<br><span class="price-per">1 515 / зан.</span></td></tr>
+      <tr class="section-row"><td colspan="9">Безлимиты</td></tr>
+      <tr><td>Безлимит 1 месяц</td><td class="right price-num">20 000 ₽</td><td class="right dash">—</td><td class="right price-num">18 000 ₽</td><td class="right price-orange">14 000 ₽</td><td class="right price-green">16 000 ₽</td><td class="right price-per">без изменений</td><td class="right dash">—</td><td class="right price-num">23 000 ₽</td></tr>
+      <tr><td>Безлимит 3 месяца</td><td class="right price-num">49 500 ₽</td><td class="right dash">—</td><td class="right price-num">44 550 ₽</td><td class="right price-orange">34 650 ₽</td><td class="right price-green">39 600 ₽</td><td class="right price-per">без изменений</td><td class="right dash">—</td><td class="right price-num">57 000 ₽</td></tr>
+      <tr><td>Безлимит 6 месяцев</td><td class="right price-num">92 000 ₽</td><td class="right dash">—</td><td class="right price-num">82 800 ₽</td><td class="right price-orange">64 400 ₽</td><td class="right price-green">73 600 ₽</td><td class="right price-per">без изменений</td><td class="right dash">—</td><td class="right price-num">102 000 ₽</td></tr>
+      <tr><td>Безлимит 12 месяцев</td><td class="right price-num">128 000 ₽</td><td class="right dash">—</td><td class="right price-num">115 200 ₽</td><td class="right price-orange">89 600 ₽</td><td class="right price-green">102 400 ₽</td><td class="right price-per">без изменений</td><td class="right dash">—</td><td class="right price-num">150 000 ₽</td></tr>
+      <tr class="section-row"><td colspan="9">Майсор — безлимиты</td></tr>
+      <tr>
+        <td>Безлимит майсор 1 месяц</td>
+        <td class="right price-num">10 800 ₽<br><span style="color:#d94f4f;font-weight:700;font-size:11px">8 640 ₽ по DENIS</span></td>
+        <td class="right dash">—</td><td class="right dash">—</td><td class="right dash">—</td><td class="right dash">—</td>
+        <td class="right price-per">без изменений</td>
+        <td class="right dash">—</td><td class="right dash">—</td>
+      </tr>
+      <tr>
+        <td>Безлимит майсор 3 месяца</td>
+        <td class="right price-num">29 500 ₽<br><span style="color:#d94f4f;font-weight:700;font-size:11px">23 600 ₽ по DENIS</span></td>
+        <td class="right dash">—</td><td class="right dash">—</td><td class="right dash">—</td><td class="right dash">—</td>
+        <td class="right price-per">без изменений</td>
+        <td class="right dash">—</td><td class="right dash">—</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <div class="info-box red">
+    <div class="info-box-title">Промокод DENIS — −20% на майсор</div>
+    <ul>
+      <li>Действует <b>до конца года</b> на безлимиты майсора: <b>8 640 ₽</b> вместо 10 800 ₽ и <b>23 600 ₽</b> вместо 29 500 ₽.</li>
+      <li><b>Только для гостей Дениса Баранова.</b> Гость называет промокод <b>DENIS</b>.</li>
+      <li>На групповые абонементы, разовые и индивидуальные не распространяется.</li>
+    </ul>
+  </div>
+
+  <div class="info-box orange">
+    <div class="info-box-title">Скидки открытия — на что действуют</div>
+    <ul>
+      <li><b>−30%</b> — до технического открытия. <b>−20%</b> — до 12 декабря.</li>
+      <li>Обе скидки действуют только на <b>абонементы Пятницкой</b>: и на занятия, и на безлимиты.</li>
+      <li><b>Не действуют</b> на абонементы в три студии и во все студии, на разовое занятие, майсор и индивидуальные.</li>
+      <li>Цены в колонках — итоговые, называем гостю именно их.</li>
+    </ul>
+  </div>
+
+  <div class="info-box">
+    <div class="info-box-title">Как объяснять сетку</div>
+    <ul>
+      <li><b>Одна студия</b> — Пятницкая, Дмитровка или Мясницкая, цена одинаковая.</li>
+      <li><b>Три студии</b> — Дмитровка + Мясницкая + Пятницкая, без Никитской. Это +15% к цене одной студии.</li>
+      <li><b>Все студии</b> — по количеству занятий стоят как Никитская, но в прайсе это отдельная позиция.</li>
+      <li>Абонемента <b>только на две студии</b> больше нет. <b>Безлимита в три студии</b> тоже нет — либо одна, либо все.</li>
+      <li>Безлимит во все студии дороже Никитской, это своя цена.</li>
+      <li><b>Майсор</b> продаём только в одну студию — он привязан к преподавателю. Абонемент майсора на Пятницкой действует только на Пятницкой, скидки открытия и NEXT на него не распространяются.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Сроки действия и заморозка</div>
+  <div class="table-wrap"><table class="price-table">
+    <thead>
+      <tr>
+        <th>Абонемент</th>
+        <th class="center">Куплен по 30 ноября</th>
+        <th class="center" style="background:#d94f4f">Куплен с 1 декабря</th>
+        <th class="center">Заморозка</th>
+        <th class="center">Занятий в неделю</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="section-row"><td colspan="5">По количеству занятий</td></tr>
+      <tr><td>5 занятий</td><td class="center price-per">5 недель</td><td class="center"><span style="color:#d94f4f;font-weight:700">4 недели</span></td><td class="center">7 дней</td><td class="center price-per">1,25</td></tr>
+      <tr><td>10 занятий</td><td class="center price-per">10 недель</td><td class="center"><span style="color:#d94f4f;font-weight:700">7 недель</span></td><td class="center">14 дней</td><td class="center price-per">1,4</td></tr>
+      <tr><td>20 занятий</td><td class="center price-per">20 недель</td><td class="center"><span style="color:#d94f4f;font-weight:700">14 недель</span></td><td class="center">4 недели</td><td class="center price-per">1,4</td></tr>
+      <tr class="section-row"><td colspan="5">Безлимиты</td></tr>
+      <tr><td>Безлимит 1 месяц</td><td class="center price-per">30 дней</td><td class="center price-per">без изменений</td><td class="center">7 дней</td><td class="center dash">—</td></tr>
+      <tr><td>Безлимит 3 месяца</td><td class="center price-per">90 дней</td><td class="center price-per">без изменений</td><td class="center">14 дней</td><td class="center dash">—</td></tr>
+      <tr><td>Безлимит 6 месяцев</td><td class="center price-per">180 дней</td><td class="center price-per">без изменений</td><td class="center">4 недели</td><td class="center dash">—</td></tr>
+      <tr><td>Безлимит 12 месяцев</td><td class="center price-per">365 дней</td><td class="center price-per">без изменений</td><td class="center">6 недель</td><td class="center dash">—</td></tr>
+      <tr class="section-row"><td colspan="5">Запись на класс</td></tr>
+      <tr><td><b>Отмена записи</b></td><td class="center price-per">за 4 часа</td><td class="center"><span style="color:#d94f4f;font-weight:700">за 8 часов</span></td><td class="center dash">—</td><td class="center dash">—</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="info-box">
+    <div class="info-box-title">Про заморозку</div>
+    <p><b>Сроки заморозки не меняются</b> — остаются прежними при любой дате покупки. Меняется только срок действия абонемента.</p>
+  </div>
+
+  <div class="info-box red">
+    <div class="info-box-title">Что меняется с 1 декабря</div>
+    <ul>
+      <li><b>Сроки короче, цены прежние.</b> Посыл для гостя: «Цены не повышаем. Хотим, чтобы практика оставалась доступной и регулярной».</li>
+      <li>Абонементы, купленные <b>по 30 ноября включительно</b>, действуют по старым срокам до конца.</li>
+      <li><b>Отмена записи — за 8 часов</b> вместо 4, для всех гостей независимо от даты покупки абонемента. Заранее не анонсируем, просто меняем правило. Первое время делаем исключения для тех, кто привык к старому сроку.</li>
+      <li><b>Платное продление</b> выносим в раздел цен на сайте — при коротких сроках оно нужно гостям.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Индивидуальные занятия (1 человек)</div>
+  <div class="table-wrap"><table class="price-table">
+    <thead>
+      <tr><th>Формат</th><th class="right">Стоимость</th><th class="right">За занятие</th><th>Примечание</th></tr>
+    </thead>
+    <tbody>
+      <tr class="section-row"><td colspan="4">Разовые</td></tr>
+      <tr><td>1 занятие, 1 час</td><td class="right price-num">7 000 ₽</td><td class="right price-per">7 000 ₽</td><td></td></tr>
+      <tr><td>1 занятие, 1,5 часа</td><td class="right price-num">8 000 ₽</td><td class="right price-per">8 000 ₽</td><td></td></tr>
+      <tr class="section-row"><td colspan="4">Абонементы</td></tr>
+      <tr><td>5 занятий, 1 час</td><td class="right price-num">32 000 ₽</td><td class="right price-per">6 400 ₽</td><td></td></tr>
+      <tr><td>5 занятий, 1,5 часа</td><td class="right price-num">35 000 ₽</td><td class="right price-per">7 000 ₽</td><td></td></tr>
+      <tr><td>10 занятий, 1 час</td><td class="right price-num">58 000 ₽</td><td class="right price-per">5 800 ₽</td><td></td></tr>
+      <tr><td>10 занятий, 1,5 часа</td><td class="right price-num">65 000 ₽</td><td class="right price-per">6 500 ₽</td><td></td></tr>
+      <tr class="section-row"><td colspan="4">Отдельные позиции</td></tr>
+      <tr><td>С Ксенией, 1,5 часа</td><td class="right price-num">7 500 ₽</td><td class="right price-per">7 500 ₽</td><td class="price-per">цена одинаковая во всех студиях</td></tr>
+      <tr><td>3 занятия по 1 часу — для новых гостей</td><td class="right price-num">15 000 ₽</td><td class="right price-per">5 000 ₽</td><td class="price-per">только для тех, кто ещё не занимался индивидуально</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box">
+    <div class="info-box-title">Важно</div>
+    <p>Индивидуальные — <b>для одного человека</b> и <b>только в одну студию</b>: здесь привязка к преподавателю. На Пятницкой цены как на Дмитровке и Мясницкой.</p>
+  </div>
+
+  <div class="section-title">Мини-группы (до 4 человек)</div>
+  <div class="table-wrap"><table class="price-table">
+    <thead>
+      <tr>
+        <th>Сколько человек</th>
+        <th class="right">1 час — за класс</th>
+        <th class="right">На человека</th>
+        <th class="right">1,5 часа — за класс</th>
+        <th class="right">На человека</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1 человек <span class="price-per">индивидуальное</span></td>
+        <td class="right price-num">7 000 ₽</td><td class="right price-per">7 000 ₽</td>
+        <td class="right price-num">8 000 ₽</td><td class="right price-per">8 000 ₽</td></tr>
+      <tr><td>2 человека</td>
+        <td class="right price-num">8 000 ₽</td><td class="right price-green">4 000 ₽</td>
+        <td class="right price-num">9 000 ₽</td><td class="right price-green">4 500 ₽</td></tr>
+      <tr><td>3 человека</td>
+        <td class="right price-num">9 000 ₽</td><td class="right price-green">3 000 ₽</td>
+        <td class="right price-num">10 000 ₽</td><td class="right price-green">3 333 ₽</td></tr>
+      <tr><td>4 человека <span class="price-per">максимум</span></td>
+        <td class="right price-num">10 000 ₽</td><td class="right price-green">2 500 ₽</td>
+        <td class="right price-num">11 000 ₽</td><td class="right price-green">2 750 ₽</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box">
+    <div class="info-box-title">Как считается</div>
+    <ul>
+      <li>Берём цену индивидуального занятия и <b>добавляем 1 000 ₽ за каждого участника сверх первого</b>. Итоговая сумма делится на всех поровну.</li>
+      <li>В классе может быть <b>до 4 человек</b>.</li>
+      <li>Аргумент для гостя: вдвоём заметно дешевле, а вчетвером выходит почти как обычное групповое занятие.</li>
+      <li>Коврики, пледы, полотенца, душевые принадлежности, вода и травяной чай входят в стоимость.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Скидки</div>
+  <div class="grid2">
+    <div class="info-box orange">
+      <div class="info-box-title"><span class="badge badge-orange">Открытие −30%</span> <span class="badge badge-green">затем −20%</span></div>
+      <p><b>−30%</b> — до технического открытия Пятницкой. Дальше <b>−20%</b> — до 12 декабря.<br>Обе скидки <b>не распространяются</b> на общие абонементы — в три студии и во все студии.</p>
+    </div>
+    <div class="info-box">
+      <div class="info-box-title"><span class="badge badge-green">FIRST −20%</span></div>
+      <p>На первый абонемент после пробного занятия. Без изменений.</p>
+    </div>
+    <div class="info-box">
+      <div class="info-box-title"><span class="badge badge-green">NEXT −10%</span></div>
+      <p>На следующий абонемент, пока действует текущий. Работает <b>от 10 занятий и выше</b> и на безлимитах. <b>На майсор не распространяется.</b></p>
+    </div>
+    <div class="info-box">
+      <div class="info-box-title"><span class="badge badge-gray">Отзыв −10%</span></div>
+      <p>Гость показывает опубликованный отзыв. Не суммируется с FIRST.</p>
+    </div>
+  </div>
+
+  <div class="info-box red">
+    <div class="info-box-title">Правила применения скидок</div>
+    <ul>
+            <li>Скидка за отзыв <b>не суммируется</b> с FIRST.</li>
+      <li>Пробное занятие — <b>одно на все направления</b>, не повторяется. 1 000 ₽.</li>
+      <li>NEXT −10% — только <b>от 10 занятий</b> и на безлимитах. На 5 занятий, разовое и майсор не действует.</li>
+      <li>Скидки открытия (−30%, затем −20%) не работают на абонементах в три и во все студии.</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ===== TAB 2 ===== -->
+<div id="t2" class="tab-panel">
+
+  <div class="section-title">Залы студии</div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-label">Большой зал</div>
+      <div class="card-price">Вселенная</div>
+      <div class="card-note">до 36 человек</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Средний зал</div>
+      <div class="card-price">Венера</div>
+      <div class="card-note">до 25 человек</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Малый зал</div>
+      <div class="card-price">Меркурий</div>
+      <div class="card-note">до 10 человек</div>
+    </div>
+  </div>
+
+  <div class="section-title">Стоимость аренды</div>
+  <div class="table-wrap"><table class="price-table">
+    <thead>
+      <tr>
+        <th rowspan="2" style="vertical-align:bottom">Зал</th>
+        <th colspan="2" class="center">Индивид / мини-группа</th>
+        <th colspan="2" class="center">Группа</th>
+        <th colspan="2" class="center">Сотрудники</th>
+      </tr>
+      <tr>
+        <th class="right">1 час</th><th class="right">1,5 часа</th>
+        <th class="right">1 час</th><th class="right">1,5 часа</th>
+        <th class="right">1 час</th><th class="right">1,5 часа</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Вселенная</b> <span class="price-per">до 36 чел.</span></td>
+        <td class="right price-num">4 500 ₽</td><td class="right price-num">6 500 ₽</td>
+        <td class="right price-num">7 000 ₽</td><td class="right price-num">9 000 ₽</td>
+        <td class="right price-green">2 500 ₽</td><td class="right price-green">3 500 ₽</td>
+      </tr>
+      <tr>
+        <td><b>Венера</b> <span class="price-per">до 25 чел.</span></td>
+        <td class="right price-num">4 000 ₽</td><td class="right price-num">5 500 ₽</td>
+        <td class="right price-num">5 500 ₽</td><td class="right price-num">7 500 ₽</td>
+        <td class="right price-green">2 500 ₽</td><td class="right price-green">3 500 ₽</td>
+      </tr>
+      <tr>
+        <td><b>Меркурий</b> <span class="price-per">до 10 чел.</span></td>
+        <td class="right price-num">3 000 ₽</td><td class="right price-num">4 000 ₽</td>
+        <td class="right price-num">3 000 ₽</td><td class="right price-num">4 000 ₽</td>
+        <td class="right price-green">2 500 ₽</td><td class="right price-green">3 500 ₽</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <div class="grid2">
+    <div class="info-box">
+      <div class="info-box-title">Кто платит по тарифу «Сотрудники»</div>
+      <p>Действующие преподаватели и сотрудники любой студии Yoga Space. Цена одинаковая для всех трёх залов.</p>
+    </div>
+    <div class="info-box orange">
+      <div class="info-box-title">Чем отличаются тарифы</div>
+      <p><b>Индивид / мини-группа</b> — занятие один на один или небольшая группа. <b>Группа</b> — полноценный класс в зале.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== TAB 3 ===== -->
+<div id="t3" class="tab-panel">
+
+  <div class="section-title">Бонусы с 1 декабря</div>
+  <div class="table-wrap"><table class="price-table">
+    <thead>
+      <tr><th>Что</th><th>Условия</th><th class="center">Статус</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Гостевой визит для друга</b></td>
+        <td>Один визит в абонементе на 20 занятий и во всех безлимитах (1, 3, 6, 12 месяцев). Гость пишет администратору, тот добавляет визит вручную и проверяет, что в текущем абонементе такого ещё не было.</td>
+        <td class="center"><span class="badge badge-green">с 1 декабря</span></td>
+      </tr>
+      <tr>
+        <td><b>«Приведи друга»</b></td>
+        <td>Если друг в день визита купил любой абонемент, приведший получает одно занятие на свой абонемент. Занятие добавляет администратор вручную. За разовое занятие друга бонуса нет. Число друзей не ограничено.</td>
+        <td class="center"><span class="badge badge-green">бессрочно</span></td>
+      </tr>
+      <tr>
+        <td><b>Разовое для друга</b></td>
+        <td>500 ₽, как и сейчас.</td>
+        <td class="center"><span class="badge badge-gray">без изменений</span></td>
+      </tr>
+      <tr>
+        <td><b>Массаж в подарок</b></td>
+        <td>Для знакомства с массажем на Пятницкой: подарок к безлимиту на 1 месяц и к абонементу на 20 занятий.</td>
+        <td class="center"><span class="badge badge-orange">ждём массажистов</span></td>
+      </tr>
+      <tr>
+        <td><b>Поздравления за регулярность</b></td>
+        <td>На 10-м, 21-м и 100-м занятии: карточка для сторис, на 100-м — подарок.</td>
+        <td class="center"><span class="badge badge-orange">изучаем</span></td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <div class="info-box red">
+    <div class="info-box-title">Что администратор делает руками</div>
+    <ul>
+      <li><b>Гостевой визит</b> в 1С не зашит. Гость пишет администратору — администратор добавляет визит и проверяет, что в этом абонементе визита ещё не было.</li>
+      <li><b>Занятие за приведённого друга</b> тоже добавляем вручную, на абонемент того, кто привёл.</li>
+      <li>Массаж в подарок идёт <b>отдельной акцией</b>, не зашит в абонемент.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">От чего отказались</div>
+  <div class="info-box">
+    <ul>
+      <li>От бонуса за быстро отхоженный абонемент — после сокращения сроков он не нужен.</li>
+      <li>От абонемента на две студии.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Чего на Пятницкой нет</div>
+  <div class="info-box">
+    <ul>
+      <li><b>Гонг</b> и <b>гвоздестояние</b> — на Пятницкой не проводим.</li>
+      <li><b>Абонемент на две студии</b> — отменён во всей сети.</li>
+      <li><b>Безлимит в три студии</b> — не существует: либо одна студия, либо все.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Ещё не решено</div>
+  <div class="info-box orange">
+    <ul>
+      <li><b>Массаж в подарок</b> — ждём массажистов со ставками или запускаем вариант с нашими преподавателями.</li>
+      <li><b>Отмена записи за 8 часов</b> — как и за сколько до 1 декабря предупреждаем гостей.</li>
+      <li><b>Дата технического открытия</b> — от неё зависит, когда −30% сменится на −20%.</li>
+    </ul>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+
+</body>
+</html>

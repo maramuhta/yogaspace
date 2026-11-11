@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Эффективность преподавателей</title>
 <style>
 :root{
@@ -48,6 +50,10 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;margin:0;font-weight:400;}
 .metric .val{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.25rem;color:var(--dark);}
 .metric .sub{font-size:10px;color:var(--mid);margin-top:1px;}
 .sample{font-size:11px;color:var(--mid);margin-top:.6rem;padding-top:.5rem;border-top:1px solid var(--cream-dark);}
+.srcblock{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.2rem 1.4rem;margin:0 0 1.8rem;}
+.srcblock h3{font-size:1.35rem;color:var(--green);margin-bottom:.2rem;}
+.srcsub{font-size:11.5px;color:var(--mid);margin-bottom:.9rem;}
+.srcframe{width:100%;border:none;display:block;}
 footer{text-align:center;font-size:11px;color:var(--mid);padding:2rem 0 0;}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -155,11 +161,59 @@ function renderStudio(key){
   document.getElementById('searchWrap').style.display = 'none';
   const el = document.getElementById('content');
   const studio = STUDIOS.find(s => s.key === key);
-  if (!studio || !studio.teachers || !studio.teachers.length){
-    el.innerHTML = '<div class="empty-state">Нет данных по этой студии.</div>';
-    return;
-  }
-  el.innerHTML = studio.teachers.map(teacherCard).join('');
+  const cards = '';
+  const label = studio ? studio.label : '';
+  const vozUrl = VOZ_URLS[key];
+  el.innerHTML = cards
+    + `<div class="srcblock"><h3>Посещаемость преподавателей — ${esc(label)}</h3>
+        <div class="srcsub">Данные из отчёта «Посещаемость преподавателей», обновляются вместе с ним.</div>`
+    + (ATT_STUDIOS.includes(key)
+        ? `<iframe class="srcframe" id="attFrame" src="${ATT_URL}" style="height:1400px"></iframe>`
+        : '<div class="empty-state">Пока нет данных.</div>')
+    + `</div><div class="srcblock"><h3>Возвратность пробного и частота посещения — ${esc(label)}</h3>
+        <div class="srcsub">Данные из отчёта «Возвратность пробного и частота посещения», обновляются вместе с ним.</div>`
+    + (vozUrl
+        ? `<iframe class="srcframe" id="vozFrame" src="${vozUrl}" style="height:1800px"></iframe>`
+        : '<div class="empty-state">Пока нет данных.</div>')
+    + '</div>';
+  const att = document.getElementById('attFrame');
+  if (att) att.addEventListener('load', () => setupAttendance(att, key));
+  const voz = document.getElementById('vozFrame');
+  if (voz) voz.addEventListener('load', () => autoHeight(voz));
+}
+
+// Отчёт «Посещаемость» лежит на том же сайте → можно показать только нужную студию
+const ATT_URL = 'https://maramuhta.github.io/analitikaprepodavately/';
+const ATT_STUDIOS = ['dmitrovka','myasnitskaya','nikitskaya','chernyshevskaya'];
+const VOZ_URLS = {
+  dmitrovka: 'https://yoga-space-dmitrovka.netlify.app/retention.html',
+  myasnitskaya: 'https://mininat4444-design.github.io/myasnitskaya-dashboard/raspisanie.html',
+  nikitskaya: 'https://maramuhta.github.io/yogaspace/vozvratnost/',
+  chernyshevskaya: 'https://yogaspacespb.github.io/analytics/vozvratnost/'
+};
+
+function autoHeight(frame){
+  let doc;
+  try { doc = frame.contentDocument; } catch(e){ return; }   // чужой сайт — оставляем фикс. высоту
+  if (!doc || !doc.body) return;
+  const fit = () => { frame.style.height = (doc.documentElement.scrollHeight + 20) + 'px'; };
+  fit();
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(doc.body);
+}
+
+function setupAttendance(frame, studioKey){
+  let w, doc;
+  try { w = frame.contentWindow; doc = frame.contentDocument; } catch(e){ return; }
+  if (!doc || !w.showPage) return;
+  const st = doc.createElement('style');
+  st.textContent = '.site-header,.nav-pages{display:none!important}';
+  doc.head.appendChild(st);
+  const pick = () => w.showPage(studioKey, doc.querySelector('.page-btn[data-page="'+studioKey+'"]'));
+  const origMonth = w.showMonth;
+  w.showMonth = function(m, b){ origMonth(m, b); pick(); };
+  w.scrollTo = function(){};
+  pick();
+  autoHeight(frame);
 }
 
 function render(){

@@ -290,6 +290,7 @@ async function loadVoz(frame, url){
     frame.addEventListener('load', () => {
       const doc = frame.contentDocument;
       const collapse = () => doc.querySelectorAll('section.card').forEach(c => c.classList.add('collapsed'));
+      mergeComposition(doc);
       collapse(); setTimeout(collapse, 300);
       autoHeight(frame);
     }, {once:true});
@@ -298,6 +299,33 @@ async function loadVoz(frame, url){
     frame.style.height = '1800px';
     frame.src = url;
   }
+}
+
+// Блоки 4+5 возвратности → одна таблица «Регулярность посещения и состав группы»
+// (для отчётов, у которых блок 5 ещё отдельный, напр. Чернышевская)
+function mergeComposition(doc){
+  const b4 = doc.getElementById('body4'), b5 = doc.getElementById('body5'), c5 = doc.getElementById('card5');
+  if (!b4 || !b5 || !c5) return;
+  c5.style.display = 'none';
+  const h = doc.querySelector('#card4 h2'); if (h) h.textContent = '4. Регулярность посещения и состав группы';
+  const run = () => {
+    const t4 = b4.querySelector('table'), t5 = b5.querySelector('table');
+    if (!t4 || !t5 || t4.dataset.merged) return;
+    const hs = [...t5.querySelectorAll('thead th')].map(x => x.textContent);
+    const iReg = hs.findIndex(x => /Постоянных/.test(x)), iWtw = hs.findIndex(x => /след/.test(x));
+    if (iReg < 0 || iWtw < 0) return;
+    const map = {};
+    t5.querySelectorAll('tbody tr').forEach(tr => { const td = tr.children; map[td[0].textContent.trim()+'|'+td[1].textContent.trim()] = [td[iReg].innerHTML, td[iWtw].innerHTML]; });
+    const hr = t4.querySelector('thead tr');
+    hr.insertAdjacentHTML('beforeend', `<th class="num">${hs[iReg]}</th><th class="num">${hs[iWtw]}</th>`);
+    t4.querySelectorAll('tbody tr').forEach(tr => {
+      const m = map[tr.children[0].textContent.trim()+'|'+tr.children[1].textContent.trim()] || ['—','—'];
+      tr.insertAdjacentHTML('beforeend', `<td class="num">${m[0]}</td><td class="num">${m[1]}</td>`);
+    });
+    t4.dataset.merged = '1';
+  };
+  setTimeout(run, 50);
+  new MutationObserver(() => setTimeout(run, 50)).observe(b4, {childList: true});
 }
 
 const ATT_CSS = `

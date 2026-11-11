@@ -237,6 +237,7 @@ function renderAllForCity(city){
 }
 
 function renderStudio(key){
+  vozReady = null;
   document.getElementById('searchWrap').style.display = 'none';
   const el = document.getElementById('content');
   const studio = STUDIOS.find(s => s.key === key);
@@ -246,8 +247,6 @@ function renderStudio(key){
     + (ATT_STUDIOS.includes(key)
         ? `<iframe class="srcframe" id="attFrame" src="${ATT_URL}" style="height:900px"></iframe>`
         : '<div class="empty-state">Пока нет данных.</div>')
-    + `<h3 class="src2">Возвратность пробного и частота посещения — ${esc(label)}</h3>
-      <div class="srcsub">Из отчёта «Возвратность пробного и частота посещения». Нажмите на заголовок блока, чтобы развернуть.</div>`
     + (vozUrl ? `<iframe class="srcframe" id="vozFrame" style="height:1200px"></iframe>`
               : '<div class="empty-state">Пока нет данных.</div>')
     + '</div>';
@@ -290,6 +289,7 @@ async function loadVoz(frame, url){
       const collapse = () => doc.querySelectorAll('section.card').forEach(c => c.classList.add('collapsed'));
       mergeComposition(doc);
       collapse(); setTimeout(collapse, 300);
+      restructureVoz(doc);
       autoHeight(frame);
     }, {once:true});
     frame.srcdoc = html;
@@ -297,6 +297,59 @@ async function loadVoz(frame, url){
     frame.style.height = '1800px';
     frame.src = url;
   }
+}
+
+// Порядок блоков возвратности: плашка с кварталами, средние, «3. Возвратность и частота»
+// (бывш. блок 4, по алфавиту), «4. Мероприятия и замены» (из отчёта посещаемости), затем 5–7.
+function restructureVoz(doc){
+  const t = doc.querySelector('.teacher-card'), c = [1,2,3,4].map(i => doc.getElementById('card'+i));
+  if (!t || c.some(x => !x)) return;
+  const title = (card, text) => { const h = card.querySelector('h2'); if (h) h.textContent = text; };
+  const strip = card => (card.querySelector('h2')?.textContent || '').replace(/^\s*\d+\.\s*/, '');
+  title(c[3], '3. Возвратность и частота посещения');
+  [0,1,2].forEach(i => title(c[i], (i + 5) + '. ' + strip(c[i])));
+  t.after(c[3]);
+  const ev = c[3].cloneNode(true);
+  ev.id = 'cardEv'; ev.classList.add('collapsed');
+  const hd = ev.querySelector('[data-card]'); if (hd) hd.dataset.card = 'cardEv';
+  title(ev, '4. Мероприятия и замены');
+  const body = ev.querySelector('.card-body'); body.id = 'bodyEv'; body.innerHTML = '';
+  (hd || ev.firstElementChild).addEventListener('click', () => ev.classList.toggle('collapsed'));
+  c[3].after(ev);
+  const st = doc.createElement('style');
+  st.textContent = '#bodyEv h4{font-family:Unbounded,sans-serif;font-size:15px;color:#5C6937;margin:18px 0 10px}'
+    + '#bodyEv table{width:100%;border-collapse:collapse;font-size:13px;background:none!important}'
+    + '#bodyEv th{text-align:left;font-size:12px;opacity:.7;font-weight:600;padding:8px 10px;border-bottom:1px solid rgba(92,105,55,.15)}'
+    + '#bodyEv td{padding:8px 10px;border-bottom:1px solid rgba(92,105,55,.08)}'
+    + '#bodyEv .spec-highlight td{background:rgba(240,128,59,.08)}';
+  doc.head.appendChild(st);
+  // таблица блока 3 — по алфавиту (перерисовывается при смене квартала)
+  const b4 = doc.getElementById('body4');
+  const sortT = () => b4.querySelectorAll('table tbody').forEach(tb => {
+    [...tb.rows].sort((a, b) => (a.cells[0].textContent + '|' + a.cells[1].textContent)
+      .localeCompare(b.cells[0].textContent + '|' + b.cells[1].textContent, 'ru')).forEach(r => tb.appendChild(r));
+  });
+  sortT(); setTimeout(sortT, 120);
+  new MutationObserver(() => setTimeout(sortT, 120)).observe(b4, {childList: true});
+  vozReady = doc;
+  placeEvents();
+}
+
+// «Мероприятия и замены» выбранного месяца → в возвратность блоком 4
+let vozReady = null;
+function placeEvents(){
+  const att = document.getElementById('attFrame');
+  let adoc; try { adoc = att && att.contentDocument; } catch(e){ return; }
+  if (!adoc || !vozReady || !vozReady.getElementById('bodyEv')) return;
+  const page = adoc.querySelector('.month-content.active .page-content.active');
+  const card = page && [...page.querySelectorAll('.ys-card')].find(x => /Мероприятия/.test(x.querySelector('.ys-coll')?.textContent || ''));
+  const body = vozReady.getElementById('bodyEv');
+  body.innerHTML = '';
+  if (!card){ body.innerHTML = '<div class="empty-state">Нет данных за этот месяц</div>'; return; }
+  card.classList.add('ys-moved');
+  [...card.children].filter(x => !x.classList.contains('ys-coll')).forEach(x => body.appendChild(vozReady.importNode(x, true)));
+  const m = adoc.querySelector('.month-btn.active, [onclick^="showMonth"].active');
+  if (m) body.insertAdjacentHTML('afterbegin', '<p class="note" style="margin:0 0 4px;opacity:.7">Месяц: ' + m.textContent.trim() + ' (выбирается вверху страницы)</p>');
 }
 
 // Блоки 4+5 возвратности → одна таблица «Регулярность посещения и состав группы»
@@ -344,6 +397,7 @@ body{background:transparent!important}
 .ys-coll::after{content:'▾';position:absolute;right:32px;top:50%;transform:translateY(-50%);font-size:18px;transition:transform .2s}
 .ys-closed>.ys-coll::after{transform:translateY(-50%) rotate(-90deg)}
 .ys-closed>:not(.ys-coll){display:none!important}
+.ys-moved{display:none!important}
 .ys-card .section-grid{margin-top:0!important}
 .ys-title{font-family:'Unbounded',sans-serif!important;font-weight:700!important;font-size:20px!important;color:#5C6937!important;padding:28px 0 4px!important;border:none!important}
 .ys-load-sub{font-family:'Montserrat',sans-serif;font-size:13.5px;color:#6b6b67;margin-bottom:16px}
@@ -363,14 +417,24 @@ function makeCollapsible(doc, page){
   const titled = (card, h, text) => { h.textContent = text; h.classList.add('ys-coll'); card.classList.add('ys-card','ys-closed'); };
   // Блок «Посещаемость» (по неделям / по дням недели) убран по просьбе пользователя
   page.querySelectorAll('.section-grid').forEach(g => g.style.display = 'none');
-  const names = [[/Динамика посещаемости/, '1. Динамика по преподавателям'],
-                 [/Расписание/, '2. Расписание'],
+  const names = [[/Расписание/, '1. Расписание'],
+                 [/Динамика посещаемости/, '2. Посещаемость преподавателей'],
                  [/Мероприятия и замены/, '3. Мероприятия и замены']];
   page.querySelectorAll('.section-card.full-width').forEach(c => {
     const h = c.querySelector(':scope > .card-title');
     if (!h) return;
     const n = names.find(x => x[0].test(h.textContent));
     titled(c, h, n ? n[1] : h.textContent);
+  });
+  // Расписание — первым, затем посещаемость
+  const cards = [...page.querySelectorAll('.ys-card')];
+  const rasp = cards.find(c => /Расписание/.test(c.textContent.slice(0, 40)));
+  const dyn = cards.find(c => c.querySelector('.dynamics-container'));
+  if (rasp && dyn) dyn.parentNode.insertBefore(rasp, dyn);
+  // Преподаватели по алфавиту
+  page.querySelectorAll('.dyn-table tbody').forEach(tb => {
+    [...tb.rows].sort((a, b) => a.cells[0].textContent.trim().localeCompare(b.cells[0].textContent.trim(), 'ru'))
+      .forEach(r => tb.appendChild(r));
   });
   page.addEventListener('click', e => {
     const h = e.target.closest('.ys-coll');
@@ -391,6 +455,7 @@ function setupAttendance(frame, studioKey){
   const pick = () => {
     w.showPage(studioKey, doc.querySelector('.page-btn[data-page="'+studioKey+'"]'));
     makeCollapsible(doc, doc.querySelector('.month-content.active .page-content.active'));
+    placeEvents();
   };
   const origMonth = w.showMonth;
   w.showMonth = function(m, b){ origMonth(m, b); pick(); };

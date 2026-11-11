@@ -329,16 +329,11 @@ function makeCollapsible(doc, page){
   if (!page || page.dataset.ysDone) return;
   page.dataset.ysDone = '1';
   const titled = (card, h, text) => { h.textContent = text; h.classList.add('ys-coll'); card.classList.add('ys-card','ys-closed'); };
-  // 1. «Посещаемость» = две карточки сверху (по неделям и по дням недели)
-  page.querySelectorAll('.section-grid').forEach(g => {
-    const w = doc.createElement('div');
-    const h = doc.createElement('h3');
-    g.parentNode.insertBefore(w, g); w.appendChild(h); w.appendChild(g);
-    titled(w, h, '1. Посещаемость');
-  });
-  const names = [[/Динамика посещаемости/, '2. Динамика по преподавателям'],
-                 [/Расписание/, '3. Расписание'],
-                 [/Мероприятия и замены/, '4. Мероприятия и замены']];
+  // Блок «Посещаемость» (по неделям / по дням недели) убран по просьбе пользователя
+  page.querySelectorAll('.section-grid').forEach(g => g.style.display = 'none');
+  const names = [[/Динамика посещаемости/, '1. Динамика по преподавателям'],
+                 [/Расписание/, '2. Расписание'],
+                 [/Мероприятия и замены/, '3. Мероприятия и замены']];
   page.querySelectorAll('.section-card.full-width').forEach(c => {
     const h = c.querySelector(':scope > .card-title');
     if (!h) return;

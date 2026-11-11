@@ -283,7 +283,7 @@ async function loadVoz(frame, url){
     const r = await fetch(url, {cache:'no-cache'});
     if (!r.ok) throw 0;
     let html = await r.text();
-    const inject = '<base href="' + url + '"><style>body>header{display:none!important}html,body{background:transparent!important}</style>';
+    const inject = '<base href="' + url + '"><style>body>header{display:none!important}html,body{background:transparent!important}.wrap{max-width:1600px!important}.card-body{overflow-x:auto!important}</style>';
     html = /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, m => m + inject) : inject + html;
     frame.addEventListener('load', () => {
       const doc = frame.contentDocument;

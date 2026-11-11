@@ -176,7 +176,6 @@ function classRows(t, classes){
     const people = (c.avgPeople!=null && c.cap) ? Math.round(c.avgPeople) : null;
     const newPct = (c.newGuests!=null && c.totalGuests) ? ` (${Math.round(c.newGuests/c.totalGuests*100)}%)` : '';
     const pot = (c.avgPeople!=null && c.maxCap) ? c.avgPeople/c.maxCap : null;
-    const prevPot = (c.prevAttendance!=null && c.cap && c.maxCap) ? c.prevAttendance*c.cap/c.maxCap : null;
     const nameCell = i===0 ? `<td class="tname" rowspan="${classes.length}">${esc(t.name)}</td>` : '';
     return `<tr class="${i===0?'tfirst':''}">${nameCell}
       <td class="tcls"><b>${esc(c.service)}</b><span>${esc(c._studio)} · ${esc(c.when)} · ${esc(c.hall||'?')}</span></td>
@@ -184,7 +183,7 @@ function classRows(t, classes){
         <div class="s">${people!==null?`${people} из ${c.cap} чел. (max ${c.maxCap||'?'})`:'нет данных'}</div>${delta(c.attendance, c.prevAttendance, true)}</td>
       <td class="m ${cmpClass(c.returnRate, NET_AVG.returnRate)}"><div class="v">${fmtPct(c.returnRate)}</div>${delta(c.returnRate, c.prevReturnRate, true)}</td>
       <td class="m ${cmpClass(c.freqRaw, NET_AVG.freqRaw)}"><div class="v">${fmtFreq(c.freqRaw)}</div><div class="s">${fmtPct(c.freq)}</div>${delta(c.freqRaw, c.prevFreqRaw, false)}</td>
-      <td class="m pot"><div class="v">${pot!==null?Math.round(pot*100)+'%':'—'}</div><div class="s">${c.avgPeople!=null&&c.maxCap?`${Math.round(c.avgPeople)} из ${c.maxCap} мест`:''}</div>${delta(pot, prevPot, true)}</td>
+      <td class="m pot"><div class="v">${pot!==null?Math.round(pot*100)+'%':'—'}</div><div class="s">${c.avgPeople!=null&&c.maxCap?`${Math.round(c.avgPeople)} из ${c.maxCap} мест`:''}</div></td>
       <td class="smp">${c.sessions!=null?c.sessions:'—'} кл. · ${c.periodUsed||''}<br>новичков ${c.newGuests!=null?c.newGuests:'—'} из ${c.totalGuests!=null?c.totalGuests:'—'}${newPct}</td>
     </tr>`;
   }).join('');

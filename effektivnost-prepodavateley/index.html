@@ -235,31 +235,37 @@ async function loadVoz(frame, url){
 const ATT_CSS = `
 .site-header,.nav-pages,.norms-legend-bar,footer{display:none!important}
 body{background:transparent!important}
-.ys-coll{cursor:pointer;user-select:none;position:relative;padding-left:1.4rem!important}
-.ys-coll::before{content:'▾';position:absolute;left:0;top:50%;transform:translateY(-50%);color:#5C6937;transition:transform .2s}
-.ys-closed>.ys-coll::before{transform:translateY(-50%) rotate(-90deg)}
+.ys-card{background:#fff!important;border:none!important;border-radius:18px!important;box-shadow:0 2px 16px rgba(44,44,42,.06)!important;padding:0!important;margin:0 0 20px!important;overflow:hidden}
+.ys-card>:not(.ys-coll){margin-left:32px!important;margin-right:32px!important}
+.ys-card:not(.ys-closed){padding-bottom:28px!important}
+.ys-coll{font-family:'Unbounded',sans-serif!important;font-weight:700!important;font-size:20px!important;letter-spacing:-.01em;color:#5C6937!important;
+  padding:28px 70px 28px 32px!important;margin:0!important;border:none!important;cursor:pointer;user-select:none;position:relative;display:block;background:none!important}
+.ys-coll:hover{background:rgba(92,105,55,.03)!important}
+.ys-coll::after{content:'▾';position:absolute;right:32px;top:50%;transform:translateY(-50%);font-size:18px;transition:transform .2s}
+.ys-closed>.ys-coll::after{transform:translateY(-50%) rotate(-90deg)}
 .ys-closed>:not(.ys-coll){display:none!important}
-.ys-wrap{background:#fff;border-radius:12px;padding:1.2rem 1.4rem;margin-top:1.2rem;box-shadow:0 2px 16px rgba(44,44,42,.06)}
-.ys-wrap .section-grid{margin-top:.8rem}
+.ys-card .section-grid{margin-top:0!important}
 `;
 
 function makeCollapsible(doc, page){
   if (!page || page.dataset.ysDone) return;
   page.dataset.ysDone = '1';
-  // «Посещаемость» = две карточки сверху (по неделям и по дням недели)
+  const titled = (card, h, text) => { h.textContent = text; h.classList.add('ys-coll'); card.classList.add('ys-card','ys-closed'); };
+  // 1. «Посещаемость» = две карточки сверху (по неделям и по дням недели)
   page.querySelectorAll('.section-grid').forEach(g => {
-    const w = doc.createElement('div'); w.className = 'ys-wrap ys-closed';
-    const h = doc.createElement('h3'); h.className = 'card-title ys-coll'; h.textContent = 'Посещаемость';
+    const w = doc.createElement('div');
+    const h = doc.createElement('h3');
     g.parentNode.insertBefore(w, g); w.appendChild(h); w.appendChild(g);
+    titled(w, h, '1. Посещаемость');
   });
+  const names = [[/Динамика посещаемости/, '2. Динамика по преподавателям'],
+                 [/Расписание/, '3. Расписание'],
+                 [/Мероприятия и замены/, '4. Мероприятия и замены']];
   page.querySelectorAll('.section-card.full-width').forEach(c => {
     const h = c.querySelector(':scope > .card-title');
     if (!h) return;
-    const t = h.textContent;
-    if (/Динамика посещаемости/.test(t)) h.textContent = 'Динамика по преподавателям';
-    else if (/Расписание/.test(t)) h.textContent = 'Расписание';
-    else if (/Мероприятия и замены/.test(t)) h.textContent = 'Мероприятия и замены';
-    h.classList.add('ys-coll'); c.classList.add('ys-closed');
+    const n = names.find(x => x[0].test(h.textContent));
+    titled(c, h, n ? n[1] : h.textContent);
   });
   page.addEventListener('click', e => {
     const h = e.target.closest('.ys-coll');
@@ -274,6 +280,9 @@ function setupAttendance(frame, studioKey){
   const st = doc.createElement('style');
   st.textContent = ATT_CSS;
   doc.head.appendChild(st);
+  const fl = doc.createElement('link'); fl.rel = 'stylesheet';
+  fl.href = 'https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&display=swap';
+  doc.head.appendChild(fl);
   const pick = () => {
     w.showPage(studioKey, doc.querySelector('.page-btn[data-page="'+studioKey+'"]'));
     makeCollapsible(doc, doc.querySelector('.month-content.active .page-content.active'));

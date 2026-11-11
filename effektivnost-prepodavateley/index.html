@@ -206,7 +206,7 @@ function setupAttendance(frame, studioKey){
   try { w = frame.contentWindow; doc = frame.contentDocument; } catch(e){ return; }
   if (!doc || !w.showPage) return;
   const st = doc.createElement('style');
-  st.textContent = '.site-header,.nav-pages{display:none!important}';
+  st.textContent = '.site-header,.nav-pages{display:none!important} .section-card:has(> details.teacher-details){display:none!important}';
   doc.head.appendChild(st);
   const pick = () => w.showPage(studioKey, doc.querySelector('.page-btn[data-page="'+studioKey+'"]'));
   const origMonth = w.showMonth;

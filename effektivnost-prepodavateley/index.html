@@ -122,7 +122,8 @@ function renderAvg(){
   const tab = TABS.find(t => t.key === activeTab);
   const city = activeCity();
   let avg, title;
-  if (tab && !tab.all){ avg = studioAvg(tab.key); title = 'Средние по студии ' + tab.label; }
+  document.querySelector('.avg-block').style.display = (tab && !tab.all) ? 'none' : '';
+  if (tab && !tab.all) return;
   else { avg = CITY_AVGS[city]; title = city === 'moscow' ? 'Средние по всем студиям Москвы' : 'Средние по Чернышевской'; }
   document.getElementById('avgTitle').innerText = title;
   const el = document.getElementById('avgRow');

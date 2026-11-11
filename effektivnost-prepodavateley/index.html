@@ -51,6 +51,7 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;margin:0;font-weight:600;}
 .metric .sub{font-size:12.5px;color:var(--mid);margin-top:1px;}
 .sample{font-size:13.5px;color:var(--mid);margin-top:.6rem;padding-top:.5rem;border-top:1px solid var(--cream-dark);}
 .srcblock{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.2rem 1.4rem;margin:0 0 1.8rem;}
+.srcblock h3.src2{margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid var(--border);}
 .srcblock h3{font-size:1.6rem;color:var(--green);margin-bottom:.2rem;}
 .srcsub{font-size:14px;color:var(--mid);margin-bottom:.9rem;}
 .srcframe{width:100%;border:none;display:block;}
@@ -110,10 +111,20 @@ function activeCity(){
   return t ? t.city : 'moscow';
 }
 
+function studioAvg(key){
+  const st = STUDIOS.find(s => s.key === key);
+  const cl = st ? st.teachers.flatMap(t => t.studios.flatMap(x => x.classes)) : [];
+  const mean = k => { const v = cl.map(c => c[k]).filter(x => x!==null && x!==undefined); return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null; };
+  return {attendance: mean('attendance'), returnRate: mean('returnRate'), freq: mean('freq')};
+}
+
 function renderAvg(){
+  const tab = TABS.find(t => t.key === activeTab);
   const city = activeCity();
-  const avg = CITY_AVGS[city];
-  document.getElementById('avgTitle').innerText = city === 'moscow' ? 'Средние по всем студиям Москвы' : 'Средние по Чернышевской';
+  let avg, title;
+  if (tab && !tab.all){ avg = studioAvg(tab.key); title = 'Средние по студии ' + tab.label; }
+  else { avg = CITY_AVGS[city]; title = city === 'moscow' ? 'Средние по всем студиям Москвы' : 'Средние по Чернышевской'; }
+  document.getElementById('avgTitle').innerText = title;
   const el = document.getElementById('avgRow');
   el.innerHTML = `
     <div class="avg-item"><div class="lab">Посещаемость</div><div class="val">${fmtPct(avg.attendance)}</div></div>
@@ -161,25 +172,23 @@ function renderStudio(key){
   document.getElementById('searchWrap').style.display = 'none';
   const el = document.getElementById('content');
   const studio = STUDIOS.find(s => s.key === key);
-  const cards = '';
   const label = studio ? studio.label : '';
   const vozUrl = VOZ_URLS[key];
-  el.innerHTML = cards
-    + `<div class="srcblock"><h3>Посещаемость преподавателей — ${esc(label)}</h3>
-        <div class="srcsub">Данные из отчёта «Посещаемость преподавателей», обновляются вместе с ним.</div>`
+  el.innerHTML = `<div class="srcblock">
+      <h3>Посещаемость преподавателей — ${esc(label)}</h3>
+      <div class="srcsub">Из отчёта «Посещаемость преподавателей». Нажмите на заголовок блока, чтобы развернуть.</div>`
     + (ATT_STUDIOS.includes(key)
-        ? `<iframe class="srcframe" id="attFrame" src="${ATT_URL}" style="height:1400px"></iframe>`
+        ? `<iframe class="srcframe" id="attFrame" src="${ATT_URL}" style="height:900px"></iframe>`
         : '<div class="empty-state">Пока нет данных.</div>')
-    + `</div><div class="srcblock"><h3>Возвратность пробного и частота посещения — ${esc(label)}</h3>
-        <div class="srcsub">Данные из отчёта «Возвратность пробного и частота посещения», обновляются вместе с ним.</div>`
-    + (vozUrl
-        ? `<iframe class="srcframe" id="vozFrame" src="${vozUrl}" style="height:1800px"></iframe>`
-        : '<div class="empty-state">Пока нет данных.</div>')
+    + `<h3 class="src2">Возвратность пробного и частота посещения — ${esc(label)}</h3>
+      <div class="srcsub">Из отчёта «Возвратность пробного и частота посещения». Нажмите на заголовок блока, чтобы развернуть.</div>`
+    + (vozUrl ? `<iframe class="srcframe" id="vozFrame" style="height:1200px"></iframe>`
+              : '<div class="empty-state">Пока нет данных.</div>')
     + '</div>';
   const att = document.getElementById('attFrame');
   if (att) att.addEventListener('load', () => setupAttendance(att, key));
   const voz = document.getElementById('vozFrame');
-  if (voz) voz.addEventListener('load', () => autoHeight(voz));
+  if (voz) loadVoz(voz, vozUrl);
 }
 
 // Отчёт «Посещаемость» лежит на том же сайте → можно показать только нужную студию
@@ -196,9 +205,66 @@ function autoHeight(frame){
   let doc;
   try { doc = frame.contentDocument; } catch(e){ return; }   // чужой сайт — оставляем фикс. высоту
   if (!doc || !doc.body) return;
-  const fit = () => { frame.style.height = (doc.documentElement.scrollHeight + 20) + 'px'; };
+  const fit = () => { frame.style.height = Math.max(doc.body.scrollHeight, doc.body.offsetHeight) + 'px'; };
   fit();
   if (window.ResizeObserver) new ResizeObserver(fit).observe(doc.body);
+}
+
+// Возвратность: если сайт отдаёт страницу для чтения — встраиваем копию (тогда блоки
+// сворачиваются и высота подстраивается); иначе — обычное окно фиксированной высоты.
+async function loadVoz(frame, url){
+  try {
+    const r = await fetch(url, {cache:'no-cache'});
+    if (!r.ok) throw 0;
+    let html = await r.text();
+    const inject = '<base href="' + url + '"><style>body>header{display:none!important}html,body{background:transparent!important}</style>';
+    html = /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, m => m + inject) : inject + html;
+    frame.addEventListener('load', () => {
+      const doc = frame.contentDocument;
+      const collapse = () => doc.querySelectorAll('section.card').forEach(c => c.classList.add('collapsed'));
+      collapse(); setTimeout(collapse, 300);
+      autoHeight(frame);
+    }, {once:true});
+    frame.srcdoc = html;
+  } catch(e){
+    frame.style.height = '1800px';
+    frame.src = url;
+  }
+}
+
+const ATT_CSS = `
+.site-header,.nav-pages,.norms-legend-bar,footer{display:none!important}
+body{background:transparent!important}
+.ys-coll{cursor:pointer;user-select:none;position:relative;padding-left:1.4rem!important}
+.ys-coll::before{content:'▾';position:absolute;left:0;top:50%;transform:translateY(-50%);color:#5C6937;transition:transform .2s}
+.ys-closed>.ys-coll::before{transform:translateY(-50%) rotate(-90deg)}
+.ys-closed>:not(.ys-coll){display:none!important}
+.ys-wrap{background:#fff;border-radius:12px;padding:1.2rem 1.4rem;margin-top:1.2rem;box-shadow:0 2px 16px rgba(44,44,42,.06)}
+.ys-wrap .section-grid{margin-top:.8rem}
+`;
+
+function makeCollapsible(doc, page){
+  if (!page || page.dataset.ysDone) return;
+  page.dataset.ysDone = '1';
+  // «Посещаемость» = две карточки сверху (по неделям и по дням недели)
+  page.querySelectorAll('.section-grid').forEach(g => {
+    const w = doc.createElement('div'); w.className = 'ys-wrap ys-closed';
+    const h = doc.createElement('h3'); h.className = 'card-title ys-coll'; h.textContent = 'Посещаемость';
+    g.parentNode.insertBefore(w, g); w.appendChild(h); w.appendChild(g);
+  });
+  page.querySelectorAll('.section-card.full-width').forEach(c => {
+    const h = c.querySelector(':scope > .card-title');
+    if (!h) return;
+    const t = h.textContent;
+    if (/Динамика посещаемости/.test(t)) h.textContent = 'Динамика по преподавателям';
+    else if (/Расписание/.test(t)) h.textContent = 'Расписание';
+    else if (/Мероприятия и замены/.test(t)) h.textContent = 'Мероприятия и замены';
+    h.classList.add('ys-coll'); c.classList.add('ys-closed');
+  });
+  page.addEventListener('click', e => {
+    const h = e.target.closest('.ys-coll');
+    if (h && page.contains(h)) h.parentElement.classList.toggle('ys-closed');
+  });
 }
 
 function setupAttendance(frame, studioKey){
@@ -206,9 +272,12 @@ function setupAttendance(frame, studioKey){
   try { w = frame.contentWindow; doc = frame.contentDocument; } catch(e){ return; }
   if (!doc || !w.showPage) return;
   const st = doc.createElement('style');
-  st.textContent = '.site-header,.nav-pages{display:none!important} .section-card:has(> details.teacher-details){display:none!important}';
+  st.textContent = ATT_CSS;
   doc.head.appendChild(st);
-  const pick = () => w.showPage(studioKey, doc.querySelector('.page-btn[data-page="'+studioKey+'"]'));
+  const pick = () => {
+    w.showPage(studioKey, doc.querySelector('.page-btn[data-page="'+studioKey+'"]'));
+    makeCollapsible(doc, doc.querySelector('.month-content.active .page-content.active'));
+  };
   const origMonth = w.showMonth;
   w.showMonth = function(m, b){ origMonth(m, b); pick(); };
   w.scrollTo = function(){};

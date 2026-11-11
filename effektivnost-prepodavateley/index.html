@@ -29,6 +29,7 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;margin:0;font-weight:600;}
 @media (max-width:620px){.avg-row{grid-template-columns:1fr;}}
 .avg-item{background:var(--green-pale);border-radius:10px;padding:.7rem;text-align:center;}
 .avg-item .lab{font-size:13.5px;font-weight:500;color:var(--mid);margin-bottom:3px;}
+.avg-item .ref{font-size:12px;color:var(--mid);margin-top:2px;}
 .avg-item.load .val{color:#8a8a85;}
 .avg-item .val{font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.7rem;color:var(--green);}
 .target-note{font-size:14px;color:var(--mid);font-style:italic;margin-top:.8rem;padding-top:.7rem;border-top:1px dashed var(--border);}
@@ -163,16 +164,33 @@ const STUDIO_ORDER = {moscow:['dmitrovka','myasnitskaya','nikitskaya','pyatnitsk
 const STUDIO_NAME = {dmitrovka:'Дмитровка', myasnitskaya:'Мясницкая', nikitskaya:'Никитская', pyatnitskaya:'Пятницкая', chernyshevskaya:'Чернышевская'};
 let studioFilter = 'all';
 
+function avgsOf(cl){
+  const mean = k => { const v = cl.map(c => c[k]).filter(x => x!==null && x!==undefined); return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null; };
+  let v = 0, cap = 0; cl.forEach(c => { if (c.totalGuests!=null && c.sessions && c.maxCap){ v += c.totalGuests; cap += c.sessions*c.maxCap; } });
+  return { attendance: mean('attendance'), returnRate: mean('returnRate'), freqRaw: mean('freqRaw'), load: cap ? v/cap : null };
+}
+
 function renderAvg(){
   const tab = TABS.find(t => t.key === activeTab);
   document.querySelector('.avg-block').style.display = (tab && !tab.all) ? 'none' : '';
   if (tab && !tab.all) return;
-  document.getElementById('avgTitle').innerText = 'Среднее по всем студиям';
-  document.getElementById('avgRow').innerHTML = `
-    <div class="avg-item"><div class="lab">Посещаемость</div><div class="val">${fmtPct(NET_AVG.attendance)}</div></div>
-    <div class="avg-item"><div class="lab">Возвратность</div><div class="val">${fmtPct(NET_AVG.returnRate)}</div></div>
-    <div class="avg-item"><div class="lab">Частота, раз/нед.</div><div class="val">${fmtFreq(NET_AVG.freqRaw)}</div></div>
-    <div class="avg-item load"><div class="lab">Загруженность залов</div><div class="val">${fmtPct(NET_LOAD)}</div></div>`;
+  const net = { attendance: NET_AVG.attendance, returnRate: NET_AVG.returnRate, freqRaw: NET_AVG.freqRaw, load: NET_LOAD };
+  let a = net, sub = '';
+  if (studioFilter !== 'all'){
+    a = avgsOf(ALL_CLASSES.filter(c => c.studioKey === studioFilter));
+    document.getElementById('avgTitle').innerText = 'Среднее по студии ' + STUDIO_NAME[studioFilter];
+    document.querySelector('.avg-sub').innerText = 'Среднее по регулярным классам студии за последний доступный месяц. Под цифрой — среднее по всем студиям; цвет в таблице — сравнение со средним по всем студиям.';
+  } else {
+    document.getElementById('avgTitle').innerText = 'Среднее по всем студиям';
+    document.querySelector('.avg-sub').innerText = 'Среднее по всем регулярным классам всех студий (Москва и Петербург), последний доступный месяц. С ним сравниваются цифры в таблице.';
+  }
+  const ref = (v, f) => studioFilter !== 'all' ? `<div class="ref">по всем студиям ${f(v)}</div>` : '';
+  const item = (lab, v, nv, f, cls) => `<div class="avg-item ${cls||''}"><div class="lab">${lab}</div><div class="val">${v===null?'—':f(v)}</div>${ref(nv, f)}</div>`;
+  document.getElementById('avgRow').innerHTML =
+    item('Посещаемость', a.attendance, net.attendance, fmtPct) +
+    item('Возвратность', a.returnRate, net.returnRate, fmtPct) +
+    item('Частота, раз/нед.', a.freqRaw, net.freqRaw, fmtFreq) +
+    item('Загруженность залов', a.load, net.load, fmtPct, 'load');
 }
 
 function classRows(t, classes){
@@ -200,7 +218,7 @@ function renderAllForCity(city){
   chips.innerHTML = opts.length > 1
     ? ['all', ...opts].map(k => `<button class="chip ${studioFilter===k?'on':''}" data-st="${k}">${k==='all'?'Все студии':STUDIO_NAME[k]}</button>`).join('')
     : '';
-  chips.querySelectorAll('.chip').forEach(b => b.onclick = () => { studioFilter = b.dataset.st; renderAllForCity(city); });
+  chips.querySelectorAll('.chip').forEach(b => b.onclick = () => { studioFilter = b.dataset.st; renderAvg(); renderAllForCity(city); });
   const el = document.getElementById('content');
   const q = searchQ.trim().toLowerCase();
   const rows = [];

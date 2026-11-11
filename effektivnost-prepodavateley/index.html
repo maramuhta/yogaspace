@@ -175,16 +175,18 @@ function renderAvg(){
   document.querySelector('.avg-block').style.display = (tab && !tab.all) ? 'none' : '';
   if (tab && !tab.all) return;
   const net = { attendance: NET_AVG.attendance, returnRate: NET_AVG.returnRate, freqRaw: NET_AVG.freqRaw, load: NET_LOAD };
-  let a = net, sub = '';
-  if (studioFilter !== 'all'){
-    a = avgsOf(ALL_CLASSES.filter(c => c.studioKey === studioFilter));
-    document.getElementById('avgTitle').innerText = 'Среднее по студии ' + STUDIO_NAME[studioFilter];
+  const one = STUDIO_ORDER[activeCity()];
+  const sel = studioFilter !== 'all' ? studioFilter : (one.length === 1 ? one[0] : 'all');
+  let a = net;
+  if (sel !== 'all'){
+    a = avgsOf(ALL_CLASSES.filter(c => c.studioKey === sel));
+    document.getElementById('avgTitle').innerText = 'Среднее по студии ' + STUDIO_NAME[sel];
     document.querySelector('.avg-sub').innerText = 'Среднее по регулярным классам студии за последний доступный месяц. Под цифрой — среднее по всем студиям; цвет в таблице — сравнение со средним по всем студиям.';
   } else {
     document.getElementById('avgTitle').innerText = 'Среднее по всем студиям';
     document.querySelector('.avg-sub').innerText = 'Среднее по всем регулярным классам всех студий (Москва и Петербург), последний доступный месяц. С ним сравниваются цифры в таблице.';
   }
-  const ref = (v, f) => studioFilter !== 'all' ? `<div class="ref">по всем студиям ${f(v)}</div>` : '';
+  const ref = (v, f) => sel !== 'all' ? `<div class="ref">по всем студиям ${f(v)}</div>` : '';
   const item = (lab, v, nv, f, cls) => `<div class="avg-item ${cls||''}"><div class="lab">${lab}</div><div class="val">${v===null?'—':f(v)}</div>${ref(nv, f)}</div>`;
   document.getElementById('avgRow').innerHTML =
     item('Посещаемость', a.attendance, net.attendance, fmtPct) +
@@ -343,49 +345,6 @@ function makeCollapsible(doc, page){
     const n = names.find(x => x[0].test(h.textContent));
     titled(c, h, n ? n[1] : h.textContent);
   });
-  // 0. Общая загруженность залов: посетители / (занятия × max вместимость), без учёта времени
-  try {
-    const caps = {};
-    page.querySelectorAll('.room-cap-item').forEach(it => {
-      const n = it.querySelector('.room-cap-name'), v = it.querySelector('.room-cap-num');
-      if (n && v) caps[n.textContent.trim()] = +v.textContent;
-    });
-    const hallOf = {};
-    page.querySelectorAll('.schedule-cell-item').forEach(c => {
-      const t = c.querySelector('.sc-teacher'), k = c.querySelector('.sc-class'), r = c.querySelector('.sc-room');
-      if (t && k && r) hallOf[t.textContent.trim() + '|' + k.textContent.trim()] = r.textContent.replace('Зал', '').trim();
-    });
-    const tpl = page.querySelector('template.teacher-stats');
-    const agg = {};
-    if (tpl) {
-      let cur = null;
-      tpl.content.querySelectorAll('tbody tr').forEach(tr => {
-        const tds = tr.querySelectorAll('td');
-        if (tr.classList.contains('teacher-header-row')) { cur = (tds[0].textContent.split(' — ')[0] || '').trim(); return; }
-        if (tds.length < 5 || !tds[2].textContent.trim()) return;
-        const hall = hallOf[cur + '|' + tds[1].textContent.trim()];
-        if (!hall || !caps[hall]) return;
-        const a = agg[hall] = agg[hall] || {sess: 0, vis: 0};
-        a.sess += +tds[2].textContent.replace(/\D/g, ''); a.vis += +tds[3].textContent.replace(/\D/g, '');
-      });
-    }
-    const halls = Object.keys(caps).filter(h => agg[h] && agg[h].sess);
-    if (halls.length) {
-      let tv = 0, tp = 0;
-      const item = (name, vis, sess, cap) => {
-        const pct = Math.round(vis / (sess * cap) * 100);
-        return `<div class="ys-load"><div class="ys-load-h">${name}</div><div class="ys-load-v">${pct}%</div>
-          <div class="ys-load-s">в среднем ${(vis / sess).toFixed(1)} из ${cap} мест · ${sess} занятий</div></div>`;
-      };
-      let html = halls.map(h => { const a = agg[h]; tv += a.vis; tp += a.sess * caps[h]; return item('Зал ' + h, a.vis, a.sess, caps[h]); }).join('');
-      if (halls.length > 1) html = `<div class="ys-load ys-load-all"><div class="ys-load-h">Студия в целом</div><div class="ys-load-v">${Math.round(tv / tp * 100)}%</div><div class="ys-load-s">${tv} посетителей из ${tp} мест</div></div>` + html;
-      const card = doc.createElement('div'); card.className = 'ys-card ys-loadcard';
-      card.innerHTML = `<h3 class="ys-title">Загруженность залов</h3><div class="ys-load-sub">Посетители к максимальной вместимости зала, без учёта времени класса. Только регулярные классы за выбранный месяц.</div><div class="ys-load-row">${html}</div>`;
-      const first = page.querySelector('.ys-card');
-      if (first) first.parentNode.insertBefore(card, first);
-    }
-  } catch(e) { console.warn('hall load', e); }
-
   page.addEventListener('click', e => {
     const h = e.target.closest('.ys-coll');
     if (h && page.contains(h)) h.parentElement.classList.toggle('ys-closed');

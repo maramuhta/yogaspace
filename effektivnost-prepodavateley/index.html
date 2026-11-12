@@ -65,6 +65,25 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;margin:0;font-weight:600;}
 .legend{font-size:13.5px;color:var(--mid);margin:0 0 .7rem;display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;}
 .lg{display:inline-block;width:14px;height:14px;border-radius:4px;margin-left:.6rem;}
 .lg.up{background:#dfeccf;border:1px solid #9bb57a}.lg.eq{background:#eeeeec;border:1px solid #c9c9c4}.lg.down{background:#fde3cf;border:1px solid #f0a46f}
+.scale{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin:0 0 1.2rem;}
+.scale>summary{cursor:pointer;list-style:none;padding:1rem 1.4rem;font-family:'Unbounded',sans-serif;font-weight:700;font-size:17px;color:var(--green);user-select:none;position:relative;}
+.scale>summary::-webkit-details-marker{display:none}
+.scale>summary::after{content:'▾';position:absolute;right:1.4rem;top:50%;transform:translateY(-50%) rotate(-90deg);transition:transform .2s;}
+.scale[open]>summary::after{transform:translateY(-50%);}
+.scale-body{display:flex;flex-wrap:wrap;gap:2rem;padding:0 1.4rem 1.4rem;}
+.scale-col{flex:1 1 320px;min-width:0;}
+.scale-h{font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin:.2rem 0 .8rem;}
+.scale-row{display:flex;align-items:center;gap:.6rem;font-size:15px;margin:.45rem 0;}
+.scale-dot{width:14px;height:14px;border-radius:50%;flex:none;}
+.scale-sq{width:16px;height:16px;border-radius:4px;flex:none;}
+.scale p{font-size:14.5px;line-height:1.5;margin:.35rem 0;}
+.ntable{border-collapse:collapse;font-size:15px;width:100%;}
+.ntable th{background:var(--green);color:#fff;font-weight:600;font-size:13.5px;padding:.6rem .7rem;text-align:center;line-height:1.25;}
+.ntable th small{display:block;font-weight:400;font-size:11.5px;opacity:.8;}
+.ntable th:first-child,.ntable td:first-child{text-align:left;}
+.ntable td{padding:.55rem .7rem;border-bottom:1px solid var(--cream-dark);text-align:center;}
+.ntable td.mx{color:var(--mid);}
+.ntable td small{display:block;font-size:12px;color:var(--mid);}
 .tbl-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow-x:auto;}
 .ttable{width:100%;border-collapse:collapse;font-size:14.5px;min-width:1120px;}
 .ttable th{position:sticky;top:0;background:var(--green);color:#fff;font-weight:600;font-size:13px;letter-spacing:.03em;text-align:left;padding:.75rem .8rem;}
@@ -213,6 +232,42 @@ function classRows(t, classes){
   }).join('');
 }
 
+// Шкала: нормы залов (как в отчёте «Посещаемость преподавателей») и правила цветов
+const HALL_NORMS = {
+  'Луна':[15,15,15,25,25,28,'dmitrovka'], 'Солнце':[15,10,10,15,15,18,'dmitrovka'],
+  'Юпитер':[15,10,10,19,19,23,'myasnitskaya'], 'Сатурн':[15,8,8,14,14,17,'myasnitskaya'],
+  'Звезда':[10,5,6,13,13,15,'nikitskaya'], 'Сияние':[4,4,4,4,4,5,'nikitskaya'],
+  'Галактика':[12,12,12,20,20,25,'chernyshevskaya'], 'Марс':[12,8,8,14,14,17,'chernyshevskaya']
+};
+let scaleOpen = false;
+function scaleBlock(city){
+  const studios = studioFilter !== 'all' ? [studioFilter] : STUDIO_ORDER[city];
+  const halls = Object.entries(HALL_NORMS).filter(([, v]) => studios.includes(v[6]));
+  return `<details class="scale" ${scaleOpen ? 'open' : ''} ontoggle="scaleOpen=this.open"><summary>Шкала: как считаем эффективность посещаемости</summary>
+  <div class="scale-body">
+    <div class="scale-col">
+      <div class="scale-h">Как считаем</div>
+      <p><b>Посещаемость</b> = среднее число людей на классе ÷ норма класса. Норма зависит от зала и времени (таблица справа). Если класс идёт в разное время, норма усредняется.</p>
+      <p><b>Загруженность зала</b> = среднее число людей ÷ максимальная вместимость зала, без учёта времени.</p>
+      <div class="scale-h" style="margin-top:1.1rem">Цвет в таблице — сравнение со средним по всем студиям</div>
+      <div class="scale-row"><span class="scale-sq" style="background:#dfeccf;border:1px solid #9bb57a"></span>Выше среднего — больше чем на 5%</div>
+      <div class="scale-row"><span class="scale-sq" style="background:#eeeeec;border:1px solid #c9c9c4"></span>Примерно равно среднему — ±5%</div>
+      <div class="scale-row"><span class="scale-sq" style="background:#fde3cf;border:1px solid #f0a46f"></span>Ниже среднего — меньше чем на 5%</div>
+      <p style="color:var(--mid);font-size:13.5px">▲▼ — изменение к прошлому месяцу.</p>
+      <div class="scale-h" style="margin-top:1.1rem">Выполнение нормы (в отчётах студий)</div>
+      <div class="scale-row"><span style="color:#E3B82E;font-size:18px;width:14px;text-align:center">★</span>Отлично — свыше 95% от нормы</div>
+      <div class="scale-row"><span class="scale-dot" style="background:#5C6937"></span>Хорошо — 86–95%</div>
+      <div class="scale-row"><span class="scale-dot" style="background:#F0803B"></span>Средне — 70–85%</div>
+      <div class="scale-row"><span class="scale-dot" style="background:#c0392b"></span>Ниже нормы — менее 70%</div>
+    </div>
+    <div class="scale-col">
+      <div class="scale-h">Нормы по залам (человек)</div>
+      <table class="ntable"><thead><tr><th>Зал</th><th>Майсор</th><th>Утро<small>до 11:30</small></th><th>День<small>11:30–18:00</small></th><th>Вечер<small>от 18:00</small></th><th>Выходные</th><th>Макс.<small>вместимость</small></th></tr></thead>
+      <tbody>${halls.map(([h, v]) => `<tr><td>${h}<small>${STUDIO_NAME[v[6]]}</small></td>${v.slice(0,5).map(x => `<td>${x}</td>`).join('')}<td class="mx">${v[5]}</td></tr>`).join('')}</tbody></table>
+    </div>
+  </div></details>`;
+}
+
 function renderAllForCity(city){
   document.getElementById('searchWrap').style.display = '';
   const chips = document.getElementById('studioChips');
@@ -230,8 +285,8 @@ function renderAllForCity(city){
       .filter(c => studioFilter==='all' || c.studioKey===studioFilter);
     if (classes.length) rows.push(classRows(t, classes));
   });
-  if (!rows.length){ el.innerHTML = `<div class="empty-state">${studioFilter==='pyatnitskaya'||studioFilter==='myasnitskaya' ? 'По этой студии пока нет данных.' : 'Никого не нашли.'}</div>`; return; }
-  el.innerHTML = `<div class="legend"><span class="lg up"></span>выше среднего <span class="lg eq"></span>≈ среднему (±5%) <span class="lg down"></span>ниже среднего · ▲▼ — изменение к прошлому месяцу · «Загруженность зала» — среднее число людей на классе к максимальной вместимости зала, без учёта времени</div>
+  if (!rows.length){ el.innerHTML = scaleBlock(city) + `<div class="empty-state">${studioFilter==='pyatnitskaya'||studioFilter==='myasnitskaya' ? 'По этой студии пока нет данных.' : 'Никого не нашли.'}</div>`; return; }
+  el.innerHTML = scaleBlock(city) + `<div class="legend"><span class="lg up"></span>выше среднего <span class="lg eq"></span>≈ среднему (±5%) <span class="lg down"></span>ниже среднего · ▲▼ — изменение к прошлому месяцу · «Загруженность зала» — среднее число людей на классе к максимальной вместимости зала, без учёта времени</div>
     <div class="tbl-wrap"><table class="ttable"><thead><tr><th>Преподаватель</th><th>Класс</th><th>Посещаемость</th><th>Возвратность</th><th>Частота, раз/нед.</th><th>Загруженность зала</th><th>Выборка</th></tr></thead>
     <tbody>${rows.join('')}</tbody></table></div>`;
 }

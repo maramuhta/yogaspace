@@ -364,7 +364,7 @@ async function loadVoz(frame, url){
     const r = await fetch(url, {cache:'no-cache'});
     if (!r.ok) throw 0;
     let html = await r.text();
-    const inject = '<base href="' + url + '"><style>body>header{display:none!important}html,body{background:transparent!important}.wrap{max-width:none!important;padding-left:0!important;padding-right:0!important}.card-body{overflow-x:auto!important}.wrap{padding-top:0!important}.card{margin:0 0 10px!important;border:none!important;border-radius:14px!important;box-shadow:0 2px 16px rgba(44,44,42,.06)!important}.card-header{padding:15px 24px!important}.card-header h2{font-family:Unbounded,sans-serif!important;font-size:16px!important;font-weight:700!important;line-height:1.3!important;margin:0!important}.card-body{padding:0 24px 22px!important}#kpiRow,.teacher-card{display:none!important}.teacher-card .section-sub{margin-bottom:0}</style>';
+    const inject = '<base href="' + url + '"><style>body>header{display:none!important}html,body{background:transparent!important;overflow:hidden!important}body{display:flow-root!important}.wrap{max-width:none!important;padding-left:0!important;padding-right:0!important}.card-body{overflow-x:auto!important}.wrap{padding-top:0!important}.card{margin:0 0 10px!important;border:none!important;border-radius:14px!important;box-shadow:0 2px 16px rgba(44,44,42,.06)!important}.card-header{padding:15px 24px!important}.card-header h2{font-family:Unbounded,sans-serif!important;font-size:16px!important;font-weight:700!important;line-height:1.3!important;margin:0!important}.card-body{padding:0 24px 22px!important}#kpiRow,.teacher-card{display:none!important}.teacher-card .section-sub{margin-bottom:0}</style>';
     html = /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, m => m + inject) : inject + html;
     frame.addEventListener('load', () => {
       const doc = frame.contentDocument;
@@ -508,7 +508,8 @@ const ATT_CSS = `
 body>.container:not(:has(.month-content.active)){display:none!important}
 body>.container:has(.month-content.active){padding-top:12px!important}
 .month-content.active{padding-top:16px}
-body{background:transparent!important}
+body{background:transparent!important;display:flow-root!important}
+html,body{overflow:hidden!important}
 .ys-card{background:#fff!important;border:none!important;border-radius:14px!important;box-shadow:0 2px 16px rgba(44,44,42,.06)!important;padding:0!important;margin:0 0 10px!important;overflow:hidden}
 .ys-card>:not(.ys-coll){margin-left:24px!important;margin-right:24px!important}
 .ys-card:not(.ys-closed){padding-bottom:22px!important}

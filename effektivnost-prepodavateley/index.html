@@ -59,7 +59,7 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;margin:0;font-weight:600;}
 .srcframe{width:100%;border:none;display:block;}
 .filters{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;margin-bottom:1.2rem;}
 .filters #search{margin-bottom:0;}
-.sortw{margin-left:auto;font-size:14px;color:var(--mid);display:flex;align-items:center;gap:.45rem;}
+.sortw{margin:-.4rem 0 1.2rem;width:fit-content;font-size:14px;color:var(--mid);display:flex;align-items:center;gap:.45rem;}
 .sortw select{font-family:'Montserrat';font-size:14px;font-weight:500;color:var(--dark);border:1px solid var(--border);border-radius:999px;padding:.45rem 2rem .45rem .95rem;background:var(--white);cursor:pointer;}
 .ttable td.tname .effi{display:block;font-family:'Montserrat';font-size:12.5px;font-weight:500;color:var(--mid);margin-top:.3rem;}
 .chips{display:flex;flex-wrap:wrap;gap:.4rem;}
@@ -125,7 +125,7 @@ footer{text-align:center;font-size:11px;color:var(--mid);padding:2rem 0 0;}
   </div>
 
   <div id="searchWrap">
-    <div class="filters"><input id="search" placeholder="Найти преподавателя по ФИО…"><div id="studioChips" class="chips"></div><label class="sortw">Сортировка: <select id="sortBy"><option value="name">по ФИО</option><option value="eff">по эффективности</option><option value="attendance">по посещаемости</option><option value="returnRate">по возвратности</option><option value="freqRaw">по частоте</option></select></label></div>
+    <div class="filters"><input id="search" placeholder="Найти преподавателя по ФИО…"><div id="studioChips" class="chips"></div></div><label class="sortw">Сортировка: <select id="sortBy"><option value="name">по ФИО</option><option value="eff">по эффективности</option><option value="attendance">по посещаемости</option><option value="returnRate">по возвратности</option><option value="freqRaw">по частоте</option></select></label>
   </div>
   <div id="content"></div>
   <footer>Yoga Space — внутренняя аналитика</footer>

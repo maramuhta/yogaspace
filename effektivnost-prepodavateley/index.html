@@ -549,6 +549,8 @@ body{background:transparent!important}
 .ys-closed>.ys-coll::after{transform:translateY(-50%) rotate(-90deg)}
 .ys-closed>:not(.ys-coll){display:none!important}
 .ys-moved{display:none!important}
+.ys-sub{font-family:'Unbounded',sans-serif;font-weight:600;font-size:16px;color:#5C6937;margin-top:28px!important;margin-bottom:14px!important}
+.ys-card .section-grid .section-card{box-shadow:none!important;border:1px solid rgba(92,105,55,.12)!important}
 .studio-kpi{flex-wrap:wrap!important;row-gap:.9rem!important;align-items:flex-end}
 .kpi-item.ys-x .kpi-num{color:#5C6937}
 .ys-sep{width:1px;align-self:stretch;background:rgba(92,105,55,.25);margin:0 .2rem}
@@ -570,9 +572,9 @@ function makeCollapsible(doc, page){
   page.dataset.ysDone = '1';
   const titled = (card, h, text) => { h.textContent = text; h.classList.add('ys-coll'); card.classList.add('ys-card','ys-closed'); };
   // Блок «Посещаемость» (по неделям / по дням недели) убран по просьбе пользователя
-  page.querySelectorAll('.section-grid').forEach(g => g.style.display = 'none');
+
   const names = [[/Расписание/, '1. Расписание'],
-                 [/Динамика посещаемости/, '2. Посещаемость преподавателей'],
+                 [/Динамика посещаемости/, '2. Посещаемость'],
                  [/Мероприятия и замены/, '3. Мероприятия и замены']];
   page.querySelectorAll('.section-card.full-width').forEach(c => {
     const h = c.querySelector(':scope > .card-title');
@@ -585,6 +587,13 @@ function makeCollapsible(doc, page){
   const rasp = cards.find(c => /Расписание/.test(c.textContent.slice(0, 40)));
   const dyn = cards.find(c => c.querySelector('.dynamics-container'));
   if (rasp && dyn) dyn.parentNode.insertBefore(rasp, dyn);
+  // «Динамика по неделям» и «по дням недели» — внутрь блока 2, над таблицей по преподавателям
+  const grid = page.querySelector('.section-grid');
+  if (dyn && grid){
+    const head = dyn.querySelector('.ys-coll');
+    head.after(grid);
+    grid.insertAdjacentHTML('afterend', '<h4 class="ys-sub">По преподавателям</h4>');
+  }
   // Преподаватели по алфавиту
   page.querySelectorAll('.dyn-table tbody').forEach(tb => {
     [...tb.rows].sort((a, b) => a.cells[0].textContent.trim().localeCompare(b.cells[0].textContent.trim(), 'ru'))

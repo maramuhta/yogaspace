@@ -446,7 +446,7 @@ function fillHeader(){
 }
 
 // Кнопки кварталов возвратности → в строку с месяцами (тот же стиль), зелёная плашка скрывается
-let vozDoc = null;
+let vozDoc = null, vozReady = null;
 function syncQuarters(){
   const att = document.getElementById('attFrame');
   let adoc; try { adoc = att && att.contentDocument; } catch(e){ return; }

@@ -226,8 +226,8 @@ function classRows(t, classes){
         <div class="s">${people!==null?`${people} из ${c.cap} чел. (max ${c.maxCap||'?'})`:'нет данных'}</div>${delta(c.attendance, c.prevAttendance, true)}</td>
       <td class="m ${cmpClass(c.returnRate, NET_AVG.returnRate)}"><div class="v">${fmtPct(c.returnRate)}</div>${delta(c.returnRate, c.prevReturnRate, true)}</td>
       <td class="m ${cmpClass(c.freqRaw, NET_AVG.freqRaw)}"><div class="v">${fmtFreq(c.freqRaw)}</div><div class="s">${fmtPct(c.freq)}</div>${delta(c.freqRaw, c.prevFreqRaw, false)}</td>
-      <td class="m pot"><div class="v">${pot!==null?Math.round(pot*100)+'%':'—'}</div><div class="s">${c.avgPeople!=null&&c.maxCap?`в ср. ${c.avgPeople.toFixed(1)} из ${c.maxCap} мест`:''}</div></td>
-      <td class="smp">${c.sessions!=null?c.sessions:'—'} ${plural(c.sessions,'занятие','занятия','занятий')}<br>новых гостей: ${c.newGuests!=null?c.newGuests:'—'} из ${c.totalGuests!=null?c.totalGuests:'—'} посещений${newPct}</td>
+      <td class="m pot"><div class="v">${pot!==null?Math.round(pot*100)+'%':'—'}</div><div class="s">${c.avgPeople!=null&&c.maxCap?`${c.avgPeople.toFixed(1)} из ${c.maxCap} мест`:''}</div></td>
+      <td class="smp">${c.sessions!=null?c.sessions:'—'} ${plural(c.sessions,'занятие','занятия','занятий')}<br>новички: ${c.newGuests!=null?c.newGuests:'—'} из ${c.totalGuests!=null?c.totalGuests:'—'} посещений${newPct}</td>
     </tr>`;
   }).join('');
 }

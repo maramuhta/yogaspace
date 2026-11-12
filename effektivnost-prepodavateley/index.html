@@ -318,7 +318,7 @@ function renderAllForCity(city){
 }
 
 function renderStudio(key){
-  vozReady = null;
+  vozReady = null; vozDoc = null;
   document.getElementById('searchWrap').style.display = 'none';
   const el = document.getElementById('content');
   const studio = STUDIOS.find(s => s.key === key);
@@ -363,7 +363,7 @@ async function loadVoz(frame, url){
     const r = await fetch(url, {cache:'no-cache'});
     if (!r.ok) throw 0;
     let html = await r.text();
-    const inject = '<base href="' + url + '"><style>body>header{display:none!important}html,body{background:transparent!important}.wrap{max-width:1600px!important}.card-body{overflow-x:auto!important}</style>';
+    const inject = '<base href="' + url + '"><style>body>header{display:none!important}html,body{background:transparent!important}.wrap{max-width:1600px!important}.card-body{overflow-x:auto!important}#kpiRow,.teacher-select-wrap,#teacherProfile{display:none!important}.teacher-card .section-sub{margin-bottom:0}</style>';
     html = /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, m => m + inject) : inject + html;
     frame.addEventListener('load', () => {
       const doc = frame.contentDocument;
@@ -371,6 +371,13 @@ async function loadVoz(frame, url){
       mergeComposition(doc);
       collapse(); setTimeout(collapse, 300);
       restructureVoz(doc);
+      const tc = doc.querySelector('.teacher-card');
+      if (tc){ const h = tc.querySelector('h2'); if (h) h.textContent = 'Средние показатели студии';
+        const sb = tc.querySelector('.section-sub'); if (sb) sb.textContent = 'За период, выбранный вверху страницы (кнопки «Квартал»)'; }
+      vozDoc = doc;
+      syncQuarters();
+      const pn = doc.querySelector('.period-nav-wrap');
+      if (pn) new MutationObserver(() => syncQuarters()).observe(pn, {childList: true, subtree: true});
       autoHeight(frame);
     }, {once:true});
     frame.srcdoc = html;
@@ -414,6 +421,32 @@ function restructureVoz(doc){
   new MutationObserver(() => setTimeout(sortT, 120)).observe(b4, {childList: true});
   vozReady = doc;
   placeEvents();
+}
+
+// Кнопки кварталов возвратности → в строку с месяцами (тот же стиль), зелёная плашка скрывается
+let vozDoc = null;
+function syncQuarters(){
+  const att = document.getElementById('attFrame');
+  let adoc; try { adoc = att && att.contentDocument; } catch(e){ return; }
+  if (!adoc || !vozDoc) return;
+  const nav = adoc.querySelector('.nav-months'), pn = vozDoc.querySelector('.period-nav-wrap');
+  if (!nav || !pn) return;
+  const src = [...pn.querySelectorAll('#periodRowTop .period-btn')], sub = [...pn.querySelectorAll('#periodRowSub .period-btn')];
+  if (!src.length) return;
+  let row = adoc.getElementById('ysQuarters');
+  if (!row){
+    row = adoc.createElement('div'); row.id = 'ysQuarters'; row.className = 'nav-months';
+    nav.after(row);
+  }
+  const btn = b => { const x = adoc.createElement('button'); x.className = 'month-btn' + (b.classList.contains('active') ? ' active' : '');
+    x.textContent = b.textContent.trim(); x.onclick = () => b.click(); return x; };
+  row.innerHTML = '<span class="nav-months-label">Квартал:</span>';
+  src.forEach(b => row.appendChild(btn(b)));
+  if (sub.length){
+    const sep = adoc.createElement('span'); sep.className = 'nav-months-label'; sep.style.margin = '0 .2rem 0 .6rem'; sep.textContent = '·';
+    row.appendChild(sep); sub.forEach(b => row.appendChild(btn(b)));
+  }
+  pn.style.display = 'none';
 }
 
 // «Мероприятия и замены» выбранного месяца → в возвратность блоком 4
@@ -537,6 +570,7 @@ function setupAttendance(frame, studioKey){
     w.showPage(studioKey, doc.querySelector('.page-btn[data-page="'+studioKey+'"]'));
     makeCollapsible(doc, doc.querySelector('.month-content.active .page-content.active'));
     placeEvents();
+    syncQuarters();
   };
   const origMonth = w.showMonth;
   w.showMonth = function(m, b){ origMonth(m, b); pick(); };

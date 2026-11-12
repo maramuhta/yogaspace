@@ -363,7 +363,7 @@ async function loadVoz(frame, url){
     const r = await fetch(url, {cache:'no-cache'});
     if (!r.ok) throw 0;
     let html = await r.text();
-    const inject = '<base href="' + url + '"><style>body>header{display:none!important}html,body{background:transparent!important}.wrap{max-width:1600px!important}.card-body{overflow-x:auto!important}#kpiRow,.teacher-select-wrap,#teacherProfile{display:none!important}.teacher-card .section-sub{margin-bottom:0}</style>';
+    const inject = '<base href="' + url + '"><style>body>header{display:none!important}html,body{background:transparent!important}.wrap{max-width:1600px!important}.card-body{overflow-x:auto!important}#kpiRow,.teacher-card{display:none!important}.teacher-card .section-sub{margin-bottom:0}</style>';
     html = /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, m => m + inject) : inject + html;
     frame.addEventListener('load', () => {
       const doc = frame.contentDocument;
@@ -375,7 +375,9 @@ async function loadVoz(frame, url){
       if (tc){ const h = tc.querySelector('h2'); if (h) h.textContent = 'Средние показатели студии';
         const sb = tc.querySelector('.section-sub'); if (sb) sb.textContent = 'За период, выбранный вверху страницы (кнопки «Квартал»)'; }
       vozDoc = doc;
-      syncQuarters();
+      syncQuarters(); fillHeader();
+      const ar = doc.getElementById('studioAvgRow');
+      if (ar) new MutationObserver(() => fillHeader()).observe(ar, {childList: true, subtree: true});
       const pn = doc.querySelector('.period-nav-wrap');
       if (pn) new MutationObserver(() => syncQuarters()).observe(pn, {childList: true, subtree: true});
       autoHeight(frame);
@@ -421,6 +423,41 @@ function restructureVoz(doc){
   new MutationObserver(() => setTimeout(sortT, 120)).observe(b4, {childList: true});
   vozReady = doc;
   placeEvents();
+}
+
+// Шапка студии: + посещаемость к норме и загруженность залов (за выбранный месяц, по расписанию),
+// + средние возвратности/частоты (за выбранный квартал, из отчёта возвратности)
+function fillHeader(){
+  const att = document.getElementById('attFrame');
+  let adoc, w; try { adoc = att && att.contentDocument; w = att.contentWindow; } catch(e){ return; }
+  const page = adoc && adoc.querySelector('.month-content.active .page-content.active');
+  const kpi = page && page.querySelector('.studio-kpi');
+  if (!kpi) return;
+  kpi.querySelectorAll('.ys-x,.ys-sep').forEach(x => x.remove());
+  const item = (num, lab, cls) => { const d = adoc.createElement('div'); d.className = 'kpi-item ys-x ' + (cls||'');
+    d.innerHTML = '<span class="kpi-num">' + num + '</span><span class="kpi-label">' + lab + '</span>'; kpi.appendChild(d); };
+  const maxCap = {}; page.querySelectorAll('.room-cap-item').forEach(r => maxCap[r.querySelector('.room-cap-name').textContent.trim()] = +r.querySelector('.room-cap-num').textContent);
+  const ratios = []; let sumAvg = 0, sumMax = 0;
+  page.querySelectorAll('.schedule-cell-item').forEach(cell => {
+    const hall = (cell.querySelector('.sc-room')?.textContent || '').replace('Зал', '').trim();
+    const avg = parseFloat((cell.querySelector('.sc-avg')?.textContent || '').replace('∅', ''));
+    if (!hall || isNaN(avg)) return;
+    const td = cell.closest('td'), col = td ? [...td.parentElement.children].indexOf(td) : 0;
+    const t = cell.querySelector('.sc-time-mini')?.textContent.trim() || '19:00', mm = parseInt(t) * 60 + parseInt(t.split(':')[1] || 0);
+    const slot = /майсор|лэд/i.test(cell.querySelector('.sc-class')?.textContent || '') ? 'maysor'
+      : col >= 6 ? 'weekend' : mm < 690 ? 'morning' : mm < 1080 ? 'day' : 'evening';
+    const norm = HALL_NORMS[hall] && HALL_NORMS[hall][['maysor','morning','day','evening','weekend'].indexOf(slot)];
+    if (norm) ratios.push(avg / norm);
+    if (maxCap[hall]){ sumAvg += avg; sumMax += maxCap[hall]; }
+  });
+  if (ratios.length) item(Math.round(ratios.reduce((a, b) => a + b, 0) / ratios.length * 100) + '%', 'посещаемость к норме');
+  if (sumMax) item(Math.round(sumAvg / sumMax * 100) + '%', 'загруженность залов');
+  const ar = vozDoc && vozDoc.getElementById('studioAvgRow');
+  const its = ar ? [...ar.querySelectorAll('.studio-avg-item')] : [];
+  if (its.length){
+    const sep = adoc.createElement('div'); sep.className = 'ys-sep'; kpi.appendChild(sep);
+    its.forEach(x => item(x.querySelector('.val')?.textContent.trim() || '—', (x.querySelector('.lab')?.textContent.trim() || '').toLowerCase()));
+  }
 }
 
 // Кнопки кварталов возвратности → в строку с месяцами (тот же стиль), зелёная плашка скрывается
@@ -512,6 +549,9 @@ body{background:transparent!important}
 .ys-closed>.ys-coll::after{transform:translateY(-50%) rotate(-90deg)}
 .ys-closed>:not(.ys-coll){display:none!important}
 .ys-moved{display:none!important}
+.studio-kpi{flex-wrap:wrap!important;row-gap:.9rem!important;align-items:flex-end}
+.kpi-item.ys-x .kpi-num{color:#5C6937}
+.ys-sep{width:1px;align-self:stretch;background:rgba(92,105,55,.25);margin:0 .2rem}
 .ys-card .section-grid{margin-top:0!important}
 .ys-title{font-family:'Unbounded',sans-serif!important;font-weight:700!important;font-size:20px!important;color:#5C6937!important;padding:28px 0 4px!important;border:none!important}
 .ys-load-sub{font-family:'Montserrat',sans-serif;font-size:13.5px;color:#6b6b67;margin-bottom:16px}
@@ -571,6 +611,7 @@ function setupAttendance(frame, studioKey){
     makeCollapsible(doc, doc.querySelector('.month-content.active .page-content.active'));
     placeEvents();
     syncQuarters();
+    fillHeader();
   };
   const origMonth = w.showMonth;
   w.showMonth = function(m, b){ origMonth(m, b); pick(); };

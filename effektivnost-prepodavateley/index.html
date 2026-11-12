@@ -227,11 +227,13 @@ function classRows(t, classes){
       <td class="m ${cmpClass(c.returnRate, NET_AVG.returnRate)}"><div class="v">${fmtPct(c.returnRate)}</div>${delta(c.returnRate, c.prevReturnRate, true)}</td>
       <td class="m ${cmpClass(c.freqRaw, NET_AVG.freqRaw)}"><div class="v">${fmtFreq(c.freqRaw)}</div><div class="s">${fmtPct(c.freq)}</div>${delta(c.freqRaw, c.prevFreqRaw, false)}</td>
       <td class="m pot"><div class="v">${pot!==null?Math.round(pot*100)+'%':'—'}</div><div class="s">${c.avgPeople!=null&&c.maxCap?`в ср. ${c.avgPeople.toFixed(1)} из ${c.maxCap} мест`:''}</div></td>
-      <td class="smp">${c.sessions!=null?c.sessions:'—'} кл. · ${c.periodUsed||''}<br>новичков ${c.newGuests!=null?c.newGuests:'—'} из ${c.totalGuests!=null?c.totalGuests:'—'}${newPct}</td>
+      <td class="smp">${c.sessions!=null?c.sessions:'—'} ${plural(c.sessions,'занятие','занятия','занятий')} за ${monthName(c.periodUsed)}<br>новых гостей: ${c.newGuests!=null?c.newGuests:'—'} из ${c.totalGuests!=null?c.totalGuests:'—'} посещений${newPct}</td>
     </tr>`;
   }).join('');
 }
 
+function plural(n, one, few, many){ if (n==null) return many; const a=n%10, b=n%100; return a===1&&b!==11 ? one : a>=2&&a<=4&&(b<12||b>14) ? few : many; }
+function monthName(p){ const m=['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь'][+(p||'').slice(5,7)-1]; return m || (p||''); }
 // Шкала: нормы залов (как в отчёте «Посещаемость преподавателей») и правила цветов
 const HALL_NORMS = {
   'Луна':[15,15,15,25,25,28,'dmitrovka'], 'Солнце':[15,10,10,15,15,18,'dmitrovka'],
@@ -249,6 +251,7 @@ function scaleBlock(city){
       <div class="scale-h">Как считаем</div>
       <p><b>Посещаемость</b> = среднее число людей на классе ÷ норма класса. Норма зависит от зала и времени (таблица справа). Если класс идёт в разное время, норма усредняется.</p>
       <p><b>Загруженность зала</b> = среднее число людей ÷ максимальная вместимость зала, без учёта времени.</p>
+      <p><b>Выборка</b> — сколько занятий класса было за месяц и сколько из всех посещений пришлось на новых гостей (по ним считается возвратность). Чем меньше новых гостей, тем менее надёжен процент возвратности.</p>
       <div class="scale-h" style="margin-top:1.1rem">Цвет в таблице — сравнение со средним по всем студиям</div>
       <div class="scale-row"><span class="scale-sq" style="background:#dfeccf;border:1px solid #9bb57a"></span>Выше среднего — больше чем на 5%</div>
       <div class="scale-row"><span class="scale-sq" style="background:#eeeeec;border:1px solid #c9c9c4"></span>Примерно равно среднему — ±5%</div>

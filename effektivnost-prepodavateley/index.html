@@ -237,8 +237,7 @@ function classRows(t, classes){
     const people = (c.avgPeople!=null && c.cap) ? c.avgPeople.toFixed(1) : null;
     const newPct = (c.newGuests!=null && c.totalGuests) ? ` (${Math.round(c.newGuests/c.totalGuests*100)}%)` : '';
     const pot = (c.avgPeople!=null && c.maxCap) ? c.avgPeople/c.maxCap : null;
-    const ts = sortBy === 'eff' ? teacherScore(classes, 'eff') : null;
-    const nameCell = i===0 ? `<td class="tname" rowspan="${classes.length}">${esc(t.name)}${ts!=null?`<span class="effi">эффективность ${Math.round(ts*100)}% от среднего</span>`:''}</td>` : '';
+    const nameCell = i===0 ? `<td class="tname" rowspan="${classes.length}">${esc(t.name)}</td>` : '';
     return `<tr class="${i===0?'tfirst':''}">${nameCell}
       <td class="tcls"><b>${esc(c.service)}</b><span>${esc(c._studio)} · ${esc(c.when)} · ${esc(c.hall||'?')}</span></td>
       <td class="m ${cmpClass(c.attendance, NET_AVG.attendance)}"><div class="v">${fmtPct(c.attendance)}</div>

@@ -352,7 +352,13 @@ function autoHeight(frame){
   let doc;
   try { doc = frame.contentDocument; } catch(e){ return; }   // чужой сайт — оставляем фикс. высоту
   if (!doc || !doc.body) return;
-  const fit = () => { frame.style.height = Math.max(doc.body.scrollHeight, doc.body.offsetHeight) + 'px'; };
+  const fit = () => {
+    if (frame.id === 'attFrame'){   // посещаемость: по низу видимого содержимого, без нижних отступов страницы
+      const b = [...doc.body.children].filter(x => x.offsetHeight > 0 && getComputedStyle(x).position !== 'fixed')
+        .reduce((m, x) => Math.max(m, x.getBoundingClientRect().bottom + doc.documentElement.scrollTop), 0);
+      if (b) { frame.style.height = Math.ceil(b) + 'px'; return; }
+    }
+    frame.style.height = Math.max(doc.body.scrollHeight, doc.body.offsetHeight) + 'px'; };
   fit();
   if (window.ResizeObserver) new ResizeObserver(fit).observe(doc.body);
 }
